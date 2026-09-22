@@ -1,0 +1,50 @@
+# REPRODUCTION REPORT
+
+- Bug ID / target: <matching BUG CONTRACT>
+- Bug contract revision: <bN>
+- Input artifacts: <contract and evidence IDs>
+- Status: <REPRODUCED / EVIDENCE_CONFIRMED / CANNOT_REPRODUCE / NEEDS_INFORMATION / BLOCKED>
+- Context used: <max L0-L6; question and evidence that justified escalation>
+- Attempt number: <n; retain prior attempts>
+
+## Expected / Reported / Observed
+
+- Expected: <BUG CONTRACT reference>
+- Reported actual: <BUG CONTRACT reference>
+- Observed: <what this investigation directly observed>
+
+## Environment and State
+
+<Environment/build/platform/OS/device/account-role/state/data/flags/dependencies actually used.>
+
+## Attempts
+
+1. <exact steps/variation; result; evidence produced>
+
+## Confirmation Evidence
+
+- <E/test/log/video/network/monitoring ID; what it establishes; limitation>
+
+## Reproduction Steps
+
+<For REPRODUCED: exact deterministic/intermittent steps, state, and observed output. Otherwise N/A.>
+
+## Investigation Log
+
+- <unknown/hypothesis ID>: <level, targeted action, decisive evidence, stop reason>
+
+## Missing Information or Blocker
+
+- <specific missing item/access/dependency; impact; owner; resume condition, or none>
+
+## BUG COMMENT
+
+<For CANNOT_REPRODUCE/NEEDS_INFORMATION/BLOCKED: concise ticket-ready text stating
+what was tested, environment/build, observation, and actionable request. Otherwise N/A.>
+
+## Handoff
+
+- REPRODUCED/EVIDENCE_CONFIRMED: route to bug-root-cause.
+- CANNOT_REPRODUCE: human unless explicitly documented compelling evidence permits investigation.
+- NEEDS_INFORMATION: human response → update BUG CONTRACT/reproduction.
+- BLOCKED: environment/access owner → reproduction after resolution.

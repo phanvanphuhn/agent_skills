@@ -1,5 +1,36 @@
 # Skill-system changelog
 
+## 2026-09-23 — Automatic task routing and evidence-first bug workflow
+
+- Added the lightweight `task-router` entry skill. It classifies a new top-level
+  request once as FEATURE, BUG, or NORMAL from user intent, routes the untouched input,
+  and stops; UNCLEAR is reserved for a genuinely material ambiguity.
+- Integrated automatic routing into `AGENTS.md`, including explicit-user overrides,
+  NORMAL handling without a specialized workflow, and follow-up isolation.
+- Added five single-responsibility bug skills for analysis, reproduction, root-cause
+  evidence, minimal correction, and independent verification.
+- Added structured bug artifacts, human-ready blocked/information comments, evidence
+  hierarchy, L0-L6/V0-V6 walk-down, focused failure routing, and persistent per-cause
+  plus total fix-cycle counters with a three-FAIL stop.
+- Reused the existing generic changed-file, related-test, and verification command
+  helpers rather than duplicating bug-specific scripts.
+- Added a fictional end-to-end bug example with a failed first fix, focused BUG FIX
+  REQUEST, repair, and final PASS. Updated README discovery, routing, and calibration.
+- Expanded structural validation from four to ten skills, all new templates, router
+  size/cost boundaries, bug statuses/routes, and loop-protection markers.
+- Validation: the complete structural validator and Bash syntax checks passed; all ten
+  frontmatter blocks parsed as YAML with matching directory names; no trailing-space or
+  unfinished-placeholder findings remained. Four negative fixtures correctly rejected
+  a missing router, unexpected eleventh skill, broken router link, and missing BUG route.
+  A scenario review covered explicit overrides, feature/bug ambiguity, explanation-only
+  NORMAL requests, attachment pass-through, and follow-up isolation. The bundled
+  `quick_validate.py` could not run because its environment lacks PyYAML; equivalent
+  frontmatter/name/description/placeholder checks passed through the dependency-free
+  workspace validator plus Ruby's YAML parser.
+- Limits: task-router is workspace-routed through `AGENTS.md`; because `skills/` is a
+  custom directory, native client discovery still depends on opening this workspace or
+  explicitly supplying the root instructions.
+
 ## 2026-09-22 — Walk It Down cost and context policy
 
 - Added the L0-L5 context ladder and decision-based stopping rules to orchestration.

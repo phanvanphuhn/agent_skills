@@ -87,6 +87,7 @@ documents=(
   AGENTS.md
   skills/README.md
   skills/CHANGELOG.md
+  skills/task-router/SKILL.md
   skills/task-requirements/SKILL.md
   skills/task-requirements/references/task-contract-template.md
   skills/requirement-validator/SKILL.md
@@ -99,7 +100,19 @@ documents=(
   skills/verification/scripts/changed-files.sh
   skills/verification/scripts/related-tests.sh
   skills/verification/scripts/verify.sh
+  skills/bug-analysis/SKILL.md
+  skills/bug-analysis/references/bug-contract-template.md
+  skills/bug-reproduction/SKILL.md
+  skills/bug-reproduction/references/reproduction-report-template.md
+  skills/bug-root-cause/SKILL.md
+  skills/bug-root-cause/references/root-cause-report-template.md
+  skills/bug-fix/SKILL.md
+  skills/bug-fix/references/bug-fix-report-template.md
+  skills/bug-verification/SKILL.md
+  skills/bug-verification/references/bug-verification-report-template.md
+  skills/bug-verification/references/bug-fix-request-template.md
   skills/examples/feature-workflow.md
+  skills/examples/bug-workflow.md
 )
 
 for doc in "${documents[@]}"; do
@@ -117,7 +130,8 @@ for script in skills/scripts/validate-skill-system.sh \
   fi
 done
 
-for skill in task-requirements requirement-validator implementation verification; do
+for skill in task-requirements requirement-validator implementation verification \
+  bug-analysis bug-reproduction bug-root-cause bug-fix bug-verification; do
   doc="skills/$skill/SKILL.md"
   if [ ! -s "$workspace_root/$doc" ]; then continue; fi
   check_frontmatter "$doc" "$skill"
@@ -134,13 +148,38 @@ require_heading skills/requirement-validator/SKILL.md '## Investigation strategy
 require_heading skills/implementation/SKILL.md '## Context reuse rule'
 require_heading skills/implementation/SKILL.md '## Minimal change principle'
 require_heading skills/verification/SKILL.md '## Verification strategy — Walk It Down'
+require_heading skills/bug-analysis/SKILL.md '## Context budget'
+require_heading skills/bug-reproduction/SKILL.md '## Investigation strategy — Walk It Down'
+require_heading skills/bug-root-cause/SKILL.md '## Investigation strategy — Walk It Down'
+require_heading skills/bug-fix/SKILL.md '## Context reuse and minimal fix'
+require_heading skills/bug-verification/SKILL.md '## Verification strategy — Walk It Down'
+
+if [ -s "$workspace_root/skills/task-router/SKILL.md" ]; then
+  check_frontmatter skills/task-router/SKILL.md task-router
+  router_lines=$(awk 'END {print NR}' "$workspace_root/skills/task-router/SKILL.md")
+  if [ "$router_lines" -ge 100 ]; then
+    fail "skills/task-router/SKILL.md: has $router_lines lines; router must stay below 100"
+  fi
+  for heading in Responsibility Classification 'Cost boundary' Output; do
+    require_heading skills/task-router/SKILL.md "## $heading"
+  done
+  for route in FEATURE BUG NORMAL; do
+    require_pattern skills/task-router/SKILL.md "ROUTE: $route" "router output $route"
+  done
+  require_pattern skills/task-router/SKILL.md 'ROUTE: UNCLEAR' 'router unclear output'
+  require_pattern skills/task-router/SKILL.md 'Explicit user intent wins' 'intent-first routing'
+  require_pattern skills/task-router/SKILL.md 'Prefer zero tools' 'low-cost routing'
+  require_pattern skills/task-router/SKILL.md 'active downstream workflow owns follow-ups' 'follow-up isolation'
+  require_pattern skills/task-router/SKILL.md 'then stop' 'router stop boundary'
+fi
 
 for candidate in "$workspace_root"/skills/*/SKILL.md; do
   if [ ! -f "$candidate" ]; then continue; fi
   candidate_name=$(basename -- "$(dirname -- "$candidate")")
   case "$candidate_name" in
-    task-requirements|requirement-validator|implementation|verification) ;;
-    *) fail "skills/$candidate_name/SKILL.md: unexpected fifth skill; orchestration belongs in AGENTS.md" ;;
+    task-router|task-requirements|requirement-validator|implementation|verification|\
+bug-analysis|bug-reproduction|bug-root-cause|bug-fix|bug-verification) ;;
+    *) fail "skills/$candidate_name/SKILL.md: unexpected skill; update routing and validation intentionally" ;;
   esac
 done
 
@@ -184,17 +223,68 @@ if [ -s "$workspace_root/$report" ]; then
   done
 fi
 
+report=skills/bug-analysis/references/bug-contract-template.md
+if [ -s "$workspace_root/$report" ]; then
+  for heading in 'Bug Summary' 'Expected Behavior' 'Actual Behavior' Environment Occurrence \
+    'Reproduction Steps' Evidence 'Known Facts' Unknowns 'Initial Suspicions' \
+    'Potentially Relevant Areas' 'Reproduction Requirements' 'Investigation Priority' Handoff; do
+    require_heading "$report" "## $heading"
+  done
+fi
+report=skills/bug-reproduction/references/reproduction-report-template.md
+if [ -s "$workspace_root/$report" ]; then
+  for heading in 'Expected / Reported / Observed' 'Environment and State' Attempts \
+    'Confirmation Evidence' 'Reproduction Steps' 'Investigation Log' \
+    'Missing Information or Blocker' 'BUG COMMENT' Handoff; do
+    require_heading "$report" "## $heading"
+  done
+fi
+report=skills/bug-root-cause/references/root-cause-report-template.md
+if [ -s "$workspace_root/$report" ]; then
+  for heading in Symptom 'Reproduction Evidence' 'Failure Path' Hypotheses \
+    'Confirmed Root Cause' Evidence 'Affected Code' 'Why Existing Behavior Fails' \
+    'Regression Risk' 'Fix Strategy' 'Areas That Must Not Change' 'Tests Required' Handoff; do
+    require_heading "$report" "## $heading"
+  done
+fi
+report=skills/bug-fix/references/bug-fix-report-template.md
+if [ -s "$workspace_root/$report" ]; then
+  for heading in Summary 'Root Cause to Change Mapping' 'Files Changed' 'Behavior Preserved' \
+    'Regression Test' 'Developer Checks' 'Diff Review' 'Risks and Limitations' \
+    'Contradictory Evidence' Handoff; do
+    require_heading "$report" "## $heading"
+  done
+fi
+report=skills/bug-verification/references/bug-verification-report-template.md
+if [ -s "$workspace_root/$report" ]; then
+  for heading in 'Verification Scope' 'Evidence Chain' 'Original Failure Verification' \
+    'Root Cause Coverage' 'Preserved Behavior and Regression' 'Code and Architecture Review' \
+    'Commands Executed' 'Failures and Limitations' 'Cycle History' 'Human-Ready Comment' Handoff; do
+    require_heading "$report" "## $heading"
+  done
+fi
+report=skills/bug-verification/references/bug-fix-request-template.md
+if [ -s "$workspace_root/$report" ]; then
+  for heading in 'Failed Expectations' Reproduction Evidence \
+    'Required Correction or Investigation' Constraints \
+    'Prior Attempts and Remaining Blockers' 'Required Handoff'; do
+    require_heading "$report" "## $heading"
+  done
+fi
+
 if [ -s "$workspace_root/AGENTS.md" ]; then
   for heading in 'Scope and routing' 'Applicability and authorization' \
     'Cost and context policy — Walk It Down' 'Shared handoff contract' 'State transitions' 'Loop limit and human intervention' \
-    'Evidence and verification rules' 'Skill-system maintenance'; do
+    'Evidence and verification rules' 'Bug investigation and fix workflow' 'Skill-system maintenance'; do
     require_heading AGENTS.md "## $heading"
   done
-  for skill in task-requirements requirement-validator implementation verification; do
+  for skill in task-router task-requirements requirement-validator implementation verification \
+    bug-analysis bug-reproduction bug-root-cause bug-fix bug-verification; do
     require_pattern AGENTS.md "skills/$skill/SKILL[.]md" "route to $skill"
   done
   for artifact in 'TASK CONTRACT' 'VALIDATION REPORT' 'IMPLEMENTATION REPORT' \
-    'VERIFICATION REPORT' 'FIX REQUEST'; do
+    'VERIFICATION REPORT' 'FIX REQUEST' 'BUG CONTRACT' 'REPRODUCTION REPORT' \
+    'ROOT CAUSE REPORT' 'BUG FIX REPORT' 'BUG VERIFICATION REPORT' 'BUG FIX REQUEST'; do
     require_pattern AGENTS.md "$artifact" "handoff artifact $artifact"
   done
   for state in READY NEEDS_CLARIFICATION BLOCKED PASS FAIL NOT_RUN DONE; do
@@ -214,11 +304,25 @@ if [ -s "$workspace_root/AGENTS.md" ]; then
   require_pattern AGENTS.md 'Every escalation must name' 'evidence-based context escalation'
   require_pattern AGENTS.md '### Handoff economy' 'compact handoff policy'
   require_pattern AGENTS.md 'repair consumes only failed ACs' 'targeted repair handoff'
+  require_pattern AGENTS.md 'USER REQUEST.*TASK ROUTER' 'automatic task-router entry'
+  require_pattern AGENTS.md 'FEATURE.*task-requirements.*feature workflow' 'FEATURE route'
+  require_pattern AGENTS.md 'BUG.*bug-analysis.*bug workflow' 'BUG route'
+  require_pattern AGENTS.md 'NORMAL.*normal Codex behavior' 'NORMAL route'
+  require_pattern AGENTS.md 'Explicit user routing overrides' 'explicit routing override'
+  require_pattern AGENTS.md 'Do not reclassify follow-up messages' 'single classification per task'
+  require_pattern AGENTS.md 'do not change production code before the bug is REPRODUCED' 'bug fix evidence gate'
+  for state in REPRODUCED EVIDENCE_CONFIRMED CANNOT_REPRODUCE NEEDS_INFORMATION \
+    IMPLEMENTATION_ISSUE ROOT_CAUSE_INCORRECT REQUIREMENT_UNCLEAR; do
+    require_pattern AGENTS.md "(^|[^A-Z_])$state([^A-Z_]|$)" "bug status $state"
+  done
+  require_pattern AGENTS.md 'failed_cycles_for_root_cause' 'per-root-cause failed-cycle count'
+  require_pattern AGENTS.md 'total_fix_cycles' 'cumulative fix-cycle count'
+  require_pattern AGENTS.md 'Stop at the third FAIL for the same' 'bug three-failure limit'
 fi
 
 if [ "$errors" -gt 0 ]; then
   printf 'FAIL: %s structural error(s).\n' "$errors" >&2
   exit 1
 fi
-printf 'PASS: four skills, templates, links, line limits, and orchestration structure validated.\n'
+printf 'PASS: task router, feature and bug skills, templates, links, line limits, and orchestration structure validated.\n'
 printf 'Semantic behavior and native client discovery require separate review.\n'

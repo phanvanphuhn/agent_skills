@@ -1,7 +1,9 @@
 # Workspace development skills
 
-Four focused skills turn development input into a validated contract, an
-implementation, and evidence of acceptance. Start with [workspace instructions](../AGENTS.md).
+Ten focused skills provide a cheap automatic router plus separate feature-delivery
+and evidence-first bug-fix pipelines. Start with
+[workspace instructions](../AGENTS.md); task-router selects a workflow but never
+performs downstream work.
 
 ## Layout
 
@@ -10,6 +12,7 @@ AGENTS.md
 skills/
 ├── README.md
 ├── CHANGELOG.md
+├── task-router/SKILL.md
 ├── task-requirements/
 │   ├── SKILL.md
 │   └── references/task-contract-template.md
@@ -28,15 +31,36 @@ skills/
 │   └── references/
 │       ├── verification-report-template.md
 │       └── fix-request-template.md
-├── examples/feature-workflow.md
+├── bug-analysis/
+│   ├── SKILL.md
+│   └── references/bug-contract-template.md
+├── bug-reproduction/
+│   ├── SKILL.md
+│   └── references/reproduction-report-template.md
+├── bug-root-cause/
+│   ├── SKILL.md
+│   └── references/root-cause-report-template.md
+├── bug-fix/
+│   ├── SKILL.md
+│   └── references/bug-fix-report-template.md
+├── bug-verification/
+│   ├── SKILL.md
+│   └── references/
+│       ├── bug-verification-report-template.md
+│       └── bug-fix-request-template.md
+├── examples/
+│   ├── feature-workflow.md
+│   └── bug-workflow.md
 └── scripts/validate-skill-system.sh
 ```
 
 ## Invocation and discovery
 
 Open `/Users/snsean/Desktop/code/sulong` as the workspace. The root `AGENTS.md`
-routes development work to these files; always specify whether a task targets
-the ops repository, the crew repository, or the workspace itself.
+automatically invokes task-router once for each new top-level request. Users do not
+need to label a request or name a skill. Once FEATURE or BUG is selected, follow-up
+evidence remains with that active workflow and is not reclassified. When relevant,
+specify whether a task targets the ops repository, crew repository, or workspace.
 
 Example prompts:
 
@@ -45,10 +69,22 @@ Example prompts:
 - "Run requirement-validator against the contract below; inspect code before asking questions."
 - "Use implementation with this READY contract and validation report."
 - "Use verification to check this implementation against contract r2."
+- "Follow the bug workflow for this crash report and attached logs."
+- "Use bug-reproduction with BUG CONTRACT b2; do not change production code."
+- "Verify fix f2 against root-cause revision rc1 and retain the cycle history."
+- "Explain why this story exists, but do not implement it." (routes NORMAL)
 
-The last two require the named input artifacts. A bare request to implement does
-not bypass validation; the orchestrator obtains the contract and readiness first.
-Explicit stage invocation does not grant missing production/environment authority.
+Explicit reproduction or verification stage prompts require their named input
+artifacts. A bare request to implement does not bypass validation; the orchestrator
+obtains the contract and readiness first.
+Explicit stage or route instructions override automatic classification but do not
+grant missing production/environment authority.
+
+The router classifies by intent, not isolated keywords. Restoring behavior that should
+already work is BUG; introducing meaningful product behavior is FEATURE; explanation,
+review, docs, planning, small maintenance, and general questions are NORMAL. It uses
+the prompt and immediately available metadata, preferably with zero tools or repository
+reads. If the distinction truly matters and cannot be inferred, it asks one question.
 
 `skills/` is the user-selected directory, not the standard `.agents/skills/`
 discovery location. Do not assume these skills appear in a client's skill picker,
@@ -61,7 +97,7 @@ committed by Git operations inside either child repository; sharing/versioning
 requires separately including this workspace content. Paths inside skill documents
 are relative and the validator works after relocating the workspace.
 
-## Reasoning and handoffs
+## Feature reasoning and handoffs
 
 ```text
 OBSERVE → UNDERSTAND → QUESTION → PLAN → ACT → VERIFY → LEARN
@@ -113,6 +149,35 @@ exploration transcripts and repeated upstream prose. A failure returns the focus
 FIX REQUEST and READY baseline directly to implementation. Earlier stages rerun only
 when the failure exposes a requirements ambiguity.
 
+## Bug reasoning and handoffs
+
+```text
+BUG INPUT → BUG CONTRACT → REPRODUCTION REPORT → ROOT CAUSE REPORT
+  → BUG FIX REPORT → BUG VERIFICATION REPORT → PASS → DONE
+
+NEEDS_INFORMATION/CANNOT_REPRODUCE → human evidence → reproduction
+IMPLEMENTATION_ISSUE → BUG FIX REQUEST → bug-fix → bug-verification
+ROOT_CAUSE_INCORRECT → bug-root-cause → bug-fix → bug-verification
+REQUIREMENT_UNCLEAR → human/bug-analysis
+```
+
+The bug pipeline separates observed evidence from conclusions and does not permit a
+production fix before reproduction/evidence confirmation and a supported root cause.
+Reproduction has five statuses: REPRODUCED, EVIDENCE_CONFIRMED, CANNOT_REPRODUCE,
+NEEDS_INFORMATION, and BLOCKED. Root cause tests hypotheses explicitly and returns a
+bounded fix strategy. Verification inspects the actual diff and original failure.
+
+Walk It Down extends to L6 for unusually difficult debugging and V6 for full-suite or
+real-environment evidence. The stages reuse the generic scripts under `verification/`;
+there are no duplicate bug-specific discovery runners. Human-facing comments contain
+observations and actionable requests, not private reasoning or sensitive payloads.
+
+On FAIL, verification classifies the problem and returns only to the necessary stage.
+It tracks both failures for the active root-cause revision and total fix cycles. The
+third FAIL for one root-cause revision stops for human intervention. Only materially
+different evidence can create a new root-cause revision and reset its local counter;
+the cumulative history is never discarded.
+
 ## Deterministic verification helpers
 
 From any directory, use the scripts with an explicit repository path:
@@ -156,8 +221,9 @@ bash skills/scripts/validate-skill-system.sh /path/to/workspace-copy
 
 The script uses Bash and standard shell utilities (`awk`, `dirname`, `basename`).
 It needs no package installation or network, never edits files, and returns zero
-on success or non-zero with file-specific errors. It checks the four skill files,
-templates, helper-script syntax, headings, local links, line limits, and orchestration markers.
+on success or non-zero with file-specific errors. It checks all ten skill files,
+templates, helper-script syntax, headings, local links, line limits, feature and bug
+orchestration markers, status routes, and loop protection.
 
 For predictable dependency-free validation, frontmatter uses exactly two fields:
 an unquoted lowercase-hyphen `name` and a one-line double-quoted `description`.
@@ -170,9 +236,10 @@ correctness. Review the instructions and exercise the scenarios below as well.
 
 ## Calibration and feedback
 
-Use [the worked example](examples/feature-workflow.md) as the expected shape of
-handoffs. It is fictional training evidence, not an assertion that any application
-test ran. Calibrate on several real tasks before treating the skills as reliable:
+Use the [feature example](examples/feature-workflow.md) and
+[bug example](examples/bug-workflow.md) as the expected shape of handoffs. They are
+fictional training evidence, not assertions that application tests ran. Calibrate on
+several real tasks before treating the skills as reliable:
 
 1. A complete small change: expect all four stages and evidence-backed PASS.
 2. An ambiguous story: expect code inspection, then focused clarification and no implementation.
@@ -181,6 +248,11 @@ test ran. Calibrate on several real tasks before treating the skills as reliable
 5. A missing environment: expect BLOCKED, required evidence named, and no fabricated result.
 6. Three failed verifications: expect human escalation with the complete failure history.
 7. A read-only question: expect an answer without initiating development changes.
+8. A bug with logs but no local reproduction: expect a bounded EVIDENCE_CONFIRMED or
+   an actionable information request, never an invented reproduction.
+9. An incorrect bug hypothesis: expect rejected evidence and no production edit.
+10. A verification result disproving root cause: expect a focused route back to
+    bug-root-cause with retained total cycle history.
 
 Review trigger precision, AC preservation, evidence quality, assumption visibility,
 context/verification escalation, handoff size, and repeatability. Mechanical checks should be deterministic; design
@@ -200,7 +272,7 @@ system neither switches models nor launches paid comparisons automatically.
 
 ## Design references
 
-The user-provided specification defines the four responsibilities and artifacts.
+The user-provided specifications define the feature and bug responsibilities and artifacts.
 These guides inform narrow triggers, reverse-engineering from good outputs,
 verification, judgment boundaries, and iterative calibration:
 
