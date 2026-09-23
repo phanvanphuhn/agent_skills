@@ -13,10 +13,10 @@ CLASSIFY → ROUTE → STOP. Use user intent and immediately available context o
 
 - FEATURE — meaningful new or intentionally changed product/application behavior that
   needs requirements analysis. Route the untouched input and attachments to
-  [task-requirements](../task-requirements/SKILL.md), then stop.
+  [task-requirements](../feature-workflow/task-requirements/SKILL.md), then stop.
 - BUG — expected existing behavior is broken, incorrect, regressed, crashing, or
   failing and the user wants investigation or a fix. Route the untouched input and
-  attachments to [bug-analysis](../bug-analysis/SKILL.md), then stop.
+  attachments to [bug-analysis](../bug-workflow/bug-analysis/SKILL.md), then stop.
 - NORMAL — explanation, review, documentation, formatting, Git/shell help, research,
   discussion, planning, simple refactor/configuration, or other work needing neither
   structured workflow. Continue with normal Codex behavior, then stop routing.

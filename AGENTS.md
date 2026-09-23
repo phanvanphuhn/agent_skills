@@ -25,10 +25,10 @@ The feature workflow uses the four skills below. Read each complete `SKILL.md` a
 its required template before that stage. Resolve these links relative to this file,
 regardless of the shell's working directory:
 
-1. [task-requirements](skills/task-requirements/SKILL.md) — gather evidence and draft the TASK CONTRACT.
-2. [requirement-validator](skills/requirement-validator/SKILL.md) — reverse engineer and determine readiness.
-3. [implementation](skills/implementation/SKILL.md) — implement the READY contract or its FIX REQUEST.
-4. [verification](skills/verification/SKILL.md) — inspect and verify the actual implementation.
+1. [task-requirements](skills/feature-workflow/task-requirements/SKILL.md) — gather evidence and draft the TASK CONTRACT.
+2. [requirement-validator](skills/feature-workflow/requirement-validator/SKILL.md) — reverse engineer and determine readiness.
+3. [implementation](skills/feature-workflow/implementation/SKILL.md) — implement the READY contract or its FIX REQUEST.
+4. [verification](skills/feature-workflow/verification/SKILL.md) — inspect and verify the actual implementation.
 
 These files are a workspace routing mechanism. `skills/` is not the standard
 `.agents/skills/` discovery directory; this file does not register slash commands
@@ -180,11 +180,11 @@ Use this evidence-first workflow for reported defects, regressions, crashes, and
 incorrect existing behavior. It supplements rather than replaces the feature workflow.
 Read and execute these skills in order, subject to the routes below:
 
-1. [bug-analysis](skills/bug-analysis/SKILL.md) — normalize supplied evidence into a BUG CONTRACT.
-2. [bug-reproduction](skills/bug-reproduction/SKILL.md) — reproduce or evidence-confirm the failure.
-3. [bug-root-cause](skills/bug-root-cause/SKILL.md) — test hypotheses and establish why it occurs.
-4. [bug-fix](skills/bug-fix/SKILL.md) — make the smallest safe root-cause correction.
-5. [bug-verification](skills/bug-verification/SKILL.md) — independently prove the fix and regressions.
+1. [bug-analysis](skills/bug-workflow/bug-analysis/SKILL.md) — normalize supplied evidence into a BUG CONTRACT.
+2. [bug-reproduction](skills/bug-workflow/bug-reproduction/SKILL.md) — reproduce or evidence-confirm the failure.
+3. [bug-root-cause](skills/bug-workflow/bug-root-cause/SKILL.md) — test hypotheses and establish why it occurs.
+4. [bug-fix](skills/bug-workflow/bug-fix/SKILL.md) — make the smallest safe root-cause correction.
+5. [bug-verification](skills/bug-workflow/bug-verification/SKILL.md) — independently prove the fix and regressions.
 
 Critical debugging rule: do not change production code before the bug is REPRODUCED
 or EVIDENCE_CONFIRMED and its root cause is CONFIRMED with adequate evidence. A

@@ -13,46 +13,37 @@ skills/
 ├── README.md
 ├── CHANGELOG.md
 ├── task-router/SKILL.md
-├── task-requirements/
-│   ├── SKILL.md
-│   └── references/task-contract-template.md
-├── requirement-validator/
-│   ├── SKILL.md
-│   └── references/validation-report-template.md
-├── implementation/
-│   ├── SKILL.md
-│   └── references/implementation-report-template.md
-├── verification/
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── changed-files.sh
-│   │   ├── related-tests.sh
-│   │   └── verify.sh
-│   └── references/
-│       ├── verification-report-template.md
-│       └── fix-request-template.md
-├── bug-analysis/
-│   ├── SKILL.md
-│   └── references/bug-contract-template.md
-├── bug-reproduction/
-│   ├── SKILL.md
-│   └── references/reproduction-report-template.md
-├── bug-root-cause/
-│   ├── SKILL.md
-│   └── references/root-cause-report-template.md
-├── bug-fix/
-│   ├── SKILL.md
-│   └── references/bug-fix-report-template.md
-├── bug-verification/
-│   ├── SKILL.md
-│   └── references/
-│       ├── bug-verification-report-template.md
-│       └── bug-fix-request-template.md
-├── examples/
-│   ├── feature-workflow.md
-│   └── bug-workflow.md
+├── feature-workflow/
+│   ├── task-requirements/
+│   │   ├── SKILL.md
+│   │   └── references/task-contract-template.md
+│   ├── requirement-validator/
+│   │   ├── SKILL.md
+│   │   └── references/validation-report-template.md
+│   ├── implementation/
+│   │   ├── SKILL.md
+│   │   └── references/implementation-report-template.md
+│   ├── verification/
+│   │   ├── SKILL.md
+│   │   ├── scripts/{changed-files.sh,related-tests.sh,verify.sh}
+│   │   └── references/{verification-report-template.md,fix-request-template.md}
+│   └── examples/workflow.md
+├── bug-workflow/
+│   ├── bug-analysis/{SKILL.md,references/bug-contract-template.md}
+│   ├── bug-reproduction/{SKILL.md,references/reproduction-report-template.md}
+│   ├── bug-root-cause/{SKILL.md,references/root-cause-report-template.md}
+│   ├── bug-fix/{SKILL.md,references/bug-fix-report-template.md}
+│   ├── bug-verification/
+│   │   ├── SKILL.md
+│   │   └── references/{bug-verification-report-template.md,bug-fix-request-template.md}
+│   └── examples/workflow.md
 └── scripts/validate-skill-system.sh
 ```
+
+The three top-level systems are `task-router`, `feature-workflow`, and `bug-workflow`.
+Workflow folders contain their independently triggered stage skills, references,
+examples, and workflow-owned helpers. Add future systems as sibling folders instead of
+placing their stage skills directly under `skills/`.
 
 ## Invocation and discovery
 
@@ -65,7 +56,7 @@ specify whether a task targets the ops repository, crew repository, or workspace
 Example prompts:
 
 - "Follow AGENTS.md and implement this story in eda-orchestrator-ops: …"
-- "Read skills/task-requirements/SKILL.md and prepare a contract for this ticket."
+- "Read skills/feature-workflow/task-requirements/SKILL.md and prepare a contract for this ticket."
 - "Run requirement-validator against the contract below; inspect code before asking questions."
 - "Use implementation with this READY contract and validation report."
 - "Use verification to check this implementation against contract r2."
@@ -183,9 +174,9 @@ the cumulative history is never discarded.
 From any directory, use the scripts with an explicit repository path:
 
 ```bash
-bash /Users/snsean/Desktop/code/sulong/skills/verification/scripts/changed-files.sh /path/to/repo
-bash /Users/snsean/Desktop/code/sulong/skills/verification/scripts/related-tests.sh /path/to/repo
-bash /Users/snsean/Desktop/code/sulong/skills/verification/scripts/verify.sh --repo /path/to/repo
+bash /Users/snsean/Desktop/code/sulong/skills/feature-workflow/verification/scripts/changed-files.sh /path/to/repo
+bash /Users/snsean/Desktop/code/sulong/skills/feature-workflow/verification/scripts/related-tests.sh /path/to/repo
+bash /Users/snsean/Desktop/code/sulong/skills/feature-workflow/verification/scripts/verify.sh --repo /path/to/repo
 ```
 
 An optional second argument selects the Git base for the first two scripts. For the
@@ -193,7 +184,7 @@ manifest helper, use `--base REF`. It runs no check unless an exact command foll
 `--`; arguments execute directly without shell evaluation:
 
 ```bash
-bash skills/verification/scripts/verify.sh --repo eda-orchestrator-ops -- npm test -- --runInBand
+bash skills/feature-workflow/verification/scripts/verify.sh --repo eda-orchestrator-ops -- npm test -- --runInBand
 ```
 
 `changed-files.sh` reports tracked differences from the base plus untracked files.
@@ -236,8 +227,8 @@ correctness. Review the instructions and exercise the scenarios below as well.
 
 ## Calibration and feedback
 
-Use the [feature example](examples/feature-workflow.md) and
-[bug example](examples/bug-workflow.md) as the expected shape of handoffs. They are
+Use the [feature example](feature-workflow/examples/workflow.md) and
+[bug example](bug-workflow/examples/workflow.md) as the expected shape of handoffs. They are
 fictional training evidence, not assertions that application tests ran. Calibrate on
 several real tasks before treating the skills as reliable:
 

@@ -88,31 +88,31 @@ documents=(
   skills/README.md
   skills/CHANGELOG.md
   skills/task-router/SKILL.md
-  skills/task-requirements/SKILL.md
-  skills/task-requirements/references/task-contract-template.md
-  skills/requirement-validator/SKILL.md
-  skills/requirement-validator/references/validation-report-template.md
-  skills/implementation/SKILL.md
-  skills/implementation/references/implementation-report-template.md
-  skills/verification/SKILL.md
-  skills/verification/references/verification-report-template.md
-  skills/verification/references/fix-request-template.md
-  skills/verification/scripts/changed-files.sh
-  skills/verification/scripts/related-tests.sh
-  skills/verification/scripts/verify.sh
-  skills/bug-analysis/SKILL.md
-  skills/bug-analysis/references/bug-contract-template.md
-  skills/bug-reproduction/SKILL.md
-  skills/bug-reproduction/references/reproduction-report-template.md
-  skills/bug-root-cause/SKILL.md
-  skills/bug-root-cause/references/root-cause-report-template.md
-  skills/bug-fix/SKILL.md
-  skills/bug-fix/references/bug-fix-report-template.md
-  skills/bug-verification/SKILL.md
-  skills/bug-verification/references/bug-verification-report-template.md
-  skills/bug-verification/references/bug-fix-request-template.md
-  skills/examples/feature-workflow.md
-  skills/examples/bug-workflow.md
+  skills/feature-workflow/task-requirements/SKILL.md
+  skills/feature-workflow/task-requirements/references/task-contract-template.md
+  skills/feature-workflow/requirement-validator/SKILL.md
+  skills/feature-workflow/requirement-validator/references/validation-report-template.md
+  skills/feature-workflow/implementation/SKILL.md
+  skills/feature-workflow/implementation/references/implementation-report-template.md
+  skills/feature-workflow/verification/SKILL.md
+  skills/feature-workflow/verification/references/verification-report-template.md
+  skills/feature-workflow/verification/references/fix-request-template.md
+  skills/feature-workflow/verification/scripts/changed-files.sh
+  skills/feature-workflow/verification/scripts/related-tests.sh
+  skills/feature-workflow/verification/scripts/verify.sh
+  skills/feature-workflow/examples/workflow.md
+  skills/bug-workflow/bug-analysis/SKILL.md
+  skills/bug-workflow/bug-analysis/references/bug-contract-template.md
+  skills/bug-workflow/bug-reproduction/SKILL.md
+  skills/bug-workflow/bug-reproduction/references/reproduction-report-template.md
+  skills/bug-workflow/bug-root-cause/SKILL.md
+  skills/bug-workflow/bug-root-cause/references/root-cause-report-template.md
+  skills/bug-workflow/bug-fix/SKILL.md
+  skills/bug-workflow/bug-fix/references/bug-fix-report-template.md
+  skills/bug-workflow/bug-verification/SKILL.md
+  skills/bug-workflow/bug-verification/references/bug-verification-report-template.md
+  skills/bug-workflow/bug-verification/references/bug-fix-request-template.md
+  skills/bug-workflow/examples/workflow.md
 )
 
 for doc in "${documents[@]}"; do
@@ -122,17 +122,28 @@ done
 require_file skills/scripts/validate-skill-system.sh
 
 for script in skills/scripts/validate-skill-system.sh \
-  skills/verification/scripts/changed-files.sh \
-  skills/verification/scripts/related-tests.sh \
-  skills/verification/scripts/verify.sh; do
+  skills/feature-workflow/verification/scripts/changed-files.sh \
+  skills/feature-workflow/verification/scripts/related-tests.sh \
+  skills/feature-workflow/verification/scripts/verify.sh; do
   if [ -s "$workspace_root/$script" ] && ! bash -n "$workspace_root/$script"; then
     fail "$script: Bash syntax check failed"
   fi
 done
 
-for skill in task-requirements requirement-validator implementation verification \
-  bug-analysis bug-reproduction bug-root-cause bug-fix bug-verification; do
-  doc="skills/$skill/SKILL.md"
+skill_entries=(
+  'skills/feature-workflow/task-requirements/SKILL.md:task-requirements'
+  'skills/feature-workflow/requirement-validator/SKILL.md:requirement-validator'
+  'skills/feature-workflow/implementation/SKILL.md:implementation'
+  'skills/feature-workflow/verification/SKILL.md:verification'
+  'skills/bug-workflow/bug-analysis/SKILL.md:bug-analysis'
+  'skills/bug-workflow/bug-reproduction/SKILL.md:bug-reproduction'
+  'skills/bug-workflow/bug-root-cause/SKILL.md:bug-root-cause'
+  'skills/bug-workflow/bug-fix/SKILL.md:bug-fix'
+  'skills/bug-workflow/bug-verification/SKILL.md:bug-verification'
+)
+for entry in "${skill_entries[@]}"; do
+  doc=${entry%%:*}
+  skill=${entry##*:}
   if [ ! -s "$workspace_root/$doc" ]; then continue; fi
   check_frontmatter "$doc" "$skill"
   lines=$(awk 'END {print NR}' "$workspace_root/$doc")
@@ -143,16 +154,16 @@ for skill in task-requirements requirement-validator implementation verification
   done
 done
 
-require_heading skills/task-requirements/SKILL.md '## Context budget'
-require_heading skills/requirement-validator/SKILL.md '## Investigation strategy — Walk It Down'
-require_heading skills/implementation/SKILL.md '## Context reuse rule'
-require_heading skills/implementation/SKILL.md '## Minimal change principle'
-require_heading skills/verification/SKILL.md '## Verification strategy — Walk It Down'
-require_heading skills/bug-analysis/SKILL.md '## Context budget'
-require_heading skills/bug-reproduction/SKILL.md '## Investigation strategy — Walk It Down'
-require_heading skills/bug-root-cause/SKILL.md '## Investigation strategy — Walk It Down'
-require_heading skills/bug-fix/SKILL.md '## Context reuse and minimal fix'
-require_heading skills/bug-verification/SKILL.md '## Verification strategy — Walk It Down'
+require_heading skills/feature-workflow/task-requirements/SKILL.md '## Context budget'
+require_heading skills/feature-workflow/requirement-validator/SKILL.md '## Investigation strategy — Walk It Down'
+require_heading skills/feature-workflow/implementation/SKILL.md '## Context reuse rule'
+require_heading skills/feature-workflow/implementation/SKILL.md '## Minimal change principle'
+require_heading skills/feature-workflow/verification/SKILL.md '## Verification strategy — Walk It Down'
+require_heading skills/bug-workflow/bug-analysis/SKILL.md '## Context budget'
+require_heading skills/bug-workflow/bug-reproduction/SKILL.md '## Investigation strategy — Walk It Down'
+require_heading skills/bug-workflow/bug-root-cause/SKILL.md '## Investigation strategy — Walk It Down'
+require_heading skills/bug-workflow/bug-fix/SKILL.md '## Context reuse and minimal fix'
+require_heading skills/bug-workflow/bug-verification/SKILL.md '## Verification strategy — Walk It Down'
 
 if [ -s "$workspace_root/skills/task-router/SKILL.md" ]; then
   check_frontmatter skills/task-router/SKILL.md task-router
@@ -173,17 +184,24 @@ if [ -s "$workspace_root/skills/task-router/SKILL.md" ]; then
   require_pattern skills/task-router/SKILL.md 'then stop' 'router stop boundary'
 fi
 
-for candidate in "$workspace_root"/skills/*/SKILL.md; do
-  if [ ! -f "$candidate" ]; then continue; fi
-  candidate_name=$(basename -- "$(dirname -- "$candidate")")
-  case "$candidate_name" in
-    task-router|task-requirements|requirement-validator|implementation|verification|\
-bug-analysis|bug-reproduction|bug-root-cause|bug-fix|bug-verification) ;;
-    *) fail "skills/$candidate_name/SKILL.md: unexpected skill; update routing and validation intentionally" ;;
+while IFS= read -r candidate; do
+  candidate_path=${candidate#"$workspace_root/"}
+  case "$candidate_path" in
+    skills/task-router/SKILL.md|\
+skills/feature-workflow/task-requirements/SKILL.md|\
+skills/feature-workflow/requirement-validator/SKILL.md|\
+skills/feature-workflow/implementation/SKILL.md|\
+skills/feature-workflow/verification/SKILL.md|\
+skills/bug-workflow/bug-analysis/SKILL.md|\
+skills/bug-workflow/bug-reproduction/SKILL.md|\
+skills/bug-workflow/bug-root-cause/SKILL.md|\
+skills/bug-workflow/bug-fix/SKILL.md|\
+skills/bug-workflow/bug-verification/SKILL.md) ;;
+    *) fail "$candidate_path: unexpected skill path; add a workflow folder and update routing intentionally" ;;
   esac
-done
+done < <(find "$workspace_root/skills" -type f -name SKILL.md -print)
 
-contract=skills/task-requirements/references/task-contract-template.md
+contract=skills/feature-workflow/task-requirements/references/task-contract-template.md
 if [ -s "$workspace_root/$contract" ]; then
   for heading in Task 'Business Intent' 'Current Behavior' 'Expected Behavior' \
     'Acceptance Criteria' 'Functional Requirements' 'Non-Functional Requirements' \
@@ -193,14 +211,14 @@ if [ -s "$workspace_root/$contract" ]; then
   done
 fi
 
-report=skills/requirement-validator/references/validation-report-template.md
+report=skills/feature-workflow/requirement-validator/references/validation-report-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in 'Repository Evidence' 'Uncertainty Assessment' 'Resolved Decisions' \
     'Investigation Log' 'Questions and Required Actions' 'Readiness Assessment' Handoff; do
     require_heading "$report" "## $heading"
   done
 fi
-report=skills/implementation/references/implementation-report-template.md
+report=skills/feature-workflow/implementation/references/implementation-report-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in Summary 'Files Changed' 'Implementation Decisions' 'AC Mapping' \
     'Assumptions Used' 'Developer Self-Review' 'Developer Checks' Risks 'Tests Needed' \
@@ -208,7 +226,7 @@ if [ -s "$workspace_root/$report" ]; then
     require_heading "$report" "## $heading"
   done
 fi
-report=skills/verification/references/verification-report-template.md
+report=skills/feature-workflow/verification/references/verification-report-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in 'Verification Scope' 'AC Verification' 'Other Required Checks' 'Regression Risk' \
     'Code Quality' 'Architecture Compliance' 'Uncovered Edge Cases' 'Test Coverage' \
@@ -216,14 +234,14 @@ if [ -s "$workspace_root/$report" ]; then
     require_heading "$report" "## $heading"
   done
 fi
-report=skills/verification/references/fix-request-template.md
+report=skills/feature-workflow/verification/references/fix-request-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in Defects Constraints 'Prior Attempts and Remaining Blockers' 'Required Handoff'; do
     require_heading "$report" "## $heading"
   done
 fi
 
-report=skills/bug-analysis/references/bug-contract-template.md
+report=skills/bug-workflow/bug-analysis/references/bug-contract-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in 'Bug Summary' 'Expected Behavior' 'Actual Behavior' Environment Occurrence \
     'Reproduction Steps' Evidence 'Known Facts' Unknowns 'Initial Suspicions' \
@@ -231,7 +249,7 @@ if [ -s "$workspace_root/$report" ]; then
     require_heading "$report" "## $heading"
   done
 fi
-report=skills/bug-reproduction/references/reproduction-report-template.md
+report=skills/bug-workflow/bug-reproduction/references/reproduction-report-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in 'Expected / Reported / Observed' 'Environment and State' Attempts \
     'Confirmation Evidence' 'Reproduction Steps' 'Investigation Log' \
@@ -239,7 +257,7 @@ if [ -s "$workspace_root/$report" ]; then
     require_heading "$report" "## $heading"
   done
 fi
-report=skills/bug-root-cause/references/root-cause-report-template.md
+report=skills/bug-workflow/bug-root-cause/references/root-cause-report-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in Symptom 'Reproduction Evidence' 'Failure Path' Hypotheses \
     'Confirmed Root Cause' Evidence 'Affected Code' 'Why Existing Behavior Fails' \
@@ -247,7 +265,7 @@ if [ -s "$workspace_root/$report" ]; then
     require_heading "$report" "## $heading"
   done
 fi
-report=skills/bug-fix/references/bug-fix-report-template.md
+report=skills/bug-workflow/bug-fix/references/bug-fix-report-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in Summary 'Root Cause to Change Mapping' 'Files Changed' 'Behavior Preserved' \
     'Regression Test' 'Developer Checks' 'Diff Review' 'Risks and Limitations' \
@@ -255,7 +273,7 @@ if [ -s "$workspace_root/$report" ]; then
     require_heading "$report" "## $heading"
   done
 fi
-report=skills/bug-verification/references/bug-verification-report-template.md
+report=skills/bug-workflow/bug-verification/references/bug-verification-report-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in 'Verification Scope' 'Evidence Chain' 'Original Failure Verification' \
     'Root Cause Coverage' 'Preserved Behavior and Regression' 'Code and Architecture Review' \
@@ -263,7 +281,7 @@ if [ -s "$workspace_root/$report" ]; then
     require_heading "$report" "## $heading"
   done
 fi
-report=skills/bug-verification/references/bug-fix-request-template.md
+report=skills/bug-workflow/bug-verification/references/bug-fix-request-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in 'Failed Expectations' Reproduction Evidence \
     'Required Correction or Investigation' Constraints \
@@ -278,9 +296,12 @@ if [ -s "$workspace_root/AGENTS.md" ]; then
     'Evidence and verification rules' 'Bug investigation and fix workflow' 'Skill-system maintenance'; do
     require_heading AGENTS.md "## $heading"
   done
-  for skill in task-router task-requirements requirement-validator implementation verification \
-    bug-analysis bug-reproduction bug-root-cause bug-fix bug-verification; do
-    require_pattern AGENTS.md "skills/$skill/SKILL[.]md" "route to $skill"
+  require_pattern AGENTS.md 'skills/task-router/SKILL[.]md' 'route to task-router'
+  for skill in task-requirements requirement-validator implementation verification; do
+    require_pattern AGENTS.md "skills/feature-workflow/$skill/SKILL[.]md" "route to $skill"
+  done
+  for skill in bug-analysis bug-reproduction bug-root-cause bug-fix bug-verification; do
+    require_pattern AGENTS.md "skills/bug-workflow/$skill/SKILL[.]md" "route to $skill"
   done
   for artifact in 'TASK CONTRACT' 'VALIDATION REPORT' 'IMPLEMENTATION REPORT' \
     'VERIFICATION REPORT' 'FIX REQUEST' 'BUG CONTRACT' 'REPRODUCTION REPORT' \

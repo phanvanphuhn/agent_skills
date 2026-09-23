@@ -1,5 +1,23 @@
 # Skill-system changelog
 
+## 2026-09-23 — Workflow folder organization
+
+- Grouped the architecture into three top-level systems under `skills/`:
+  `task-router/`, `feature-workflow/`, and `bug-workflow/`.
+- Moved each feature and bug stage skill, its references, workflow example, and owned
+  helper scripts into the corresponding workflow folder without changing skill names,
+  responsibilities, handoff contracts, or automatic routing behavior.
+- Updated orchestration, cross-workflow helper links, README examples, and structural
+  validation for recursive skill discovery and exact expected paths.
+- Established the convention that future workflow systems are added as sibling folders
+  under `skills/`, while their independently triggered stages remain nested inside.
+- Validation: all 29 files and all ten skill frontmatter blocks remained present; hash
+  comparison found no content changes in mechanically moved artifacts. Structural and
+  Bash syntax validation passed from the workspace and a relocated path containing
+  spaces. The three verification helpers ran successfully from their new path. A
+  recursive negative fixture correctly rejected an unregistered nested workflow skill;
+  link, stale-path, trailing-whitespace, and Git diff checks passed.
+
 ## 2026-09-23 — Automatic task routing and evidence-first bug workflow
 
 - Added the lightweight `task-router` entry skill. It classifies a new top-level

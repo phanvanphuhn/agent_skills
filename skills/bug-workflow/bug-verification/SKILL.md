@@ -40,9 +40,9 @@ Inspect independently and escalate only as evidence requires:
 - V6 — run full-suite or real-environment validation only when required by the bug,
   contract, repository, release risk, or unresolved lower-level evidence.
 
-Use [changed-files.sh](../verification/scripts/changed-files.sh),
-[related-tests.sh](../verification/scripts/related-tests.sh), and
-[verify.sh](../verification/scripts/verify.sh) for deterministic discovery/execution
+Use [changed-files.sh](../../feature-workflow/verification/scripts/changed-files.sh),
+[related-tests.sh](../../feature-workflow/verification/scripts/related-tests.sh), and
+[verify.sh](../../feature-workflow/verification/scripts/verify.sh) for deterministic discovery/execution
 when applicable. Helpers do not decide test completeness.
 
 ## Procedure
