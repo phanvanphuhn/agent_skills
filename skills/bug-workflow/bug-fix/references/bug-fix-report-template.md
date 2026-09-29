@@ -52,7 +52,7 @@
 
 ## Handoff
 
-- IMPLEMENTED: route to bug-verification with the BUG CONTRACT, REPRODUCTION REPORT,
-  ROOT CAUSE REPORT, and BUG FIX REPORT revisions.
+- IMPLEMENTED: route to code-review with the BUG CONTRACT, REPRODUCTION REPORT,
+  ROOT CAUSE REPORT, BUG FIX REPORT, actual diff, and directly related tests.
 - Contradicted root cause: route to bug-root-cause with exact new evidence.
 - BLOCKED: named owner/action/resume condition.

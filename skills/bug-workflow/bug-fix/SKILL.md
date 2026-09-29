@@ -59,14 +59,15 @@ silence failures, or hide errors to obtain a pass.
 
 Code/test changes plus a BUG FIX REPORT with status IMPLEMENTED or BLOCKED. The report
 maps the confirmed cause to files, behavior, regression coverage, checks, risks, and
-the next stage.
+the mandatory code-review gate as the next stage.
 
 ## Completion criteria
 
 The change addresses the confirmed cause, stays within scope, preserves named behavior,
 includes appropriate regression coverage, passes available focused developer checks,
 and contains no known defect or secret. The report is sufficient for independent
-bug-verification without reconstructing implementation reasoning.
+code-review without reconstructing implementation reasoning; only an APPROVED review
+baseline may proceed to bug-verification.
 
 ## Failure and blocked behavior
 

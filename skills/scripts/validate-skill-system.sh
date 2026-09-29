@@ -88,6 +88,8 @@ documents=(
   skills/README.md
   skills/CHANGELOG.md
   skills/task-router/SKILL.md
+  skills/code-review/SKILL.md
+  skills/code-review/references/code-review-report-template.md
   skills/feature-workflow/task-requirements/SKILL.md
   skills/feature-workflow/task-requirements/references/task-contract-template.md
   skills/feature-workflow/requirement-validator/SKILL.md
@@ -140,6 +142,7 @@ skill_entries=(
   'skills/bug-workflow/bug-root-cause/SKILL.md:bug-root-cause'
   'skills/bug-workflow/bug-fix/SKILL.md:bug-fix'
   'skills/bug-workflow/bug-verification/SKILL.md:bug-verification'
+  'skills/code-review/SKILL.md:code-review'
 )
 for entry in "${skill_entries[@]}"; do
   doc=${entry%%:*}
@@ -164,6 +167,7 @@ require_heading skills/bug-workflow/bug-reproduction/SKILL.md '## Investigation 
 require_heading skills/bug-workflow/bug-root-cause/SKILL.md '## Investigation strategy — Walk It Down'
 require_heading skills/bug-workflow/bug-fix/SKILL.md '## Context reuse and minimal fix'
 require_heading skills/bug-workflow/bug-verification/SKILL.md '## Verification strategy — Walk It Down'
+require_heading skills/code-review/SKILL.md '## Review strategy — Walk It Down'
 
 if [ -s "$workspace_root/skills/task-router/SKILL.md" ]; then
   check_frontmatter skills/task-router/SKILL.md task-router
@@ -174,7 +178,7 @@ if [ -s "$workspace_root/skills/task-router/SKILL.md" ]; then
   for heading in Responsibility Classification 'Cost boundary' Output; do
     require_heading skills/task-router/SKILL.md "## $heading"
   done
-  for route in FEATURE BUG NORMAL; do
+  for route in FEATURE BUG CODE_REVIEW NORMAL; do
     require_pattern skills/task-router/SKILL.md "ROUTE: $route" "router output $route"
   done
   require_pattern skills/task-router/SKILL.md 'ROUTE: UNCLEAR' 'router unclear output'
@@ -196,7 +200,8 @@ skills/bug-workflow/bug-analysis/SKILL.md|\
 skills/bug-workflow/bug-reproduction/SKILL.md|\
 skills/bug-workflow/bug-root-cause/SKILL.md|\
 skills/bug-workflow/bug-fix/SKILL.md|\
-skills/bug-workflow/bug-verification/SKILL.md) ;;
+skills/bug-workflow/bug-verification/SKILL.md|\
+skills/code-review/SKILL.md) ;;
     *) fail "$candidate_path: unexpected skill path; add a workflow folder and update routing intentionally" ;;
   esac
 done < <(find "$workspace_root/skills" -type f -name SKILL.md -print)
@@ -290,6 +295,15 @@ if [ -s "$workspace_root/$report" ]; then
   done
 fi
 
+report=skills/code-review/references/code-review-report-template.md
+if [ -s "$workspace_root/$report" ]; then
+  for heading in 'Review Scope' 'SLP Summary' Findings 'Fixes Applied' \
+    'Findings Rejected' 'Tests and Checks' 'Remaining Risks' 'Cycle History' \
+    'Final Decision and Handoff'; do
+    require_heading "$report" "## $heading"
+  done
+fi
+
 if [ -s "$workspace_root/AGENTS.md" ]; then
   for heading in 'Scope and routing' 'Applicability and authorization' \
     'Cost and context policy — Walk It Down' 'Shared handoff contract' 'State transitions' 'Loop limit and human intervention' \
@@ -297,6 +311,7 @@ if [ -s "$workspace_root/AGENTS.md" ]; then
     require_heading AGENTS.md "## $heading"
   done
   require_pattern AGENTS.md 'skills/task-router/SKILL[.]md' 'route to task-router'
+  require_pattern AGENTS.md 'skills/code-review/SKILL[.]md' 'route to code-review'
   for skill in task-requirements requirement-validator implementation verification; do
     require_pattern AGENTS.md "skills/feature-workflow/$skill/SKILL[.]md" "route to $skill"
   done
@@ -304,17 +319,20 @@ if [ -s "$workspace_root/AGENTS.md" ]; then
     require_pattern AGENTS.md "skills/bug-workflow/$skill/SKILL[.]md" "route to $skill"
   done
   for artifact in 'TASK CONTRACT' 'VALIDATION REPORT' 'IMPLEMENTATION REPORT' \
-    'VERIFICATION REPORT' 'FIX REQUEST' 'BUG CONTRACT' 'REPRODUCTION REPORT' \
+    'CODE REVIEW REPORT' 'VERIFICATION REPORT' 'FIX REQUEST' 'BUG CONTRACT' 'REPRODUCTION REPORT' \
     'ROOT CAUSE REPORT' 'BUG FIX REPORT' 'BUG VERIFICATION REPORT' 'BUG FIX REQUEST'; do
     require_pattern AGENTS.md "$artifact" "handoff artifact $artifact"
   done
-  for state in READY NEEDS_CLARIFICATION BLOCKED PASS FAIL NOT_RUN DONE; do
+  for state in READY NEEDS_CLARIFICATION BLOCKED APPROVED CHANGES_REQUIRED \
+    REVIEW_ESCALATION PASS FAIL NOT_RUN DONE; do
     require_pattern AGENTS.md "(^|[^A-Z_])$state([^A-Z_]|$)" "status $state"
   done
   require_pattern AGENTS.md 'INPUT.*TASK CONTRACT.*REQUIREMENT VALIDATION' 'requirements entry flow'
-  require_pattern AGENTS.md 'READY.*IMPLEMENTATION.*VERIFICATION.*PASS.*DONE' 'READY/PASS gates'
+  require_pattern AGENTS.md 'READY.*IMPLEMENTATION.*CODE REVIEW' 'implementation review gate'
+  require_pattern AGENTS.md 'CODE REVIEW APPROVED.*VERIFICATION.*PASS.*DONE' 'review approval and PASS gates'
+  require_pattern AGENTS.md 'CODE REVIEW CHANGES_REQUIRED.*FIX.*SELF-TEST.*RE-REVIEW' 'review fix loop'
   require_pattern AGENTS.md 'NEEDS_CLARIFICATION.*HUMAN CLARIFICATION.*REQUIREMENT VALIDATION' 'clarification loop'
-  require_pattern AGENTS.md 'VERIFICATION FAIL.*FIX REQUEST.*IMPLEMENTATION.*VERIFICATION' 'repair loop'
+  require_pattern AGENTS.md 'VERIFICATION FAIL.*FIX REQUEST.*IMPLEMENTATION.*CODE REVIEW.*VERIFICATION' 'reviewed repair loop'
   require_pattern AGENTS.md 'VERIFICATION BLOCKED.*STOP' 'blocked verification stop'
   require_pattern AGENTS.md 'Only PASS permits DONE' 'completion gate'
   require_pattern AGENTS.md 'Stop at the third' 'three-failure limit'
@@ -328,6 +346,7 @@ if [ -s "$workspace_root/AGENTS.md" ]; then
   require_pattern AGENTS.md 'USER REQUEST.*TASK ROUTER' 'automatic task-router entry'
   require_pattern AGENTS.md 'FEATURE.*task-requirements.*feature workflow' 'FEATURE route'
   require_pattern AGENTS.md 'BUG.*bug-analysis.*bug workflow' 'BUG route'
+  require_pattern AGENTS.md 'CODE_REVIEW.*code-review.*manual mode' 'CODE_REVIEW route'
   require_pattern AGENTS.md 'NORMAL.*normal Codex behavior' 'NORMAL route'
   require_pattern AGENTS.md 'Explicit user routing overrides' 'explicit routing override'
   require_pattern AGENTS.md 'Do not reclassify follow-up messages' 'single classification per task'
@@ -339,11 +358,14 @@ if [ -s "$workspace_root/AGENTS.md" ]; then
   require_pattern AGENTS.md 'failed_cycles_for_root_cause' 'per-root-cause failed-cycle count'
   require_pattern AGENTS.md 'total_fix_cycles' 'cumulative fix-cycle count'
   require_pattern AGENTS.md 'Stop at the third FAIL for the same' 'bug three-failure limit'
+  require_pattern AGENTS.md 'first CHANGES_REQUIRED decision' 'initial review finding counts toward limit'
+  require_pattern AGENTS.md 'third unsuccessful cycle.*REVIEW_ESCALATION' 'review three-cycle limit'
+  require_pattern AGENTS.md 'Only APPROVED permits verification' 'review completion gate'
 fi
 
 if [ "$errors" -gt 0 ]; then
   printf 'FAIL: %s structural error(s).\n' "$errors" >&2
   exit 1
 fi
-printf 'PASS: task router, feature and bug skills, templates, links, line limits, and orchestration structure validated.\n'
+printf 'PASS: task router, code review, feature and bug skills, templates, links, line limits, and orchestration structure validated.\n'
 printf 'Semantic behavior and native client discovery require separate review.\n'

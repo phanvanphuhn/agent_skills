@@ -31,7 +31,7 @@
 
 ## Required Handoff
 
-<After repair: IMPLEMENTATION REPORT → verification with the same contract revision/count.>
+<After repair: IMPLEMENTATION REPORT → code-review → verification with the same contract revision/count.>
 <At limit or a product/authority gap: exact human action required before work resumes.>
 
 Keep this artifact minimal. Include only information needed for the targeted repair;

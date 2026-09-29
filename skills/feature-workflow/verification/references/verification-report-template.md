@@ -2,7 +2,7 @@
 
 - Task ID / target: <matching contract>
 - Contract revision: <rN>
-- Input artifacts: <READY TASK CONTRACT, VALIDATION REPORT, IMPLEMENTATION REPORT, prior reports>
+- Input artifacts: <READY TASK CONTRACT, VALIDATION REPORT, IMPLEMENTATION REPORT, APPROVED CODE REVIEW REPORT, prior reports>
 - Final status: <PASS / FAIL / BLOCKED>
 - failed_cycles: <prior count + 1 for final FAIL; unchanged otherwise>
 - Implementation inspected: <files/diff baseline; identify pre-existing local changes>
@@ -67,7 +67,7 @@
 ## Handoff
 
 <PASS: completion evidence and meaningful limits.>
-<FAIL below three: FIX REQUEST and READY contract → implementation.>
+<FAIL below three: FIX REQUEST and READY contract → implementation → code-review → verification.>
 <Third FAIL: FIX REQUEST and cumulative attempts → human intervention; no automatic repair.>
 <BLOCKED: exact missing prerequisite, owner, and resume condition; no completion claim.>
 

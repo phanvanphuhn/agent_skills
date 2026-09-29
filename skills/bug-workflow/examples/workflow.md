@@ -197,7 +197,16 @@ The APPROVED reducer branch does not clear the attempt-scoped payment lock.
 
 ### Handoff
 
-- Route to bug-verification.
+- Route to code-review.
+
+## CODE REVIEW REPORT — f1
+
+- Mode: REQUIRED GATE
+- Baseline: f1 actual diff and focused tests
+- SLP summary: Supervisor finds the root-cause path addressed; Lead finds the reducer
+  pattern consistent; Peer finds no defect within the reviewed attempt-lock diff.
+- Findings: none.
+- Decision: APPROVED → bug-verification.
 
 ## BUG VERIFICATION REPORT — first cycle
 
@@ -233,6 +242,15 @@ too broad.
 
 The reducer now clears only `attemptPaymentLocked`; T1 and all three boundary tests pass.
 
+## CODE REVIEW REPORT — f2
+
+- Mode: REQUIRED GATE
+- Baseline: f2 repair diff, BUG FIX REQUEST fr1, and boundary tests
+- SLP summary: the implementation issue is corrected without changing the confirmed
+  root cause; permanent and attempt-scoped locks are now separated.
+- Findings: none.
+- Decision: APPROVED → bug-verification.
+
 ## BUG VERIFICATION REPORT — final
 
 - Root-cause revision: rc1
@@ -259,5 +277,6 @@ The reducer now clears only `attemptPaymentLocked`; T1 and all three boundary te
 
 - PASS: DONE.
 
-The router does not run again between artifacts. The first FAIL returns only to bug-fix,
-and the root-cause counter remains one after final PASS; history is not rewritten.
+The router does not run again between artifacts. The first FAIL returns only to bug-fix;
+the production repair must pass code-review again before bug-verification. The
+root-cause counter remains one after final PASS; review cycles remain separate.

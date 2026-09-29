@@ -36,4 +36,4 @@
 
 ## Required Handoff
 
-- <report/revised artifact and checks required before returning to verification>
+- <report/revised artifact, APPROVED code review, and checks required before returning to verification>

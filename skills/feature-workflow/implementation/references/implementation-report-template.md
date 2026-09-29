@@ -3,7 +3,7 @@
 - Task ID / target: <matching contract>
 - Contract revision: <rN>
 - Input artifacts: <READY TASK CONTRACT, VALIDATION REPORT, and FIX REQUEST if repair>
-- Status: <READY_FOR_VERIFICATION / BLOCKED>
+- Status: <READY_FOR_REVIEW / BLOCKED>
 - Mode: <initial / repair>
 - failed_cycles: <carried from latest verification; initially 0>
 
@@ -57,7 +57,7 @@
 
 ## Handoff
 
-- Next stage / owner: <verification; validator/human if blocked>
+- Next stage / owner: <code-review; validator/human if blocked>
 - Artifacts: <contract, report, diff/code, relevant tests, prior verification/fix request>
 - Resume condition: <only if blocked>
 

@@ -1,6 +1,6 @@
 ---
 name: verification
-description: "Verifies actual implementation and tests against every acceptance criterion in a READY TASK CONTRACT, producing evidence and FIX REQUESTs. Use after an implementation pass or repair and before reporting development complete."
+description: "Verifies an APPROVED reviewed implementation and tests against every acceptance criterion in a READY TASK CONTRACT, producing evidence and FIX REQUESTs before development completion."
 ---
 
 # Verification
@@ -12,19 +12,21 @@ whether the actual implementation satisfies the TASK CONTRACT with sufficient ev
 
 ## Trigger
 
-Run after initial implementation and every repair. It is the final gate before DONE.
-Use a separate review pass; a second agent is not required.
+Run after code-review returns APPROVED for the current implementation baseline. It is
+the final gate before DONE. Use a separate verification pass; a second agent is not
+required.
 
 ## When not to run
 
-Do not certify a missing/unvalidated contract, an unavailable implementation, or an
-outdated contract revision. Do not trust an implementation report as proof. Do not
-change production code or weaken ACs to make checks pass.
+Do not certify a missing/unvalidated contract, unavailable implementation, outdated
+contract revision, or code baseline without a matching APPROVED CODE REVIEW REPORT.
+Do not trust implementation or review reports as behavioral proof. Do not change
+production code or weaken ACs to make checks pass.
 
 ## Inputs
 
 - Complete READY TASK CONTRACT and matching VALIDATION REPORT.
-- Actual code/diff, tests, and IMPLEMENTATION REPORT.
+- Actual approved code/diff, tests, IMPLEMENTATION REPORT, and CODE REVIEW REPORT.
 - Previous verification/fix reports, failed-cycle count, and relevant human direction.
 - Available test environment and authorized verification capabilities.
 
@@ -55,8 +57,9 @@ not proof that all affected tests were found; apply contract and architecture ev
 ## Procedure
 
 1. Read workspace `AGENTS.md`, applicable repository instructions, the contract,
-   implementation report, [verification template](references/verification-report-template.md),
-   and [fix request template](references/fix-request-template.md).
+   implementation report, matching APPROVED CODE REVIEW REPORT,
+   [verification template](references/verification-report-template.md), and
+   [fix request template](references/fix-request-template.md).
 2. Start at V0/V1 with actual code and diff. For each AC, trace
    `AC → implementation → test → result`. Evaluate every required obligation.
 3. Create or strengthen appropriate automated tests. Where applicable cover negative
@@ -76,7 +79,8 @@ not proof that all affected tests were found; apply contract and architecture ev
    only when all required obligations pass. New requirements contradictions return
    to requirement-validator, retaining evidence of any established defects.
 8. On final FAIL, increment `failed_cycles` once and emit a FIX REQUEST. Below three,
-   route to implementation; on the third failure stop for human intervention with
+   route to implementation; every production repair then returns through code-review
+   before re-verification. On the third failure stop for human intervention with
    cumulative attempts. Carry the counter unchanged on PASS/BLOCKED.
 9. Emit the VERIFICATION REPORT and any FIX REQUEST, then perform the stated handoff.
 

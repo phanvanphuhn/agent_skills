@@ -65,21 +65,22 @@ debt, or create a new abstraction without demonstrated reuse or a contract need.
    unintended changes, errors, edge cases, types, compatibility, and architecture.
    Record successful, failed, blocked, and unexecuted checks accurately.
 6. Emit the [IMPLEMENTATION REPORT](references/implementation-report-template.md)
-   mapping each AC to actual code and naming remaining verification obligations.
-7. Hand code, contract, report, and the unchanged failed-cycle count to verification.
+   mapping each AC to actual code and naming remaining review and verification obligations.
+7. Hand code, contract, report, and the unchanged failed-cycle count to code-review.
 
 ## Outputs
 
 Implementation changes and a concise IMPLEMENTATION REPORT. A completed implementation
-pass has status READY_FOR_VERIFICATION, not task completion. Include exact file
+pass has status READY_FOR_REVIEW, not task completion. Include exact file
 locations, decisions, and check evidence so the verifier can inspect independently;
 do not repeat contract prose.
 
 ## Completion criteria
 
 The intended change is implemented, each AC maps to code, developer self-review is
-complete, unrelated changes are preserved, and risks/test gaps are disclosed.
-Only verification may return the PASS needed for DONE.
+complete, unrelated changes are preserved, and risks/test gaps are disclosed. The
+mandatory code-review gate is the next stage; only its APPROVED baseline may proceed
+to verification, and only verification may return the PASS needed for DONE.
 
 ## Failure and blocked behavior
 

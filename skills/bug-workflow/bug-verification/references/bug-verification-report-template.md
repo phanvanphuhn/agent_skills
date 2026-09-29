@@ -5,6 +5,7 @@
 - Reproduction report/status: <artifact/status>
 - Root-cause revision: <rcN>
 - Fix revision: <fN>
+- Approved code review: <CODE REVIEW REPORT revision and exact baseline>
 - Status: <PASS / FAIL / BLOCKED>
 - Failure classification: <IMPLEMENTATION_ISSUE / ROOT_CAUSE_INCORRECT / REQUIREMENT_UNCLEAR / N/A>
 - Verification level: <V0-V6 and reason for stopping/escalating>
@@ -60,7 +61,7 @@
 ## Handoff
 
 - PASS: DONE.
-- FAIL / IMPLEMENTATION_ISSUE: bug-fix with BUG FIX REQUEST.
+- FAIL / IMPLEMENTATION_ISSUE: bug-fix with BUG FIX REQUEST, then code-review before re-verification.
 - FAIL / ROOT_CAUSE_INCORRECT: bug-root-cause with new evidence and request.
 - FAIL / REQUIREMENT_UNCLEAR: human/bug-analysis; revise the contract before resuming.
 - BLOCKED: named owner/action/resume condition.

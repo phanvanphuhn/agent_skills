@@ -1,7 +1,7 @@
 # Workspace development skills
 
-Ten focused skills provide a cheap automatic router plus separate feature-delivery
-and evidence-first bug-fix pipelines. Start with
+Eleven focused skills provide a cheap automatic router, separate feature-delivery and
+evidence-first bug-fix pipelines, and a shared mandatory code-review gate. Start with
 [workspace instructions](../AGENTS.md); task-router selects a workflow but never
 performs downstream work.
 
@@ -13,6 +13,9 @@ skills/
 ├── README.md
 ├── CHANGELOG.md
 ├── task-router/SKILL.md
+├── code-review/
+│   ├── SKILL.md
+│   └── references/code-review-report-template.md
 ├── feature-workflow/
 │   ├── task-requirements/
 │   │   ├── SKILL.md
@@ -40,7 +43,8 @@ skills/
 └── scripts/validate-skill-system.sh
 ```
 
-The three top-level systems are `task-router`, `feature-workflow`, and `bug-workflow`.
+The four top-level systems are `task-router`, `code-review`, `feature-workflow`, and
+`bug-workflow`.
 Workflow folders contain their independently triggered stage skills, references,
 examples, and workflow-owned helpers. Add future systems as sibling folders instead of
 placing their stage skills directly under `skills/`.
@@ -59,21 +63,25 @@ Example prompts:
 - "Read skills/feature-workflow/task-requirements/SKILL.md and prepare a contract for this ticket."
 - "Run requirement-validator against the contract below; inspect code before asking questions."
 - "Use implementation with this READY contract and validation report."
-- "Use verification to check this implementation against contract r2."
+- "Use code-review on the implementation for contract r2 before verification."
+- "Review my current diff." (routes CODE_REVIEW in manual report-only mode)
+- "Review and fix src/payment.ts." (routes CODE_REVIEW with authorized fixes)
+- "Use verification to check this APPROVED implementation against contract r2."
 - "Follow the bug workflow for this crash report and attached logs."
 - "Use bug-reproduction with BUG CONTRACT b2; do not change production code."
 - "Verify fix f2 against root-cause revision rc1 and retain the cycle history."
 - "Explain why this story exists, but do not implement it." (routes NORMAL)
 
-Explicit reproduction or verification stage prompts require their named input
+Explicit reproduction, review-gate, or verification stage prompts require their named input
 artifacts. A bare request to implement does not bypass validation; the orchestrator
 obtains the contract and readiness first.
 Explicit stage or route instructions override automatic classification but do not
 grant missing production/environment authority.
 
 The router classifies by intent, not isolated keywords. Restoring behavior that should
-already work is BUG; introducing meaningful product behavior is FEATURE; explanation,
-review, docs, planning, small maintenance, and general questions are NORMAL. It uses
+already work is BUG; introducing meaningful product behavior is FEATURE; explicit code
+review is CODE_REVIEW; explanation, docs, planning, small maintenance, and general
+questions are NORMAL. It uses
 the prompt and immediately available metadata, preferably with zero tools or repository
 reads. If the distinction truly matters and cannot be inferred, it asks one question.
 
@@ -96,8 +104,9 @@ OBSERVE → UNDERSTAND → QUESTION → PLAN → ACT → VERIFY → LEARN
 task-requirements → TASK CONTRACT (DRAFT)
 requirement-validator → VALIDATION REPORT + finalized TASK CONTRACT (READY)
 implementation → code + IMPLEMENTATION REPORT
+code-review → CODE REVIEW REPORT (APPROVED / CHANGES_REQUIRED / BLOCKED)
 verification → VERIFICATION REPORT (PASS / FAIL / BLOCKED)
-FAIL → FIX REQUEST → implementation → verification
+FAIL → FIX REQUEST → implementation → code-review → verification
 ```
 
 Every stage applies Walk It Down. It begins with an upstream artifact or supplied
@@ -111,7 +120,10 @@ L0 artifact → L1 supplied evidence → L2 targeted search → L3 direct code/t
 
 Task requirements defaults to L1 and leaves deep investigation to the validator.
 Implementation starts from the READY contract's file/pattern/dependency lists.
-Verification walks V0 static inspection → V1 changed files → V2 AC tests → V3 module
+Code-review walks R0 diff → R1 files → R2 interfaces/types/tests → R3 callers and
+dependencies → R4 similar patterns → R5 broader architecture only when justified.
+It gathers evidence once for Supervisor, Lead, and Peer perspectives. Verification
+walks V0 static inspection → V1 changed files → V2 AC tests → V3 module
 tests → V4 static checks → V5 broader regression → V6 full suite. Contract-required
 and repository-required checks still run; cost control cannot weaken acceptance.
 
@@ -126,7 +138,8 @@ low-risk assumptions. NEEDS_CLARIFICATION/BLOCKED stops implementation. Answers
 produce an updated contract and another validation pass.
 
 The IMPLEMENTATION REPORT maps ACs to actual code but is not proof of correctness.
-The VERIFICATION REPORT records `AC → implementation → test → result`. Required
+The CODE REVIEW REPORT independently challenges the actual diff; APPROVED is required
+before verification. The VERIFICATION REPORT records `AC → implementation → test → result`. Required
 NOT_RUN/BLOCKED checks prevent final PASS. FAIL requires a FIX REQUEST with expected
 and actual behavior plus reproducible evidence. Only final PASS means DONE.
 
@@ -135,7 +148,9 @@ reach the three-cycle limit. At that point the agent stops with cumulative evide
 and asks for direction. A missing external prerequisite or product decision can stop
 the workflow sooner. No silent reset or infinite retry loop is allowed.
 
-Handoffs contain decisions, stable IDs, evidence, risks, and next actions. They omit
+Review uses its own three-cycle `review → fix → self-test → re-review` limit. It does
+not change verification failure counters. Handoffs contain decisions, stable IDs,
+evidence, risks, and next actions. They omit
 exploration transcripts and repeated upstream prose. A failure returns the focused
 FIX REQUEST and READY baseline directly to implementation. Earlier stages rerun only
 when the failure exposes a requirements ambiguity.
@@ -144,11 +159,12 @@ when the failure exposes a requirements ambiguity.
 
 ```text
 BUG INPUT → BUG CONTRACT → REPRODUCTION REPORT → ROOT CAUSE REPORT
-  → BUG FIX REPORT → BUG VERIFICATION REPORT → PASS → DONE
+  → BUG FIX REPORT → CODE REVIEW REPORT (APPROVED)
+  → BUG VERIFICATION REPORT → PASS → DONE
 
 NEEDS_INFORMATION/CANNOT_REPRODUCE → human evidence → reproduction
-IMPLEMENTATION_ISSUE → BUG FIX REQUEST → bug-fix → bug-verification
-ROOT_CAUSE_INCORRECT → bug-root-cause → bug-fix → bug-verification
+IMPLEMENTATION_ISSUE → BUG FIX REQUEST → bug-fix → code-review → bug-verification
+ROOT_CAUSE_INCORRECT → bug-root-cause → bug-fix → code-review → bug-verification
 REQUIREMENT_UNCLEAR → human/bug-analysis
 ```
 
@@ -156,7 +172,8 @@ The bug pipeline separates observed evidence from conclusions and does not permi
 production fix before reproduction/evidence confirmation and a supported root cause.
 Reproduction has five statuses: REPRODUCED, EVIDENCE_CONFIRMED, CANNOT_REPRODUCE,
 NEEDS_INFORMATION, and BLOCKED. Root cause tests hypotheses explicitly and returns a
-bounded fix strategy. Verification inspects the actual diff and original failure.
+bounded fix strategy. Code-review checks that the fix actually follows that cause and
+repository architecture; verification then proves the reviewed behavior.
 
 Walk It Down extends to L6 for unusually difficult debugging and V6 for full-suite or
 real-environment evidence. The stages reuse the generic scripts under `verification/`;
@@ -212,9 +229,9 @@ bash skills/scripts/validate-skill-system.sh /path/to/workspace-copy
 
 The script uses Bash and standard shell utilities (`awk`, `dirname`, `basename`).
 It needs no package installation or network, never edits files, and returns zero
-on success or non-zero with file-specific errors. It checks all ten skill files,
-templates, helper-script syntax, headings, local links, line limits, feature and bug
-orchestration markers, status routes, and loop protection.
+on success or non-zero with file-specific errors. It checks all eleven skill files,
+templates, helper-script syntax, headings, local links, line limits, feature, bug, and
+review orchestration markers, status routes, and loop protection.
 
 For predictable dependency-free validation, frontmatter uses exactly two fields:
 an unquoted lowercase-hyphen `name` and a one-line double-quoted `description`.
@@ -232,7 +249,7 @@ Use the [feature example](feature-workflow/examples/workflow.md) and
 fictional training evidence, not assertions that application tests ran. Calibrate on
 several real tasks before treating the skills as reliable:
 
-1. A complete small change: expect all four stages and evidence-backed PASS.
+1. A complete small change: expect implementation → code-review APPROVED → verification PASS.
 2. An ambiguous story: expect code inspection, then focused clarification and no implementation.
 3. A code-answerable question: expect repository evidence and no unnecessary stakeholder question.
 4. A failed regression: expect FIX REQUEST, bounded repair, and re-verification.
@@ -244,6 +261,14 @@ several real tasks before treating the skills as reliable:
 9. An incorrect bug hypothesis: expect rejected evidence and no production edit.
 10. A verification result disproving root cause: expect a focused route back to
     bug-root-cause with retained total cycle history.
+11. An explicit file review: expect MANUAL REVIEW without feature or bug stages.
+12. An explicit review-and-fix: expect SLP findings, authorized fix, self-test, and
+    targeted re-review.
+13. A HIGH review finding: expect a fix before verification and a new review after
+    every later production-code repair.
+14. A disproven review finding: expect REJECTED_FINDING and no unnecessary code edit.
+15. Three unsuccessful review-fix cycles: expect REVIEW_ESCALATION with review history,
+    while feature and bug verification counters remain unchanged.
 
 Review trigger precision, AC preservation, evidence quality, assumption visibility,
 context/verification escalation, handoff size, and repeatability. Mechanical checks should be deterministic; design

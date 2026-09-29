@@ -1,5 +1,35 @@
 # Skill-system changelog
 
+## 2026-09-29 — Mandatory SLP code-review gate
+
+- Added the shared `code-review` skill with REQUIRED GATE and MANUAL REVIEW modes.
+  It gathers evidence once and reviews through Supervisor, Lead, and Peer perspectives,
+  consolidates evidence-backed findings, and returns APPROVED, CHANGES_REQUIRED,
+  BLOCKED, or REVIEW_ESCALATION.
+- Added the CODE REVIEW REPORT contract, R0-R5 Walk-It-Down strategy, severity and
+  finding schemas, NEEDS_CONTEXT/NEEDS_CONFIRMATION boundaries, independent-review
+  requirement, and a three-cycle review/fix/self-test/re-review limit distinct from
+  feature and bug verification counters.
+- Routed every feature implementation and bug fix, including later production repairs,
+  through code-review before verification. Upstream rerouting is limited to invalid
+  requirements, incorrect root cause, missing authority, or human product decisions.
+- Extended task-router with a cheap CODE_REVIEW route for explicit file/diff/commit/
+  branch/PR review intent. Manual review remains report-only unless fixes are requested;
+  explanations and unrelated NORMAL tasks do not trigger review.
+- Updated feature and bug stage contracts, report templates, worked examples, README,
+  AGENTS orchestration, and structural validation for the eleventh skill and mandatory
+  APPROVED baseline.
+- Validation: the dependency-free structural validator passed; all eleven frontmatter
+  blocks parsed with Ruby YAML; Bash syntax, local links, required headings, line limits,
+  unexpected-skill detection, and trailing-whitespace checks passed. Twelve routing and
+  loop scenario assertions passed for feature, bug, NORMAL explanation, manual review,
+  review-and-fix, zero findings, blocking findings, invalid root cause, rejected finding,
+  repaired-code re-review, NEEDS_CONTEXT, and third-cycle escalation.
+- Limit: the bundled skill-creator `quick_validate.py` could not run because PyYAML is
+  not installed; the workspace validator and Ruby YAML parser covered its structural
+  frontmatter/name/description checks. Real independent-agent calibration remains to be
+  exercised on production development tasks.
+
 ## 2026-09-23 — Workflow folder organization
 
 - Grouped the architecture into three top-level systems under `skills/`:

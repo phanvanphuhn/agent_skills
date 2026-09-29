@@ -1,6 +1,6 @@
 ---
 name: bug-verification
-description: "Independently verifies that a bug fix removes the reproduced failure without regressions and routes failures to the necessary prior stage. Use after every bug-fix implementation or repair."
+description: "Independently verifies that an APPROVED reviewed bug fix removes the reproduced failure without regressions and routes failures to the necessary prior stage."
 ---
 
 # Bug verification
@@ -12,17 +12,20 @@ fix resolves the confirmed bug, covers its cause, and preserves required behavio
 
 ## Trigger
 
-Run after every IMPLEMENTED BUG FIX REPORT, including repair revisions. Verification
-is required even when developer checks passed.
+Run after code-review returns APPROVED for the current IMPLEMENTED BUG FIX REPORT and
+code baseline, including repair revisions. Verification is required even when developer
+and review checks passed.
 
 ## When not to run
 
-Do not implement production fixes, infer success from the report alone, or mark PASS
-when a required check is NOT_RUN/BLOCKED. Do not rerun unrelated stages by default.
+Do not verify a code baseline without a matching APPROVED CODE REVIEW REPORT, implement
+production fixes, infer success from reports alone, or mark PASS when a required check
+is NOT_RUN/BLOCKED. Do not rerun unrelated stages by default.
 
 ## Inputs
 
-- BUG CONTRACT, REPRODUCTION REPORT, ROOT CAUSE REPORT, and BUG FIX REPORT.
+- BUG CONTRACT, REPRODUCTION REPORT, ROOT CAUSE REPORT, BUG FIX REPORT, and matching
+  APPROVED CODE REVIEW REPORT.
 - Actual diff/worktree, tests, repository instructions, and available environments.
 - Prior BUG VERIFICATION REPORT/FIX REQUEST and complete cycle history, when present.
 
@@ -47,8 +50,8 @@ when applicable. Helpers do not decide test completeness.
 
 ## Procedure
 
-1. Confirm compatible artifact revisions and counters. Inspect the actual diff rather
-   than relying on the implementation summary.
+1. Confirm compatible artifact revisions, APPROVED review baseline, and counters.
+   Inspect the actual diff rather than relying on implementation or review summaries.
 2. Check that the edit addresses the confirmed cause and contains no unrelated change,
    secret, temporary diagnostic, weakened assertion, or hidden failure.
 3. Verify `reported failure → reproduction evidence → root cause → change → regression
@@ -60,8 +63,9 @@ when applicable. Helpers do not decide test completeness.
 6. Return PASS only when the failure is resolved and required evidence passes. On
    failure, classify it as IMPLEMENTATION_ISSUE, ROOT_CAUSE_INCORRECT, or
    REQUIREMENT_UNCLEAR and produce a focused BUG FIX REQUEST.
-7. Route IMPLEMENTATION_ISSUE to bug-fix; ROOT_CAUSE_INCORRECT to bug-root-cause;
-   REQUIREMENT_UNCLEAR to human/bug-analysis. BLOCKED names owner/resume condition.
+7. Route IMPLEMENTATION_ISSUE to bug-fix and require code-review again after its
+   production repair; route ROOT_CAUSE_INCORRECT to bug-root-cause and REQUIREMENT_UNCLEAR
+   to human/bug-analysis. BLOCKED names owner/resume condition.
 8. Update `failed_cycles_for_root_cause` and `total_fix_cycles`. The initial FAIL is
    cycle one. Stop at the third FAIL for the same root-cause revision and request human
    intervention with cumulative evidence. A materially different evidence-backed root

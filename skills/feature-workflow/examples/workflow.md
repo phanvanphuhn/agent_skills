@@ -211,7 +211,7 @@ Matching VALIDATION REPORT r1 is READY; authorized implementation follows.
 - Task ID / target: DEMO-17 / demo-api
 - Contract revision: r1
 - Input artifacts: finalized READY TASK CONTRACT r1 and VALIDATION REPORT r1
-- Status: READY_FOR_VERIFICATION
+- Status: READY_FOR_REVIEW
 - Mode: initial
 - failed_cycles: 0
 
@@ -270,120 +270,51 @@ Not applicable to the initial pass.
 
 ### Handoff
 
-READY contract, implementation report, code and tests → verification, failed_cycles 0.
+READY contract, implementation report, actual diff, and tests → code-review;
+failed_cycles remains 0.
 
-## VERIFICATION REPORT — initial failure
+## CODE REVIEW REPORT — review/fix/re-review
 
-- Task ID / target: DEMO-17 / demo-api
-- Contract revision: r1
-- Input artifacts: READY contract, validation report, initial implementation report
-- Final status: FAIL
-- failed_cycles: 1
-- Implementation inspected: `src/export.ts` and changed tests
+- Task / target: DEMO-17 / demo-api
+- Mode: REQUIRED GATE
+- Review baseline: initial implementation diff
+- Review cycle: 1
+- Context used: R0 diff → R2 affected test; stopped after AC2 was resolved by code.
 
-### Verification Scope
+### SLP Summary
 
-- Changed files: `src/export.ts`, `tests/export.spec.ts`.
-- Related tests: existing export test plus the new AC-specific whitespace case.
-- Highest level: V4.
-- Escalations: V4 typecheck required by TASK CONTRACT V3; V3/V5/V6 not justified.
+- Supervisor: AC2 is incomplete because whitespace-only input produces an empty name.
+- Lead: existing parser and response architecture are reused appropriately.
+- Peer: `trim() ??` does not fall back after `trim()` returns `""`; the required
+  whitespace test is missing.
 
-### AC Verification
+### Consolidated Finding
 
-- AC1: PASS. `src/export.ts:12`; padded-name test returns `report.txt`.
-- AC2: FAIL. New whitespace-only test expects `export.txt`, receives an empty string.
-- AC3: PASS. Response status/content regression assertions remain unchanged.
+- CR-001; MEDIUM; `src/export.ts:12`; found by Supervisor and Peer.
+- Evidence: optional chaining returns `""` for whitespace and nullish coalescing keeps it.
+- Impact: AC2 fails for a required input.
+- Action/status: replace the empty-string path with the existing default and add the
+  whitespace regression case; FIXED during the required review loop.
 
-### Other Required Checks
+### Fix, Self-Test, and Re-review
 
-V1: FAIL on whitespace-only. V2: PASS. V3: test command fails; types pass.
+The review fix uses `requestedFilename?.trim() || "export.txt"` and adds the missing
+test. Fictional focused tests pass 6/6 and typecheck exits 0. Targeted re-review confirms
+CR-001 is resolved, AC1/AC3 remain unchanged, and no new finding was introduced.
 
-### Regression Risk
+### Final Decision and Handoff
 
-Empty filenames affect callers who supply whitespace.
-
-### Code Quality
-
-Nullish coalescing preserves the empty string returned by `trim()`.
-
-### Architecture Compliance
-
-Existing query parser and response model reused.
-
-### Uncovered Edge Cases
-
-Whitespace case now covered by a failing regression test.
-
-### Test Coverage
-
-Every AC has assertions; one does not pass.
-
-### Commands Executed
-
-- Fictional demo-api: `npm test -- --runInBand`, exit 1, 1 failed / 5 passed.
-- Fictional demo-api: `npx tsc --noEmit`, exit 0.
-
-### Failures
-
-F1: AC2 expects fallback after trimming whitespace; implementation returns empty text.
-
-### Cycle History
-
-Initial verification FAIL; failed_cycles 1. No prior repair.
-
-### Handoff
-
-FIX REQUEST F1 and READY contract r1 → implementation.
-
-## FIX REQUEST
-
-- Task ID / target: DEMO-17 / demo-api
-- Contract revision: r1
-- Input artifacts: initial VERIFICATION REPORT and IMPLEMENTATION REPORT
-- failed_cycles: 1
-- Routing: implementation
-- Repair context: AC2, `src/export.ts:12`, whitespace regression test, and failure F1 only.
-- Failing AC: AC2
-- Expected: whitespace-only input returns `export.txt`.
-- Actual: whitespace-only input returns an empty string.
-- Evidence: fictional whitespace test failure in the report above.
-- Relevant file: `src/export.ts:12`
-- Recommended correction: use the fallback when the trimmed value is empty.
-- Regression verification: retain the failing whitespace test and all content/status assertions.
-- Constraints: preserve AC1/AC3 and parser behavior; no changed acceptance criteria.
-- Prior attempts/blockers: none.
-- Handoff: repaired code and implementation report → verification with failed_cycles 1.
-
-## IMPLEMENTATION REPORT — repair
-
-- Task ID / target: DEMO-17 / demo-api
-- Contract revision: r1
-- Input artifacts: READY contract, validation report, FIX REQUEST F1, failed verification
-- Status: READY_FOR_VERIFICATION
-- Mode: repair
-- failed_cycles: 1
-- Summary: blank trimmed values now use the existing default.
-- Files changed: `src/export.ts:12`; regression tests retained.
-- Implementation decisions: string inputs use `requestedFilename?.trim() || "export.txt"`.
-- AC mapping: AC1/AC2 filename branch; AC3 unchanged response assembly.
-- Assumptions used: A1 unchanged.
-- Developer self-review: checked missing/empty/whitespace/padded/valid values and response fields.
-- Developer checks: fictional tests exit 0, 6 passed; types exit 0.
-- Context escalation: L3 named file/test only; no renewed requirements search.
-- Risks: none newly identified within the specified contract.
-- Tests needed: independent verification of the diff and recorded suite.
-- Remaining concerns: none.
-- Repair response: F1 corrected and whitespace regression test retained.
-- Handoff: repaired code/report → verification; failed_cycles remains 1.
+APPROVED for the post-fix diff → verification. Review cycle remains 1; feature
+failed_cycles remains 0.
 
 ## VERIFICATION REPORT — final pass
 
 - Task ID / target: DEMO-17 / demo-api
 - Contract revision: r1
-- Input artifacts: READY contract, validation, repaired implementation report, FIX REQUEST F1
+- Input artifacts: READY contract, validation, implementation report, APPROVED CODE REVIEW REPORT
 - Final status: PASS
-- failed_cycles: 1
-- Implementation inspected: repaired filename branch and complete test assertions.
+- failed_cycles: 0
+- Implementation inspected: approved post-review filename branch and complete assertions.
 - Verification scope: V0/V1 repaired diff, V2 AC tests, and contract-required V4
   typecheck; V3/V5/V6 were unnecessary after sufficient passing evidence.
 - AC verification: AC1 PASS (padded/valid), AC2 PASS (absent/empty/whitespace),
@@ -397,7 +328,8 @@ FIX REQUEST F1 and READY contract r1 → implementation.
 - Commands executed: fictional demo-api `npm test -- --runInBand`, exit 0, 6 passed;
   `npx tsc --noEmit`, exit 0.
 - Failures: none remaining.
-- Cycle history: initial FAIL → F1 repair → PASS; failed_cycles remains 1.
+- Cycle history: review correction occurred before verification; verification PASS;
+  failed_cycles remains 0.
 - Handoff: DONE, with evidence limited to this fictional local contract.
 
 ## Alternative stop paths
@@ -406,5 +338,6 @@ If the story omitted blank-input behavior and the repository did not settle it,
 the validator would classify it NEEDS_CLARIFICATION, ask the PO to choose the behavior,
 and stop before implementation. If a required service could not be reached,
 verification would return BLOCKED and identify the missing evidence. If two further
-repairs both failed after the first failure above, failed_cycles would reach three;
-the next handoff would be to the human, not another automatic implementation attempt.
+review fixes failed after CR-001, review_cycles would reach three and emit
+REVIEW_ESCALATION. A later verification FAIL would route to implementation, then back
+through code-review before re-verification; its separate failed_cycles would increment.
