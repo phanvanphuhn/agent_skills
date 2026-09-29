@@ -1,5 +1,25 @@
 # Skill-system changelog
 
+## 2026-09-29 — Split code review from review fixes
+
+- Replaced the bundled review-and-fix behavior with two single-responsibility skills
+  under `code-review-workflow/`: read-only `code-review` and explicit-only
+  `fix-code-review`.
+- Standardized CODE REVIEW REPORT issues on HIGH, MEDIUM, and LOW severity. HIGH and
+  MEDIUM findings return CHANGES_REQUIRED; LOW findings remain non-blocking unless a
+  repository rule or concrete completion risk requires otherwise.
+- Made CHANGES_REQUIRED a stop condition. Only an explicit user fix request, invocation
+  of fix-code-review, or an original combined `review and fix` request authorizes the
+  separate correction stage after the initial report exists.
+- Added the FIX CODE REVIEW REPORT contract with issue dispositions, bounded changes,
+  self-test evidence, exact post-fix baseline, and mandatory return to code-review.
+  The fix skill cannot approve changes or route directly to verification.
+- Updated task routing, workspace orchestration, examples, README, and structural
+  validation for twelve skills and the read-only review boundary.
+- Validation: dependency-free structural validation and Bash syntax checks passed;
+  all twelve restricted frontmatter blocks, templates, links, paths, line limits,
+  routing states, stop conditions, and review-cycle markers were checked.
+
 ## 2026-09-29 — Mandatory SLP code-review gate
 
 - Added the shared `code-review` skill with REQUIRED GATE and MANUAL REVIEW modes.

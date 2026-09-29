@@ -1,7 +1,7 @@
 # Workspace development skills
 
-Eleven focused skills provide a cheap automatic router, separate feature-delivery and
-evidence-first bug-fix pipelines, and a shared mandatory code-review gate. Start with
+Twelve focused skills provide a cheap automatic router, separate feature-delivery and
+evidence-first bug-fix pipelines, and a shared review/fix workflow. Start with
 [workspace instructions](../AGENTS.md); task-router selects a workflow but never
 performs downstream work.
 
@@ -13,9 +13,13 @@ skills/
 ├── README.md
 ├── CHANGELOG.md
 ├── task-router/SKILL.md
-├── code-review/
-│   ├── SKILL.md
-│   └── references/code-review-report-template.md
+├── code-review-workflow/
+│   ├── code-review/
+│   │   ├── SKILL.md
+│   │   └── references/code-review-report-template.md
+│   └── fix-code-review/
+│       ├── SKILL.md
+│       └── references/fix-code-review-report-template.md
 ├── feature-workflow/
 │   ├── task-requirements/
 │   │   ├── SKILL.md
@@ -43,8 +47,8 @@ skills/
 └── scripts/validate-skill-system.sh
 ```
 
-The four top-level systems are `task-router`, `code-review`, `feature-workflow`, and
-`bug-workflow`.
+The four top-level systems are `task-router`, `code-review-workflow`,
+`feature-workflow`, and `bug-workflow`.
 Workflow folders contain their independently triggered stage skills, references,
 examples, and workflow-owned helpers. Add future systems as sibling folders instead of
 placing their stage skills directly under `skills/`.
@@ -64,8 +68,10 @@ Example prompts:
 - "Run requirement-validator against the contract below; inspect code before asking questions."
 - "Use implementation with this READY contract and validation report."
 - "Use code-review on the implementation for contract r2 before verification."
-- "Review my current diff." (routes CODE_REVIEW in manual report-only mode)
-- "Review and fix src/payment.ts." (routes CODE_REVIEW with authorized fixes)
+- "Review my current diff." (routes CODE_REVIEW in read-only manual mode)
+- "Fix the issues in CODE REVIEW REPORT cr2." (routes FIX_CODE_REVIEW)
+- "Review and fix src/payment.ts." (reviews first, then permits the separate fix skill
+  only if the report returns CHANGES_REQUIRED)
 - "Use verification to check this APPROVED implementation against contract r2."
 - "Follow the bug workflow for this crash report and attached logs."
 - "Use bug-reproduction with BUG CONTRACT b2; do not change production code."
@@ -80,8 +86,9 @@ grant missing production/environment authority.
 
 The router classifies by intent, not isolated keywords. Restoring behavior that should
 already work is BUG; introducing meaningful product behavior is FEATURE; explicit code
-review is CODE_REVIEW; explanation, docs, planning, small maintenance, and general
-questions are NORMAL. It uses
+review is CODE_REVIEW; an explicit request to correct an existing review report is
+FIX_CODE_REVIEW; explanation, docs, planning, small maintenance, and general questions
+are NORMAL. It uses
 the prompt and immediately available metadata, preferably with zero tools or repository
 reads. If the distinction truly matters and cannot be inferred, it asks one question.
 
@@ -105,6 +112,9 @@ task-requirements → TASK CONTRACT (DRAFT)
 requirement-validator → VALIDATION REPORT + finalized TASK CONTRACT (READY)
 implementation → code + IMPLEMENTATION REPORT
 code-review → CODE REVIEW REPORT (APPROVED / CHANGES_REQUIRED / BLOCKED)
+CHANGES_REQUIRED → stop for explicit fix instruction
+fix-code-review → FIX CODE REVIEW REPORT (READY_FOR_RE_REVIEW / BLOCKED)
+READY_FOR_RE_REVIEW → code-review again
 verification → VERIFICATION REPORT (PASS / FAIL / BLOCKED)
 FAIL → FIX REQUEST → implementation → code-review → verification
 ```
@@ -138,8 +148,13 @@ low-risk assumptions. NEEDS_CLARIFICATION/BLOCKED stops implementation. Answers
 produce an updated contract and another validation pass.
 
 The IMPLEMENTATION REPORT maps ACs to actual code but is not proof of correctness.
-The CODE REVIEW REPORT independently challenges the actual diff; APPROVED is required
-before verification. The VERIFICATION REPORT records `AC → implementation → test → result`. Required
+The CODE REVIEW REPORT independently challenges the actual diff and is always read-only.
+It lists issues as HIGH, MEDIUM, or LOW; APPROVED is required before verification.
+CHANGES_REQUIRED stops the workflow. Only explicit user authorization invokes
+fix-code-review, which applies bounded corrections, self-tests, emits a FIX CODE REVIEW
+REPORT, and returns to code-review for independent approval. The fix skill cannot approve
+its own changes or route directly to verification. The VERIFICATION REPORT records
+`AC → implementation → test → result`. Required
 NOT_RUN/BLOCKED checks prevent final PASS. FAIL requires a FIX REQUEST with expected
 and actual behavior plus reproducible evidence. Only final PASS means DONE.
 
@@ -148,8 +163,8 @@ reach the three-cycle limit. At that point the agent stops with cumulative evide
 and asks for direction. A missing external prerequisite or product decision can stop
 the workflow sooner. No silent reset or infinite retry loop is allowed.
 
-Review uses its own three-cycle `review → fix → self-test → re-review` limit. It does
-not change verification failure counters. Handoffs contain decisions, stable IDs,
+Review uses its own three-cycle `review → explicit fix → self-test → re-review` limit.
+It does not change verification failure counters. Handoffs contain decisions, stable IDs,
 evidence, risks, and next actions. They omit
 exploration transcripts and repeated upstream prose. A failure returns the focused
 FIX REQUEST and READY baseline directly to implementation. Earlier stages rerun only
@@ -229,7 +244,7 @@ bash skills/scripts/validate-skill-system.sh /path/to/workspace-copy
 
 The script uses Bash and standard shell utilities (`awk`, `dirname`, `basename`).
 It needs no package installation or network, never edits files, and returns zero
-on success or non-zero with file-specific errors. It checks all eleven skill files,
+on success or non-zero with file-specific errors. It checks all twelve skill files,
 templates, helper-script syntax, headings, local links, line limits, feature, bug, and
 review orchestration markers, status routes, and loop protection.
 
@@ -262,10 +277,11 @@ several real tasks before treating the skills as reliable:
 10. A verification result disproving root cause: expect a focused route back to
     bug-root-cause with retained total cycle history.
 11. An explicit file review: expect MANUAL REVIEW without feature or bug stages.
-12. An explicit review-and-fix: expect SLP findings, authorized fix, self-test, and
-    targeted re-review.
-13. A HIGH review finding: expect a fix before verification and a new review after
-    every later production-code repair.
+12. An explicit review-and-fix: expect a read-only SLP report first, then the separately
+    authorized fix skill, self-test, and targeted re-review.
+13. A HIGH review finding without fix authorization: expect CHANGES_REQUIRED and no
+    code edit. After explicit authorization, expect a fix before verification and a new
+    review after every later production-code repair.
 14. A disproven review finding: expect REJECTED_FINDING and no unnecessary code edit.
 15. Three unsuccessful review-fix cycles: expect REVIEW_ESCALATION with review history,
     while feature and bug verification counters remain unchanged.

@@ -5,7 +5,7 @@
 - Input artifacts: <contract/root-cause/implementation artifacts or manual scope>
 - Review baseline: <diff/base/head, commit, files, or supplied code>
 - Decision: <APPROVED / CHANGES_REQUIRED / BLOCKED / REVIEW_ESCALATION>
-- Review cycle: <0 before findings; 1-3 after each CHANGES_REQUIRED decision>
+- Review cycle: <0 initial approval; 1-3 after each CHANGES_REQUIRED review>
 - Independence: <reviewer separation and any disclosed limitation>
 - Context used: <maximum R0-R5 and question justifying expansion beyond R1>
 
@@ -13,38 +13,30 @@
 
 - Files/diff reviewed: <exact scope and directly related evidence>
 - Excluded/pre-existing changes: <identified unrelated work or none>
-- Requirements/root-cause baseline: <artifact revision or NEEDS_CONTEXT for manual mode>
+- Requirements/root-cause baseline: <artifact revision or NEEDS_CONTEXT>
 
 ## SLP Summary
 
-- Supervisor: <scope, intent, compatibility, delivery/regression result>
-- Lead: <architecture, conventions, safety, maintainability result>
+- Supervisor: <intent, completeness, compatibility, delivery/regression result>
+- Lead: <architecture, conventions, safety, and maintainability result>
 - Peer: <diff-level logic, edge, async, cleanup, and test result>
 
-## Findings
+## Issues
 
 ### <CR-ID> — <short title>
 
-- Severity: <CRITICAL / HIGH / MEDIUM / LOW / INFO>
+- Severity: <HIGH / MEDIUM / LOW>
 - Found by: <SUPERVISOR / LEAD / PEER; one or more>
 - File / location: <path:symbol-or-line>
-- Problem: <specific defect or observation>
+- Problem: <specific defect>
 - Evidence: <code/repository evidence establishing it>
 - Impact: <behavior, security, regression, maintenance, or delivery consequence>
 - Recommended action: <smallest safe correction or follow-up>
-- Status: <OPEN / FIXED / REJECTED_FINDING / NEEDS_CONFIRMATION / NEEDS_CONTEXT>
+- Status: <OPEN / RESOLVED / NEEDS_CONFIRMATION / NEEDS_CONTEXT>
 
-<Omit this subsection when there are zero findings; state `No findings.` instead.>
+<When there are zero issues, state `No issues.` instead of creating empty severity sections.>
 
-## Fixes Applied
-
-- <finding ID → exact correction and changed files; none / not authorized>
-
-## Findings Rejected
-
-- <finding ID → evidence disproving it; omit when none>
-
-## Tests and Checks
+## Read-Only Checks
 
 - `<working directory; exact command>` — <PASS / FAIL / NOT_RUN / BLOCKED; result>
 
@@ -52,16 +44,16 @@
 
 - <concrete risk, missing evidence, or none>
 
-## Cycle History
+## Review History
 
-1. <decision, findings, correction, self-test, re-review result>
+1. <baseline, decision, issue IDs, and relationship to any prior FIX CODE REVIEW REPORT>
 
 ## Final Decision and Handoff
 
 - Decision: <APPROVED / CHANGES_REQUIRED / BLOCKED / REVIEW_ESCALATION>
 - Approved baseline: <exact commit/diff/worktree state; N/A unless APPROVED>
-- Next stage / owner: <verification, bug-verification, validator, root-cause, human, or done>
-- Resume condition: <only when blocked/escalated>
+- Next stage / owner: <verification, bug-verification, user/fix-code-review, validator, root-cause, or human>
+- Resume condition: <explicit fix instruction, missing evidence, or escalation decision when applicable>
 
-Keep this report concise. Consolidate duplicate SLP findings and never expose private
-reasoning, secrets, unrelated payloads, or an implementation-report narrative.
+This report is read-only. Do not claim fixes were applied or tests passed unless the
+recorded command actually ran. Never expose private reasoning, secrets, or unrelated data.

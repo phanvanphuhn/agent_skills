@@ -273,11 +273,12 @@ Not applicable to the initial pass.
 READY contract, implementation report, actual diff, and tests → code-review;
 failed_cycles remains 0.
 
-## CODE REVIEW REPORT — review/fix/re-review
+## CODE REVIEW REPORT — initial read-only review
 
 - Task / target: DEMO-17 / demo-api
 - Mode: REQUIRED GATE
 - Review baseline: initial implementation diff
+- Decision: CHANGES_REQUIRED
 - Review cycle: 1
 - Context used: R0 diff → R2 affected test; stopped after AC2 was resolved by code.
 
@@ -288,24 +289,79 @@ failed_cycles remains 0.
 - Peer: `trim() ??` does not fall back after `trim()` returns `""`; the required
   whitespace test is missing.
 
-### Consolidated Finding
+### Issues
 
 - CR-001; MEDIUM; `src/export.ts:12`; found by Supervisor and Peer.
 - Evidence: optional chaining returns `""` for whitespace and nullish coalescing keeps it.
 - Impact: AC2 fails for a required input.
-- Action/status: replace the empty-string path with the existing default and add the
-  whitespace regression case; FIXED during the required review loop.
+- Recommended action: replace the empty-string path with the existing default and add
+  the whitespace regression case.
+- Status: OPEN.
 
-### Fix, Self-Test, and Re-review
+### Read-Only Checks
 
-The review fix uses `requestedFilename?.trim() || "export.txt"` and adds the missing
-test. Fictional focused tests pass 6/6 and typecheck exits 0. Targeted re-review confirms
-CR-001 is resolved, AC1/AC3 remain unchanged, and no new finding was introduced.
+Fictional inspection of the implementation diff and affected test file confirms the
+missing branch and test. No code or test was modified by code-review.
 
 ### Final Decision and Handoff
 
-APPROVED for the post-fix diff → verification. Review cycle remains 1; feature
-failed_cycles remains 0.
+CHANGES_REQUIRED. CR-001 → user. The workflow stops until the user explicitly requests
+the fix. Feature failed_cycles remains 0.
+
+## User authorization
+
+The fictional user says: "Fix CR-001 from the latest CODE REVIEW REPORT."
+
+## FIX CODE REVIEW REPORT
+
+- Task / target: DEMO-17 / demo-api
+- Input CODE REVIEW REPORT: initial baseline, CHANGES_REQUIRED, CR-001
+- Explicit authorization: fictional user instruction above
+- Review-fix cycle: 1
+- Status: READY_FOR_RE_REVIEW
+- Pre-fix baseline: initial implementation diff
+- Post-fix baseline: diff using `requestedFilename?.trim() || "export.txt"` plus the
+  whitespace regression case
+
+### Issue Disposition
+
+- CR-001: ACCEPTED. The nullish fallback does not cover an empty trimmed string.
+- Correction: update the fallback and add the required whitespace-only assertion.
+
+### Self-Tests
+
+Fictional focused tests pass 6/6 and typecheck exits 0.
+
+### Fix Diff Review
+
+The fix is limited to CR-001, preserves AC1/AC3, and introduces no unrelated change.
+
+### Handoff
+
+READY_FOR_RE_REVIEW → code-review. This report does not approve its own changes.
+
+## CODE REVIEW REPORT — targeted re-review
+
+- Task / target: DEMO-17 / demo-api
+- Mode: REQUIRED GATE
+- Input artifacts: prior CODE REVIEW REPORT and FIX CODE REVIEW REPORT
+- Review baseline: post-fix diff
+- Decision: APPROVED
+- Review cycle: 1
+
+### SLP Summary
+
+- Supervisor: AC2 is now complete without changing AC1/AC3.
+- Lead: the correction remains inside the existing parser/response boundary.
+- Peer: the fallback handles the empty trimmed value and the regression test covers it.
+
+### Issues
+
+No issues. CR-001 is RESOLVED by the inspected fix diff and passing fictional checks.
+
+### Final Decision and Handoff
+
+APPROVED for the exact post-fix baseline → verification. Feature failed_cycles remains 0.
 
 ## VERIFICATION REPORT — final pass
 
@@ -338,6 +394,8 @@ If the story omitted blank-input behavior and the repository did not settle it,
 the validator would classify it NEEDS_CLARIFICATION, ask the PO to choose the behavior,
 and stop before implementation. If a required service could not be reached,
 verification would return BLOCKED and identify the missing evidence. If two further
-review fixes failed after CR-001, review_cycles would reach three and emit
-REVIEW_ESCALATION. A later verification FAIL would route to implementation, then back
+post-fix reviews still found blocking issues after CR-001, review_cycles would reach
+three and emit REVIEW_ESCALATION. Without the explicit user authorization above, the
+initial CHANGES_REQUIRED report would make no edit. A later verification FAIL would
+route to implementation, then back
 through code-review before re-verification; its separate failed_cycles would increment.

@@ -10,8 +10,9 @@ working-tree status, architecture, and commands. Preserve unrelated local change
 For every new top-level request, first read and apply
 [task-router](skills/task-router/SKILL.md). It performs one cheap intent-based
 classification and stops: FEATURE routes to task-requirements, BUG routes to
-bug-analysis, explicit CODE_REVIEW routes to the review skill, and NORMAL continues
-without a specialized workflow.
+bug-analysis, explicit CODE_REVIEW routes to read-only review, explicit
+FIX_CODE_REVIEW routes to authorized review corrections, and NORMAL continues without
+a specialized workflow.
 Explicit user routing overrides automatic classification.
 Do not reclassify follow-up messages once a structured workflow is active.
 
@@ -20,6 +21,7 @@ USER REQUEST → TASK ROUTER
   FEATURE → task-requirements → feature workflow
   BUG     → bug-analysis → bug workflow
   CODE_REVIEW → code-review manual mode
+  FIX_CODE_REVIEW → fix-code-review with an existing review report
   NORMAL  → normal Codex behavior
 ```
 
@@ -30,7 +32,7 @@ Resolve these links relative to this file, regardless of the shell's working dir
 1. [task-requirements](skills/feature-workflow/task-requirements/SKILL.md) — gather evidence and draft the TASK CONTRACT.
 2. [requirement-validator](skills/feature-workflow/requirement-validator/SKILL.md) — reverse engineer and determine readiness.
 3. [implementation](skills/feature-workflow/implementation/SKILL.md) — implement the READY contract or its FIX REQUEST.
-4. [code-review](skills/code-review/SKILL.md) — independently challenge the actual diff using Supervisor, Lead, and Peer perspectives.
+4. [code-review](skills/code-review-workflow/code-review/SKILL.md) — independently challenge the actual diff using read-only Supervisor, Lead, and Peer perspectives.
 5. [verification](skills/feature-workflow/verification/SKILL.md) — verify the APPROVED code baseline against every AC.
 
 These files are a workspace routing mechanism. `skills/` is not the standard
@@ -44,15 +46,16 @@ higher-priority runtime instructions; disclose a material conflict.
 The feature-development workflow applies to meaningful new or intentionally changed
 product/application behavior. The bug workflow applies when expected existing behavior
 is broken and the user wants investigation or a fix. NORMAL covers explanations,
-reviews, documentation, planning, simple refactors/configuration, and other requests
+documentation, planning, simple refactors/configuration, and other requests
 that need neither structured workflow. If classification is genuinely unclear and
 material, task-router asks its single short question. Do not skip selected workflow
 gates because a task seems simple. Keep artifacts proportionate.
 
 Read-only explanations, manual code reviews, diagnosis, and status questions do not
 invoke the full feature/bug pipeline or authorize implementation. Explicit review
-intent routes directly to code-review in MANUAL REVIEW mode; it edits code only when
-the user requests review and fix or separately authorizes fixes. A planning request may use the first
+intent routes directly to read-only code-review in MANUAL REVIEW mode. Only an explicit
+request to fix review issues—or a combined `review and fix` request—authorizes the
+separate fix-code-review skill. A planning request may use the first
 two stages but must stop before implementation. READY expresses requirements
 readiness; it does not expand the user's authorization or override Plan Mode.
 Do not deploy, publish, send external messages, or perform live external writes
@@ -115,8 +118,8 @@ Conflicts between requirements remain explicit until resolved.
 
 The requirement-validator emits a VALIDATION REPORT and, when READY, a complete
 finalized TASK CONTRACT. The implementation emits an IMPLEMENTATION REPORT. The
-code-review gate emits a CODE REVIEW REPORT. Verification emits a VERIFICATION REPORT
-and a FIX REQUEST on FAIL.
+code-review gate emits a CODE REVIEW REPORT. Explicit review corrections emit a FIX
+CODE REVIEW REPORT. Verification emits a VERIFICATION REPORT and a FIX REQUEST on FAIL.
 Reports must cite the exact contract revision, ACs, files, checks, and evidence they
 cover. On context loss, recover these artifacts before resuming; ask for unavailable
 artifacts instead of reconstructing them from guesses.
@@ -127,7 +130,8 @@ artifacts instead of reconstructing them from guesses.
 INPUT → TASK CONTRACT → REQUIREMENT VALIDATION
   READY → IMPLEMENTATION → CODE REVIEW
   CODE REVIEW APPROVED → VERIFICATION → PASS → DONE
-  CODE REVIEW CHANGES_REQUIRED → FIX → SELF-TEST → RE-REVIEW
+  CODE REVIEW CHANGES_REQUIRED → STOP FOR EXPLICIT FIX INSTRUCTION
+  USER FIX INSTRUCTION → FIX CODE REVIEW → SELF-TEST → CODE REVIEW
   CODE REVIEW BLOCKED/REVIEW_ESCALATION → STOP WITH EVIDENCE AND REQUIRED ACTION
   NEEDS_CLARIFICATION → HUMAN CLARIFICATION → REQUIREMENT VALIDATION
   BLOCKED → STOP WITH EVIDENCE AND REQUIRED ACTION
@@ -173,16 +177,20 @@ requirement-validator. A test-environment blocker remains in verification until 
 can be resolved. Do not repeatedly run unchanged failing commands without new evidence.
 
 Code review has a separate `review_cycles` limit. The first CHANGES_REQUIRED decision
-is review cycle one. Apply the smallest accepted fix, self-test, and re-review; stop at
-the third unsuccessful cycle with REVIEW_ESCALATION. Review cycles do not increment or
-reset feature `failed_cycles`, `failed_cycles_for_root_cause`, or `total_fix_cycles`.
+is review cycle one. It stops with prioritized issues. Only explicit user authorization may
+start fix-code-review; that skill applies the smallest accepted fix and self-tests,
+then code-review independently re-reviews. The third unsuccessful review returns REVIEW_ESCALATION.
+Review cycles do not increment or reset feature `failed_cycles`,
+`failed_cycles_for_root_cause`, or `total_fix_cycles`.
 
 ## Code review gate
 
-The shared [code-review skill](skills/code-review/SKILL.md) has REQUIRED GATE and
-MANUAL REVIEW modes. REQUIRED GATE runs after every feature implementation or bug-fix
-production-code change. MANUAL REVIEW runs only on explicit review intent and does not
-start requirements or bug analysis. Review-only manual requests never authorize fixes.
+The shared review system contains read-only
+[code-review](skills/code-review-workflow/code-review/SKILL.md) and explicit-only
+[fix-code-review](skills/code-review-workflow/fix-code-review/SKILL.md). REQUIRED GATE
+review runs after every feature implementation, bug fix, or review correction that
+changes production code. MANUAL REVIEW runs only on explicit review intent and does not
+start requirements or bug analysis. Review-only requests never authorize fixes.
 
 Required review is an independent reviewer role, not implementation self-review. Use a
 distinct reviewer agent when available and authorized; otherwise perform a fresh,
@@ -194,16 +202,21 @@ R3 callers/dependencies → R4 similar patterns → R5 broader architecture. Exp
 to answer a concrete review question. Gather evidence once, then apply Supervisor,
 Lead, and Peer perspectives without three independent repository scans.
 
-Consolidate duplicate findings. Each actionable finding includes an ID, severity,
-location, problem, evidence, impact, and recommended action. CRITICAL/HIGH/MEDIUM
-findings block by default; INFO does not. Unknown business behavior is NEEDS_CONTEXT,
-not an invented defect. Decisions are APPROVED, CHANGES_REQUIRED, BLOCKED, or
-REVIEW_ESCALATION. Only APPROVED permits verification.
+Consolidate duplicate issues. Each issue includes an ID, HIGH/MEDIUM/LOW severity,
+location, problem, evidence, impact, and recommended action. HIGH/MEDIUM block by
+default; LOW is non-blocking unless repository policy or concrete completion risk says
+otherwise. Unknown business behavior is NEEDS_CONTEXT, not an invented defect.
+Decisions are APPROVED, CHANGES_REQUIRED, BLOCKED, or REVIEW_ESCALATION.
+Only APPROVED permits verification.
 
-For REQUIRED GATE findings, use `review → fix → self-test → targeted re-review` within
-the review skill. Route backward only when evidence invalidates an upstream assumption:
-a feature contradiction returns to requirement-validator; an incorrect confirmed bug
-cause returns to bug-root-cause. Any later production-code repair requires review again.
+Code-review never edits. CHANGES_REQUIRED stops until the user explicitly invokes
+fix-code-review; an original `review and fix` request counts as that authorization only
+after the report exists. Fix-code-review may correct only accepted issue IDs, self-test,
+and emit READY_FOR_RE_REVIEW; it never approves or hands directly to verification.
+Code-review then re-reviews the fix. Route backward only when evidence invalidates an
+upstream assumption: a feature contradiction returns to requirement-validator; an
+incorrect confirmed bug cause returns to bug-root-cause. Any later production repair
+requires review again.
 
 ## Evidence and verification rules
 
@@ -230,7 +243,7 @@ Read and execute these skills in order, subject to the routes below:
 2. [bug-reproduction](skills/bug-workflow/bug-reproduction/SKILL.md) — reproduce or evidence-confirm the failure.
 3. [bug-root-cause](skills/bug-workflow/bug-root-cause/SKILL.md) — test hypotheses and establish why it occurs.
 4. [bug-fix](skills/bug-workflow/bug-fix/SKILL.md) — make the smallest safe root-cause correction.
-5. [code-review](skills/code-review/SKILL.md) — independently review the fix against the confirmed cause and actual diff.
+5. [code-review](skills/code-review-workflow/code-review/SKILL.md) — independently review the fix against the confirmed cause and actual diff.
 6. [bug-verification](skills/bug-workflow/bug-verification/SKILL.md) — prove the APPROVED fix and regressions.
 
 Critical debugging rule: do not change production code before the bug is REPRODUCED
@@ -246,7 +259,8 @@ BUG INPUT → BUG ANALYSIS → REPRODUCTION / INVESTIGATION
 
 ROOT CAUSE CONFIRMED → BUG FIX → CODE REVIEW
   APPROVED → TEST / VERIFICATION
-  CHANGES_REQUIRED → REVIEW FIX → SELF-TEST → RE-REVIEW
+  CHANGES_REQUIRED → STOP FOR EXPLICIT FIX INSTRUCTION
+  USER FIX INSTRUCTION → FIX CODE REVIEW → SELF-TEST → CODE REVIEW
   BLOCKED / REVIEW_ESCALATION → STOP WITH EVIDENCE AND REQUIRED ACTION
   PASS → DONE
   FAIL / IMPLEMENTATION_ISSUE → BUG FIX → CODE REVIEW → TEST / VERIFICATION
@@ -256,7 +270,8 @@ ROOT CAUSE CONFIRMED → BUG FIX → CODE REVIEW
 ```
 
 The bug handoff artifacts are BUG CONTRACT, REPRODUCTION REPORT, ROOT CAUSE REPORT,
-BUG FIX REPORT, CODE REVIEW REPORT, BUG VERIFICATION REPORT, and BUG FIX REQUEST. Apply the shared handoff
+BUG FIX REPORT, CODE REVIEW REPORT, optional FIX CODE REVIEW REPORT,
+BUG VERIFICATION REPORT, and BUG FIX REQUEST. Apply the shared handoff
 contract: include revisions, evidence, status, counters, and next owner while omitting
 private payloads and internal reasoning. Human-facing BUG COMMENT and Human-Ready
 Comment sections must be concise, professional, paste-ready, and limited to observed
