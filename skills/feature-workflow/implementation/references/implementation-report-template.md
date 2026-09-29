@@ -1,6 +1,7 @@
 # IMPLEMENTATION REPORT
 
 - Task ID / target: <matching contract>
+- Project context: <PROJECT CONTEXT revision used>
 - Contract revision: <rN>
 - Input artifacts: <READY TASK CONTRACT, VALIDATION REPORT, and FIX REQUEST if repair>
 - Status: <READY_FOR_REVIEW / BLOCKED>

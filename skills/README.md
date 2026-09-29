@@ -1,7 +1,7 @@
-# Workspace development skills
+# Project-agnostic development skills
 
-Twelve focused skills provide a cheap automatic router, separate feature-delivery and
-evidence-first bug-fix pipelines, and a shared review/fix workflow. Start with
+Thirteen focused skills provide routing, reusable project discovery, separate
+feature-delivery and evidence-first bug-fix pipelines, and a shared review/fix workflow. Start with
 [workspace instructions](../AGENTS.md); task-router selects a workflow but never
 performs downstream work.
 
@@ -13,6 +13,9 @@ skills/
 ├── README.md
 ├── CHANGELOG.md
 ├── task-router/SKILL.md
+├── project-discovery/
+│   ├── SKILL.md
+│   └── references/project-context-template.md
 ├── code-review-workflow/
 │   ├── code-review/
 │   │   ├── SKILL.md
@@ -47,23 +50,25 @@ skills/
 └── scripts/validate-skill-system.sh
 ```
 
-The four top-level systems are `task-router`, `code-review-workflow`,
-`feature-workflow`, and `bug-workflow`.
+The five top-level systems are `task-router`, `project-discovery`,
+`code-review-workflow`, `feature-workflow`, and `bug-workflow`.
 Workflow folders contain their independently triggered stage skills, references,
 examples, and workflow-owned helpers. Add future systems as sibling folders instead of
 placing their stage skills directly under `skills/`.
 
 ## Invocation and discovery
 
-Open `/Users/snsean/Desktop/code/sulong` as the workspace. The root `AGENTS.md`
-automatically invokes task-router once for each new top-level request. Users do not
-need to label a request or name a skill. Once FEATURE or BUG is selected, follow-up
-evidence remains with that active workflow and is not reclassified. When relevant,
-specify whether a task targets the ops repository, crew repository, or workspace.
+Open the repository root or a parent workspace containing the repositories to be
+managed, and place or supply the root `AGENTS.md` there. It automatically invokes
+task-router once for each new top-level request, followed by project-discovery for
+repository-dependent work. Users do not need to know the language, layout, or name a
+skill. Once a route is selected, follow-up evidence remains with that active workflow
+and is not reclassified.
 
 Example prompts:
 
-- "Follow AGENTS.md and implement this story in eda-orchestrator-ops: …"
+- "Follow AGENTS.md and implement this story in the relevant repository: …"
+- "Explain this unfamiliar codebase and identify its entry points."
 - "Read skills/feature-workflow/task-requirements/SKILL.md and prepare a contract for this ticket."
 - "Run requirement-validator against the contract below; inspect code before asking questions."
 - "Use implementation with this READY contract and validation report."
@@ -98,10 +103,32 @@ support `$skill-name` invocation, or are loaded when only a child repository is 
 When instructions are not loaded, explicitly supply the root `AGENTS.md` and skill
 path. No native discovery registration, symlinks, or duplicated installs are included.
 
-This workspace root is outside the Git repositories. Files here will not be
-committed by Git operations inside either child repository; sharing/versioning
-requires separately including this workspace content. Paths inside skill documents
-are relative and the validator works after relocating the workspace.
+The workflow may live inside a repository or in a parent workspace. Git operations
+affect only the repository whose root they target. Paths inside skill documents are
+relative, and the validator works after relocating the workflow, including paths with
+spaces.
+
+## Project discovery and reuse
+
+```text
+task-router → project-discovery → PROJECT CONTEXT
+                                  ├── feature workflow
+                                  ├── bug workflow
+                                  ├── code review / review fixes
+                                  └── repository-dependent NORMAL work
+```
+
+Project discovery onboards the agent to an arbitrary codebase. It resolves repository
+boundaries and instructions, inspects manifests and the shallow structure, then reads
+entry points and representative source needed to map modules, interfaces, dependency
+direction, runtime/data flow, and commands. It progresses from P0 to P4 and stops as
+soon as the selected route has sufficient evidence; it does not read every file.
+
+The resulting PROJECT CONTEXT is a versioned conversation artifact. Later stages cite
+and reuse it instead of repeating general architecture discovery. Refresh it when the
+target, instructions, manifests, baseline, or architecture-relevant files materially
+change. Pure non-repository conversation skips discovery, and a PARTIAL/BLOCKED result
+states exactly what is missing and whether downstream work may proceed.
 
 ## Feature reasoning and handoffs
 
@@ -206,9 +233,9 @@ the cumulative history is never discarded.
 From any directory, use the scripts with an explicit repository path:
 
 ```bash
-bash /Users/snsean/Desktop/code/sulong/skills/feature-workflow/verification/scripts/changed-files.sh /path/to/repo
-bash /Users/snsean/Desktop/code/sulong/skills/feature-workflow/verification/scripts/related-tests.sh /path/to/repo
-bash /Users/snsean/Desktop/code/sulong/skills/feature-workflow/verification/scripts/verify.sh --repo /path/to/repo
+bash skills/feature-workflow/verification/scripts/changed-files.sh /path/to/repository
+bash skills/feature-workflow/verification/scripts/related-tests.sh /path/to/repository
+bash skills/feature-workflow/verification/scripts/verify.sh --repo /path/to/repository
 ```
 
 An optional second argument selects the Git base for the first two scripts. For the
@@ -216,7 +243,7 @@ manifest helper, use `--base REF`. It runs no check unless an exact command foll
 `--`; arguments execute directly without shell evaluation:
 
 ```bash
-bash skills/feature-workflow/verification/scripts/verify.sh --repo eda-orchestrator-ops -- npm test -- --runInBand
+bash skills/feature-workflow/verification/scripts/verify.sh --repo /path/to/repository -- npm test -- --runInBand
 ```
 
 `changed-files.sh` reports tracked differences from the base plus untracked files.
@@ -244,7 +271,7 @@ bash skills/scripts/validate-skill-system.sh /path/to/workspace-copy
 
 The script uses Bash and standard shell utilities (`awk`, `dirname`, `basename`).
 It needs no package installation or network, never edits files, and returns zero
-on success or non-zero with file-specific errors. It checks all twelve skill files,
+on success or non-zero with file-specific errors. It checks all thirteen skill files,
 templates, helper-script syntax, headings, local links, line limits, feature, bug, and
 review orchestration markers, status routes, and loop protection.
 

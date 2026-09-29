@@ -1,6 +1,7 @@
 # BUG FIX REQUEST
 
 - Bug ID / target: <matching artifacts>
+- Project context: <PROJECT CONTEXT revision for the repair baseline>
 - Request ID: <fr1; stable within the verification cycle>
 - Bug contract revision: <bN>
 - Root-cause revision: <rcN>

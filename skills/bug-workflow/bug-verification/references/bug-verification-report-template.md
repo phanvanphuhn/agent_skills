@@ -1,6 +1,7 @@
 # BUG VERIFICATION REPORT
 
 - Bug ID / target: <matching BUG CONTRACT>
+- Project context: <PROJECT CONTEXT revision used for the verified baseline>
 - Bug contract revision: <bN>
 - Reproduction report/status: <artifact/status>
 - Root-cause revision: <rcN>

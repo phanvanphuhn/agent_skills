@@ -1,6 +1,7 @@
 # FIX REQUEST
 
 - Task ID / target: <matching contract>
+- Project context: <PROJECT CONTEXT revision for the repair baseline>
 - Contract revision: <same READY revision>
 - Input artifacts: <VERIFICATION REPORT and IMPLEMENTATION REPORT>
 - failed_cycles: <current count>

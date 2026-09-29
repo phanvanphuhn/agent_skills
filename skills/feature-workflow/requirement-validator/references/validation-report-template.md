@@ -1,6 +1,7 @@
 # VALIDATION REPORT
 
 - Task ID / target: <matching contract>
+- Project context: <PROJECT CONTEXT revision used for repository evidence>
 - Contract revision: <rN>
 - Input artifacts: <TASK CONTRACT revision and prior report/answers>
 - Status: <READY / NEEDS_CLARIFICATION / BLOCKED>

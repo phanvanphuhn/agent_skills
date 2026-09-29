@@ -23,6 +23,7 @@ with a valid contract belongs in the implementation/verification repair loop.
 
 ## Inputs
 
+- Current PROJECT CONTEXT revision covering the target repository/workspace.
 - Complete TASK CONTRACT and its cited sources/revision.
 - Repository instructions, relevant code/configuration/tests, and known examples.
 - Prior validation report and stakeholder answers if resuming.

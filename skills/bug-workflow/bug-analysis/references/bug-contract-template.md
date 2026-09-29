@@ -2,6 +2,7 @@
 
 - Bug ID / title: <stable identity>
 - Target: <repository/component>
+- Project context: <PROJECT CONTEXT revision and target>
 - Revision: <b1; increment on material reporter/requirement changes>
 - Status: DRAFT
 - Requested scope: <investigation/fix/verification>

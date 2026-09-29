@@ -1,6 +1,7 @@
 # VERIFICATION REPORT
 
 - Task ID / target: <matching contract>
+- Project context: <PROJECT CONTEXT revision used for the verified baseline>
 - Contract revision: <rN>
 - Input artifacts: <READY TASK CONTRACT, VALIDATION REPORT, IMPLEMENTATION REPORT, APPROVED CODE REVIEW REPORT, prior reports>
 - Final status: <PASS / FAIL / BLOCKED>

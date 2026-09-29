@@ -25,6 +25,7 @@ production code or weaken ACs to make checks pass.
 
 ## Inputs
 
+- Current PROJECT CONTEXT revision covering the target repository/workspace.
 - Complete READY TASK CONTRACT and matching VALIDATION REPORT.
 - Actual approved code/diff, tests, IMPLEMENTATION REPORT, and CODE REVIEW REPORT.
 - Previous verification/fix reports, failed-cycle count, and relevant human direction.

@@ -1,6 +1,7 @@
 # CODE REVIEW REPORT
 
 - Task / bug / review target: <stable identity and repository>
+- Project context: <PROJECT CONTEXT revision for the reviewed baseline>
 - Mode: <REQUIRED GATE / MANUAL REVIEW>
 - Input artifacts: <contract/root-cause/implementation artifacts or manual scope>
 - Review baseline: <diff/base/head, commit, files, or supplied code>

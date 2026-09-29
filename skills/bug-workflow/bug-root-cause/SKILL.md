@@ -23,6 +23,7 @@ Do not proceed from NEEDS_INFORMATION/BLOCKED or weak speculation.
 
 ## Inputs
 
+- Current PROJECT CONTEXT revision covering the target repository/workspace.
 - BUG CONTRACT and REPRODUCTION REPORT at matching revisions.
 - Reproduction/failing-test evidence, logs/traces, and relevant code/history/tests.
 - Prior ROOT CAUSE REPORT and verification evidence when revising.

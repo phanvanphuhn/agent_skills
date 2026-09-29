@@ -24,6 +24,7 @@ is NOT_RUN/BLOCKED. Do not rerun unrelated stages by default.
 
 ## Inputs
 
+- Current PROJECT CONTEXT revision covering the target repository/workspace.
 - BUG CONTRACT, REPRODUCTION REPORT, ROOT CAUSE REPORT, BUG FIX REPORT, and matching
   APPROVED CODE REVIEW REPORT.
 - Actual diff/worktree, tests, repository instructions, and available environments.

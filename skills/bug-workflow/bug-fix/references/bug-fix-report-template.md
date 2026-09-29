@@ -1,6 +1,7 @@
 # BUG FIX REPORT
 
 - Bug ID / target: <matching BUG CONTRACT>
+- Project context: <PROJECT CONTEXT revision used>
 - Bug contract revision: <bN>
 - Reproduction report: <artifact/status>
 - Root-cause revision: <rcN>

@@ -1,11 +1,12 @@
-# Workspace development workflow
+# Generic project development workflow
 
 ## Scope and routing
 
-This directory is a workspace containing separate repositories, including
-`eda-orchestrator-ops` and `eda-orchestrator-crew`. Identify the target repository
-from the user's task before changing files. Inspect its applicable instructions,
-working-tree status, architecture, and commands. Preserve unrelated local changes.
+This workflow is project-agnostic. It may govern a single repository, a monorepo,
+nested repositories, or a parent workspace containing several repositories. Resolve
+the target boundary from the user's request and repository evidence before changing
+files. Preserve unrelated local changes and honor the most specific applicable
+instructions for every file in scope.
 
 For every new top-level request, first read and apply
 [task-router](skills/task-router/SKILL.md). It performs one cheap intent-based
@@ -16,13 +17,22 @@ a specialized workflow.
 Explicit user routing overrides automatic classification.
 Do not reclassify follow-up messages once a structured workflow is active.
 
+After classification, run
+[project-discovery](skills/project-discovery/SKILL.md) before executing any
+repository-dependent route unless a current PROJECT CONTEXT already covers the target
+and task. This includes repository-dependent NORMAL work. Pure conversation that does
+not depend on a codebase skips discovery. Routing remains first so discovery can stay
+scoped to the selected intent and repository.
+
 ```text
 USER REQUEST → TASK ROUTER
-  FEATURE → task-requirements → feature workflow
-  BUG     → bug-analysis → bug workflow
-  CODE_REVIEW → code-review manual mode
-  FIX_CODE_REVIEW → fix-code-review with an existing review report
-  NORMAL  → normal Codex behavior
+  REPOSITORY-DEPENDENT ROUTE → PROJECT DISCOVERY / CURRENT PROJECT CONTEXT
+    FEATURE → task-requirements → feature workflow
+    BUG     → bug-analysis → bug workflow
+    CODE_REVIEW → code-review manual mode
+    FIX_CODE_REVIEW → fix-code-review with an existing review report
+    NORMAL  → repository-aware normal Codex behavior
+  NON-REPOSITORY NORMAL → normal Codex behavior
 ```
 
 The feature workflow uses four feature-owned skills plus the shared mandatory review
@@ -40,6 +50,27 @@ These files are a workspace routing mechanism. `skills/` is not the standard
 or guarantee that a client lists the skills. Open the workspace at this directory
 or explicitly supply this file. Honor applicable child instructions and
 higher-priority runtime instructions; disclose a material conflict.
+
+## Project discovery gate
+
+PROJECT CONTEXT is the shared architectural baseline for downstream work. Discovery
+resolves repository/workspace boundaries, applicable instructions, worktree state,
+languages and frameworks, manifests and tooling, entry points, major modules,
+dependency direction, important runtime/data flows, and observed commands. It reads
+representative source needed to support those claims; it never assumes that exhaustive
+file-by-file reading is necessary or useful.
+
+Use progressive depth P0-P4 from repository boundaries and metadata through entry
+points and representative source, following dependencies or broader architecture only
+to answer a named question. Exclude generated, vendored, build, cache, and unrelated
+areas by default. Do not install dependencies, run application behavior, or mutate the
+repository during discovery.
+
+Downstream artifacts reference the PROJECT CONTEXT revision they used. Reuse a current
+context instead of rescanning. Refresh it when the target, applicable instructions,
+manifests, repository baseline, or architecture-relevant files materially change.
+PARTIAL context may proceed only when its gaps do not affect the selected route;
+BLOCKED stops repository-dependent work with an owner, action, and resume condition.
 
 ## Applicability and authorization
 
@@ -99,6 +130,7 @@ Use explicit Markdown artifacts in the conversation by default. Do not create
 per-task files unless requested. Each artifact must identify:
 
 - Task ID/title and target repository or workspace.
+- PROJECT CONTEXT revision, or an explicit non-repository reason it is not applicable.
 - Contract revision (for example `r1`) and the input artifacts it uses.
 - Status, evidence, unresolved items, and the next stage or responsible owner.
 
@@ -237,6 +269,8 @@ FIX REQUEST and then pass code-review again.
 
 Use this evidence-first workflow for reported defects, regressions, crashes, and
 incorrect existing behavior. It supplements rather than replaces the feature workflow.
+Start from the current PROJECT CONTEXT and refresh it only when bug evidence exposes a
+materially different repository or architectural baseline.
 Read and execute these skills in order, subject to the routes below:
 
 1. [bug-analysis](skills/bug-workflow/bug-analysis/SKILL.md) — normalize supplied evidence into a BUG CONTRACT.

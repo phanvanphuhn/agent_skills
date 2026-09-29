@@ -1,6 +1,7 @@
 # ROOT CAUSE REPORT
 
 - Bug ID / target: <matching BUG CONTRACT>
+- Project context: <PROJECT CONTEXT revision used>
 - Bug contract revision: <bN>
 - Reproduction report/status: <artifact and REPRODUCED/EVIDENCE_CONFIRMED/qualified exception>
 - Root-cause revision: <rc1; increment only for materially changed cause/evidence>

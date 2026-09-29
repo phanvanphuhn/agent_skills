@@ -39,6 +39,12 @@ require_pattern() {
   fi
 }
 
+reject_pattern() {
+  if awk -v unwanted="$2" '$0 ~ unwanted { found=1 } END { exit !found }' "$workspace_root/$1"; then
+    fail "$1: contains project-specific guidance forbidden by generic workflow policy: $3"
+  fi
+}
+
 check_frontmatter() {
   # Deliberately restricted YAML: two scalar lines, no escapes/multiline values.
   if ! awk -v expected="$2" '
@@ -88,6 +94,8 @@ documents=(
   skills/README.md
   skills/CHANGELOG.md
   skills/task-router/SKILL.md
+  skills/project-discovery/SKILL.md
+  skills/project-discovery/references/project-context-template.md
   skills/code-review-workflow/code-review/SKILL.md
   skills/code-review-workflow/code-review/references/code-review-report-template.md
   skills/code-review-workflow/fix-code-review/SKILL.md
@@ -135,6 +143,7 @@ for script in skills/scripts/validate-skill-system.sh \
 done
 
 skill_entries=(
+  'skills/project-discovery/SKILL.md:project-discovery'
   'skills/feature-workflow/task-requirements/SKILL.md:task-requirements'
   'skills/feature-workflow/requirement-validator/SKILL.md:requirement-validator'
   'skills/feature-workflow/implementation/SKILL.md:implementation'
@@ -161,6 +170,7 @@ for entry in "${skill_entries[@]}"; do
 done
 
 require_heading skills/feature-workflow/task-requirements/SKILL.md '## Context budget'
+require_heading skills/project-discovery/SKILL.md '## Investigation strategy — Walk It Down'
 require_heading skills/feature-workflow/requirement-validator/SKILL.md '## Investigation strategy — Walk It Down'
 require_heading skills/feature-workflow/implementation/SKILL.md '## Context reuse rule'
 require_heading skills/feature-workflow/implementation/SKILL.md '## Minimal change principle'
@@ -192,10 +202,20 @@ if [ -s "$workspace_root/skills/task-router/SKILL.md" ]; then
   require_pattern skills/task-router/SKILL.md 'then stop' 'router stop boundary'
 fi
 
+project_context=skills/project-discovery/references/project-context-template.md
+if [ -s "$workspace_root/$project_context" ]; then
+  for heading in 'Repository Topology' 'Governing Instructions' 'Technology and Tooling' \
+    'Structure and Responsibilities' 'Architecture and Flows' 'Entry Points and Interfaces' \
+    'Commands and Conventions' 'Task-Relevant Map' 'Risks and Unknowns' Handoff; do
+    require_heading "$project_context" "## $heading"
+  done
+fi
+
 while IFS= read -r candidate; do
   candidate_path=${candidate#"$workspace_root/"}
   case "$candidate_path" in
     skills/task-router/SKILL.md|\
+skills/project-discovery/SKILL.md|\
 skills/feature-workflow/task-requirements/SKILL.md|\
 skills/feature-workflow/requirement-validator/SKILL.md|\
 skills/feature-workflow/implementation/SKILL.md|\
@@ -316,13 +336,31 @@ if [ -s "$workspace_root/$report" ]; then
   done
 fi
 
+for report in \
+  skills/feature-workflow/task-requirements/references/task-contract-template.md \
+  skills/feature-workflow/requirement-validator/references/validation-report-template.md \
+  skills/feature-workflow/implementation/references/implementation-report-template.md \
+  skills/feature-workflow/verification/references/verification-report-template.md \
+  skills/feature-workflow/verification/references/fix-request-template.md \
+  skills/bug-workflow/bug-analysis/references/bug-contract-template.md \
+  skills/bug-workflow/bug-reproduction/references/reproduction-report-template.md \
+  skills/bug-workflow/bug-root-cause/references/root-cause-report-template.md \
+  skills/bug-workflow/bug-fix/references/bug-fix-report-template.md \
+  skills/bug-workflow/bug-verification/references/bug-verification-report-template.md \
+  skills/bug-workflow/bug-verification/references/bug-fix-request-template.md \
+  skills/code-review-workflow/code-review/references/code-review-report-template.md \
+  skills/code-review-workflow/fix-code-review/references/fix-code-review-report-template.md; do
+  require_pattern "$report" '^- Project context:' 'PROJECT CONTEXT revision reference'
+done
+
 if [ -s "$workspace_root/AGENTS.md" ]; then
-  for heading in 'Scope and routing' 'Applicability and authorization' \
+  for heading in 'Scope and routing' 'Project discovery gate' 'Applicability and authorization' \
     'Cost and context policy — Walk It Down' 'Shared handoff contract' 'State transitions' 'Loop limit and human intervention' \
     'Evidence and verification rules' 'Bug investigation and fix workflow' 'Skill-system maintenance'; do
     require_heading AGENTS.md "## $heading"
   done
   require_pattern AGENTS.md 'skills/task-router/SKILL[.]md' 'route to task-router'
+  require_pattern AGENTS.md 'skills/project-discovery/SKILL[.]md' 'route to project-discovery'
   require_pattern AGENTS.md 'skills/code-review-workflow/code-review/SKILL[.]md' 'route to code-review'
   require_pattern AGENTS.md 'skills/code-review-workflow/fix-code-review/SKILL[.]md' 'route to fix-code-review'
   for skill in task-requirements requirement-validator implementation verification; do
@@ -331,7 +369,7 @@ if [ -s "$workspace_root/AGENTS.md" ]; then
   for skill in bug-analysis bug-reproduction bug-root-cause bug-fix bug-verification; do
     require_pattern AGENTS.md "skills/bug-workflow/$skill/SKILL[.]md" "route to $skill"
   done
-  for artifact in 'TASK CONTRACT' 'VALIDATION REPORT' 'IMPLEMENTATION REPORT' \
+  for artifact in 'PROJECT CONTEXT' 'TASK CONTRACT' 'VALIDATION REPORT' 'IMPLEMENTATION REPORT' \
     'CODE REVIEW REPORT' 'FIX CODE REVIEW REPORT' 'VERIFICATION REPORT' 'FIX REQUEST' 'BUG CONTRACT' 'REPRODUCTION REPORT' \
     'ROOT CAUSE REPORT' 'BUG FIX REPORT' 'BUG VERIFICATION REPORT' 'BUG FIX REQUEST'; do
     require_pattern AGENTS.md "$artifact" "handoff artifact $artifact"
@@ -358,6 +396,9 @@ if [ -s "$workspace_root/AGENTS.md" ]; then
   require_pattern AGENTS.md '### Handoff economy' 'compact handoff policy'
   require_pattern AGENTS.md 'repair consumes only failed ACs' 'targeted repair handoff'
   require_pattern AGENTS.md 'USER REQUEST.*TASK ROUTER' 'automatic task-router entry'
+  require_pattern AGENTS.md 'REPOSITORY-DEPENDENT ROUTE.*PROJECT DISCOVERY' 'project discovery after routing'
+  require_pattern AGENTS.md 'Reuse a current' 'project context reuse policy'
+  require_pattern AGENTS.md 'Refresh it when' 'project context freshness policy'
   require_pattern AGENTS.md 'FEATURE.*task-requirements.*feature workflow' 'FEATURE route'
   require_pattern AGENTS.md 'BUG.*bug-analysis.*bug workflow' 'BUG route'
   require_pattern AGENTS.md 'CODE_REVIEW.*code-review.*manual mode' 'CODE_REVIEW route'
@@ -380,9 +421,16 @@ if [ -s "$workspace_root/AGENTS.md" ]; then
   require_pattern AGENTS.md 'start fix-code-review' 'explicit fix route'
 fi
 
+for generic_doc in AGENTS.md skills/README.md skills/task-router/SKILL.md \
+  skills/project-discovery/SKILL.md \
+  skills/project-discovery/references/project-context-template.md; do
+  reject_pattern "$generic_doc" '/Users/' 'absolute user-home path'
+  reject_pattern "$generic_doc" 'eda-orchestrator' 'named application repository'
+done
+
 if [ "$errors" -gt 0 ]; then
   printf 'FAIL: %s structural error(s).\n' "$errors" >&2
   exit 1
 fi
-printf 'PASS: task router, read-only code review, explicit review fixes, feature and bug skills, templates, links, line limits, and orchestration structure validated.\n'
+printf 'PASS: task router, project discovery, read-only code review, explicit review fixes, feature and bug skills, templates, links, line limits, generic guidance, and orchestration structure validated.\n'
 printf 'Semantic behavior and native client discovery require separate review.\n'

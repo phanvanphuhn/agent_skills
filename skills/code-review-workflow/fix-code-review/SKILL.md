@@ -31,6 +31,7 @@ or approve your own corrections.
 
 ## Inputs
 
+- Current PROJECT CONTEXT revision covering the reviewed repository/workspace.
 - Explicit user fix authorization and the latest CODE REVIEW REPORT.
 - Exact reviewed baseline, actual current diff/worktree, and all open issue IDs.
 - Feature TASK CONTRACT/VALIDATION/IMPLEMENTATION artifacts or bug CONTRACT/ROOT CAUSE/

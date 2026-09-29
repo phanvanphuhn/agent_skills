@@ -23,6 +23,7 @@ cannot answer a new question.
 
 ## Inputs
 
+- Current PROJECT CONTEXT revision covering the target repository/workspace.
 - BUG CONTRACT and every evidence item it cites.
 - Available local/DEV/QA/UAT environment, build, account/state/data, and tools.
 - Applicable repository instructions and previous reproduction report, if resuming.

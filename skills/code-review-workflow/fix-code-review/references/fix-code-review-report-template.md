@@ -1,6 +1,7 @@
 # FIX CODE REVIEW REPORT
 
 - Task / bug / review target: <matching CODE REVIEW REPORT>
+- Project context: <PROJECT CONTEXT revision for the reviewed/current baseline>
 - Input CODE REVIEW REPORT: <revision/baseline and CHANGES_REQUIRED decision>
 - Explicit authorization: <user instruction authorizing fixes>
 - Review-fix cycle: <1-3; retain prior history>

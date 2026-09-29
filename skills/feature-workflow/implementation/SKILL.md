@@ -23,6 +23,7 @@ without human direction. Do not implement speculative product behavior.
 
 ## Inputs
 
+- Current PROJECT CONTEXT revision covering the target repository/workspace.
 - Complete READY TASK CONTRACT and matching VALIDATION REPORT.
 - User-authorized scope and target repository/workspace instructions.
 - In repair mode: FIX REQUEST, latest VERIFICATION REPORT, prior implementation

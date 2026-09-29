@@ -42,6 +42,10 @@ debug, inspect code, plan implementation, write tests, or process attachments de
 Use filenames/metadata only if the prompt itself is insufficient. Run once per new
 top-level task; an active downstream workflow owns follow-ups.
 
+The orchestrator, not this router, runs project-discovery after classification for a
+repository-dependent route. The router must not pre-scan the codebase because the
+selected intent and target are inputs to bounded discovery.
+
 ## Output
 
 Emit exactly one of:

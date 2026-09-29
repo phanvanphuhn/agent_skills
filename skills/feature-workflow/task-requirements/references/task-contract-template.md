@@ -2,6 +2,7 @@
 
 - Task ID / title: <stable identity>
 - Target: <repository/workspace and relevant component>
+- Project context: <PROJECT CONTEXT revision and target>
 - Revision: <r1; increment on requirements changes>
 - Status: <DRAFT or READY; only requirement-validator assigns READY>
 - Requested scope: <analysis/planning/implementation>

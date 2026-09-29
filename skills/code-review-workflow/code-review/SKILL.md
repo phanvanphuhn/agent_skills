@@ -32,6 +32,8 @@ implementation/review reports as proof.
 
 ## Inputs
 
+- Current PROJECT CONTEXT revision covering the reviewed repository/workspace.
+
 For REQUIRED GATE mode:
 
 - Actual diff/changed files and directly related tests.

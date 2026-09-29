@@ -26,12 +26,14 @@ matches_file="$temp_dir/matches"
 bash "$script_dir/changed-files.sh" "$repo_root" "$base_ref" > "$changed_file"
 
 if command -v rg >/dev/null 2>&1; then
-  (
-    cd "$repo_root"
-    rg --files \
+  if (cd "$repo_root" && rg --files \
       -g '*.spec.*' -g '*.test.*' -g '*_test.*' -g 'test_*.*' \
-      -g '**/__tests__/**' -g 'test/**' -g 'tests/**'
-  ) > "$tests_file"
+      -g '**/__tests__/**' -g 'test/**' -g 'tests/**') > "$tests_file"; then
+    :
+  else
+    status=$?
+    [ "$status" -eq 1 ] || exit "$status"
+  fi
 else
   git -C "$repo_root" ls-files | awk '
     /(^|\/)__tests__\// || /(^|\/)(test|tests)\// ||

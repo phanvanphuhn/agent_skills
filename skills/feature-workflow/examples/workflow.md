@@ -4,6 +4,17 @@ This is a fictional worked example. Paths, commands, results, and the code excer
 illustrate the handoff contract; they are not evidence of tests run in this workspace.
 No example action should be executed against the real repositories by default.
 
+## PROJECT CONTEXT
+
+- Target: fictional repository `demo-api`
+- Revision: pc1
+- Status: CURRENT
+- Selected route / scope: FEATURE / optional export filename
+- Repository baseline: fictional Git worktree and immutable example baseline
+- Sources: repository instructions, `package.json`, `src/export.ts`, and `tests/export.spec.ts`
+- Discovery depth: P2; enough to establish the entry point, existing test seam, and commands
+- Handoff: pc1 → task-requirements; refresh if the target, instructions, manifest, or architecture changes
+
 ## Input
 
 Task DEMO-17 in a fictional Node repository `demo-api`: allow callers of the existing
@@ -17,6 +28,7 @@ export endpoint to supply an optional `filename` query parameter.
 
 - Task ID / title: DEMO-17 — optional export filename
 - Target: demo-api
+- Project context: pc1 / `demo-api`
 - Revision: r1
 - Status: DRAFT
 - Requested scope: implementation

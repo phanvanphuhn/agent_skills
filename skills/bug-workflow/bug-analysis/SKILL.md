@@ -24,6 +24,7 @@ root-cause, fix, or verification uses its existing contract.
 
 ## Inputs
 
+- Current PROJECT CONTEXT revision covering the target repository/workspace.
 - Title, description, expected/actual behavior, occurrence time, frequency, and steps.
 - Environment, app/build, platform, OS, device, state/data, and user/account context.
 - Screenshots, videos, logs, crash/network/API data, monitoring, comments, text files,

@@ -1,5 +1,28 @@
 # Skill-system changelog
 
+## 2026-09-29 — Generic project discovery baseline
+
+- Removed application-specific repository names, machine paths, and workspace-layout
+  assumptions from active orchestration and usage guidance.
+- Added `project-discovery`, a project-agnostic onboarding stage that runs after cheap
+  intent routing and before repository-dependent feature, bug, review, or NORMAL work.
+- Added the versioned PROJECT CONTEXT artifact covering repository boundaries,
+  instructions, worktree baseline, technology, tooling, entry points, module
+  responsibilities, dependency/runtime/data flows, commands, risks, and unknowns.
+- Added P0-P4 progressive discovery, representative source inspection, explicit
+  exclusions for generated/vendor/build areas, freshness checks, and reuse rules so
+  later stages do not repeat general codebase exploration.
+- Updated all downstream skills and report templates to consume and identify the
+  PROJECT CONTEXT revision used for their repository evidence.
+- Updated the feature and bug examples to demonstrate project discovery before their
+  existing pipelines.
+- Extended structural validation for the thirteenth skill, its template, required
+  orchestration/freshness markers, downstream context references, and rejection of
+  application-specific names or absolute user-home paths in active generic guidance.
+- Fixed related-test discovery so repositories with zero conventionally named tests
+  produce an empty candidate list instead of stopping the verification wrapper; real
+  ripgrep errors still propagate.
+
 ## 2026-09-29 — Split code review from review fixes
 
 - Replaced the bundled review-and-fix behavior with two single-responsibility skills

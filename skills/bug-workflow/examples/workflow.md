@@ -16,10 +16,22 @@ CONFIDENCE: HIGH
 
 task-router passes the original request and attachment to bug-analysis, then stops.
 
+## PROJECT CONTEXT
+
+- Target: fictional repository `mobile-app`
+- Revision: pc1
+- Status: CURRENT
+- Selected route / scope: BUG / checkout payment retry
+- Repository baseline: fictional Git worktree and build-123 investigation baseline
+- Sources: repository instructions, manifests, checkout entry point, payment-state module, and test configuration
+- Discovery depth: P2; enough to map the affected state flow and available commands
+- Handoff: pc1 → bug-analysis; refresh only if bug evidence changes the repository or architecture baseline
+
 ## BUG CONTRACT
 
 - Bug ID / title: PAY-42 — Continue disabled after successful payment retry
 - Target: `mobile-app` / checkout payment state
+- Project context: pc1 / `mobile-app`
 - Revision: b1
 - Status: DRAFT
 - Requested scope: investigate, fix, and verify

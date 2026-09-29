@@ -22,6 +22,7 @@ LOW-confidence speculative cause. Do not broaden scope to nearby cleanup or rede
 
 ## Inputs
 
+- Current PROJECT CONTEXT revision covering the target repository/workspace.
 - BUG CONTRACT, REPRODUCTION REPORT, and ROOT CAUSE REPORT at compatible revisions.
 - In repair mode, the current BUG FIX REQUEST and earlier fix-cycle history.
 - Applicable repository instructions, relevant code/tests, and authorized scope.

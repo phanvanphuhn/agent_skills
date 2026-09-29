@@ -24,6 +24,7 @@ production code, decide unresolved product behavior, or label the contract READY
 
 ## Inputs
 
+- Current PROJECT CONTEXT revision covering the target repository/workspace.
 - The user's requested change and any supplied story, description, or ACs.
 - Available designs, screenshots, API contracts, mappings, documentation, comments,
   approved examples, prior decisions, and related implementation.

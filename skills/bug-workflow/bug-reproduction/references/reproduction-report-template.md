@@ -1,6 +1,7 @@
 # REPRODUCTION REPORT
 
 - Bug ID / target: <matching BUG CONTRACT>
+- Project context: <PROJECT CONTEXT revision used>
 - Bug contract revision: <bN>
 - Input artifacts: <contract and evidence IDs>
 - Status: <REPRODUCED / EVIDENCE_CONFIRMED / CANNOT_REPRODUCE / NEEDS_INFORMATION / BLOCKED>
