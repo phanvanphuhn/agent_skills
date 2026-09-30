@@ -34,7 +34,8 @@
 
 ## Developer Checks
 
-- <working directory; exact command; exit code; PASS/FAIL/NOT_RUN/BLOCKED; concise output>
+Use the shared [check evidence record](../../../references/check-evidence.md).
+List CHK-* records here; cite their IDs in AC mappings and later reports.
 
 ## Context Escalation
 

@@ -7,7 +7,7 @@
 - Repository baseline: <Git root(s), branch/commit or non-Git identity, worktree state>
 - Sources: <instructions, manifests, docs, entry points, representative source paths>
 - Discovery depth: <P0-P4; question justifying P3/P4, or none>
-- Freshness basis: <instructions/manifests/baseline/architecture files checked>
+- Freshness basis: <relevant source paths, baseline/content fingerprints, dirty/untracked state>
 - Prior revision / changes: <initial or material reason for refresh>
 
 ## Repository Topology
@@ -65,5 +65,7 @@
 - Required refresh triggers: <target, instructions, manifest, baseline, or architecture change>
 - Remaining action: <none or exact owner/action/resume condition>
 
-Keep this artifact architectural and reusable. Cite paths and symbols instead of
-copying source or embedding task-specific requirements, diagnoses, or review findings.
+Emit only task-relevant sections; group unrelated fields as out of scope. On refresh,
+cite the accessible prior revision and changed facts; supply the full snapshot when
+that prior revision is unavailable. Cite paths, symbols, and stable evidence IDs rather
+than copied source. A different commit alone does not invalidate unchanged facts.

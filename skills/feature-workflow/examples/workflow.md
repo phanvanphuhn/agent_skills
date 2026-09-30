@@ -329,7 +329,8 @@ The fictional user says: "Fix CR-001 from the latest CODE REVIEW REPORT."
 - Task / target: DEMO-17 / demo-api
 - Input CODE REVIEW REPORT: initial baseline, CHANGES_REQUIRED, CR-001
 - Explicit authorization: fictional user instruction above
-- Review-fix cycle: 1
+- Review cycle: 1 (carried unchanged during the fix)
+- Fix attempt: f1
 - Status: READY_FOR_RE_REVIEW
 - Pre-fix baseline: initial implementation diff
 - Post-fix baseline: diff using `requestedFilename?.trim() || "export.txt"` plus the
@@ -401,6 +402,12 @@ APPROVED for the exact post-fix baseline → verification. Feature failed_cycles
 - Handoff: DONE, with evidence limited to this fictional local contract.
 
 ## Alternative stop paths
+
+If verification authors a new regression test after approval, that test changes the
+review baseline. It emits BLOCKED pending review with unchanged failed_cycles, supplies
+the changed diff to code-review, and resumes verification only after approval. A known
+product defect still yields FAIL. On unchanged reviewed inputs, verification may cite
+an accessible earlier check by artifact/CHK-* ID and document why it is reusable.
 
 If the story omitted blank-input behavior and the repository did not settle it,
 the validator would classify it NEEDS_CLARIFICATION, ask the PO to choose the behavior,

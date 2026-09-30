@@ -93,6 +93,12 @@ documents=(
   AGENTS.md
   skills/README.md
   skills/CHANGELOG.md
+  skills/references/check-evidence.md
+  skills/evals/behavioral-evals.md
+  skills/evals/case-01.md
+  skills/evals/case-02.md
+  skills/evals/case-03.md
+  skills/evals/case-04.md
   skills/task-router/SKILL.md
   skills/project-discovery/SKILL.md
   skills/project-discovery/references/project-context-template.md
@@ -132,6 +138,19 @@ for doc in "${documents[@]}"; do
   if [ -s "$workspace_root/$doc" ]; then check_links "$doc"; fi
 done
 require_file skills/scripts/validate-skill-system.sh
+
+require_heading skills/references/check-evidence.md '## Record'
+require_heading skills/references/check-evidence.md '## Reuse decision'
+for report in \
+  skills/feature-workflow/implementation/references/implementation-report-template.md \
+  skills/feature-workflow/verification/references/verification-report-template.md \
+  skills/bug-workflow/bug-reproduction/references/reproduction-report-template.md \
+  skills/bug-workflow/bug-fix/references/bug-fix-report-template.md \
+  skills/bug-workflow/bug-verification/references/bug-verification-report-template.md \
+  skills/code-review-workflow/code-review/references/code-review-report-template.md \
+  skills/code-review-workflow/fix-code-review/references/fix-code-review-report-template.md; do
+  require_pattern "$report" 'references/check-evidence[.]md' 'shared check evidence reference'
+done
 
 for script in skills/scripts/validate-skill-system.sh \
   skills/feature-workflow/verification/scripts/changed-files.sh \
@@ -323,7 +342,7 @@ fi
 report=skills/code-review-workflow/code-review/references/code-review-report-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in 'Review Scope' 'SLP Summary' Issues 'Read-Only Checks' \
-    'Remaining Risks' 'Review History' \
+    'Remaining Risks' 'Review Blockers' 'Review History' \
     'Final Decision and Handoff'; do
     require_heading "$report" "## $heading"
   done

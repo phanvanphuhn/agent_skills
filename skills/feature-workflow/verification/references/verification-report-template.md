@@ -7,6 +7,7 @@
 - Final status: <PASS / FAIL / BLOCKED>
 - failed_cycles: <prior count + 1 for final FAIL; unchanged otherwise>
 - Implementation inspected: <files/diff baseline; identify pre-existing local changes>
+- Approved / final baseline: <review reference; final code/test/config content identity; match or changed paths>
 
 ## Verification Scope
 
@@ -37,11 +38,11 @@
 
 ## Code Quality
 
-<Concrete findings, not an unsupported approval.>
+<Approved review reference; report only new findings or affected changes.>
 
 ## Architecture Compliance
 
-<Applicable patterns/instructions and observed compliance or deviations.>
+<Approved review reference; reassess only changed boundaries or contradictory evidence.>
 
 ## Uncovered Edge Cases
 
@@ -53,7 +54,8 @@
 
 ## Commands Executed
 
-- <working directory; exact command; exit code; observed result; relevant IDs>
+Use the shared [check evidence record](../../../references/check-evidence.md).
+List new CHK-* records or REUSED references with matching inputs/environment/baseline.
 - Proposed but unexecuted: <command; NOT_RUN; reason, or none>
 
 ## Failures
@@ -67,10 +69,12 @@
 
 ## Handoff
 
-<PASS: completion evidence and meaningful limits.>
+<PASS: completion evidence and final baseline matching review approval.>
 <FAIL below three: FIX REQUEST and READY contract → implementation → code-review → verification.>
 <Third FAIL: FIX REQUEST and cumulative attempts → human intervention; no automatic repair.>
 <BLOCKED: exact missing prerequisite, owner, and resume condition; no completion claim.>
+<Pending review: changed test/config diff and baseline → code-review → verification;
+do not increment failed_cycles solely because approval is pending.>
 
 Keep the report evidence-dense. Reference the contract/implementation report rather
 than repeating them. On FAIL, put repair instructions in the FIX REQUEST only.

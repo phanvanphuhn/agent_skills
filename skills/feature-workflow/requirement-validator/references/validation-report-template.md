@@ -55,7 +55,9 @@
 
 ## Handoff
 
-<READY: emit the complete finalized TASK CONTRACT and route authorized work to implementation.>
+<READY: emit the finalized TASK CONTRACT if changed; otherwise explicitly promote the
+accessible unchanged revision to READY by reference. Recipients resolve the complete
+body before implementation. Route only authorized work.>
 <NEEDS_CLARIFICATION/BLOCKED: stop implementation; give the human questions/actions and resume condition.>
 
 Keep the report decision-dense. Omit exploratory narration and duplicate contract

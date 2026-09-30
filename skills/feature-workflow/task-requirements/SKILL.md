@@ -56,14 +56,15 @@ architecture. Every escalation must name the requirement it is trying to clarify
    changing meaning. If no ACs exist, propose labeled derived criteria for validation.
 4. Identify functional/non-functional requirements, dependencies, constraints,
    edge cases, reuse opportunities, and concrete verification obligations.
-5. Produce the full [TASK CONTRACT template](references/task-contract-template.md).
-   Use `Not applicable — reason` where appropriate; do not silently omit sections.
+5. Read the [TASK CONTRACT template](references/task-contract-template.md) and produce
+   its applicable sections. Group empty optional sections as `N/A — sections/reason`.
+   Preserve every AC, constraint, assumption, unknown, and verification obligation.
 6. Check that every supplied AC and material source is represented and that unknowns
    remain visible. Handoff to requirement-validator.
 
 ## Outputs
 
-A concise TASK CONTRACT with task identity, revision, sources, all template sections,
+A concise TASK CONTRACT with task identity, revision, sources, applicable sections,
 testable ACs, explicit assumptions/unknowns, and status DRAFT. Cite repository
 evidence and source sections rather than narrating the investigation. Prefer IDs,
 short decisions, and locations over repeated prose.

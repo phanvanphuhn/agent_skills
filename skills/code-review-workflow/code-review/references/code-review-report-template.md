@@ -6,8 +6,9 @@
 - Input artifacts: <contract/root-cause/implementation artifacts or manual scope>
 - Review baseline: <diff/base/head, commit, files, or supplied code>
 - Decision: <APPROVED / CHANGES_REQUIRED / BLOCKED / REVIEW_ESCALATION>
-- Review cycle: <0 initial approval; 1-3 after each CHANGES_REQUIRED review>
+- Review cycle: <review_cycles: prior + 1 for confirmed blocking findings, otherwise unchanged; initially 0>
 - Independence: <reviewer separation and any disclosed limitation>
+- Coverage: <complete / incomplete; required gaps listed under Review Blockers>
 - Context used: <maximum R0-R5 and question justifying expansion beyond R1>
 
 ## Review Scope
@@ -39,15 +40,28 @@
 
 ## Read-Only Checks
 
-- `<working directory; exact command>` — <PASS / FAIL / NOT_RUN / BLOCKED; result>
+Use the shared [check evidence record](../../../references/check-evidence.md).
+List new CHK-* records or REUSED references. Independent inspection still uses actual code.
 
 ## Remaining Risks
 
 - <concrete risk, missing evidence, or none>
 
+## Review Blockers
+
+- <unreviewed scope; missing evidence/access; owner; action; resume condition, or none>
+
+Retain blockers alongside confirmed issues, including on CHANGES_REQUIRED/REVIEW_ESCALATION.
+Resolving an issue does not resolve an unrelated blocker.
+
 ## Review History
 
 1. <baseline, decision, issue IDs, and relationship to any prior FIX CODE REVIEW REPORT>
+
+Confirmed blocking findings take precedence over missing evidence: count the issued
+report once even with incomplete coverage. Counts 1–2 yield CHANGES_REQUIRED; 3+ yields
+REVIEW_ESCALATION. Without confirmed blocking findings, required gaps yield BLOCKED;
+only sufficient evidence permits APPROVED. Both preserve the count and prior history.
 
 ## Final Decision and Handoff
 

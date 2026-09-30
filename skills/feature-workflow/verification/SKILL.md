@@ -59,19 +59,27 @@ not proof that all affected tests were found; apply contract and architecture ev
 
 1. Read workspace `AGENTS.md`, applicable repository instructions, the contract,
    implementation report, matching APPROVED CODE REVIEW REPORT,
-   [verification template](references/verification-report-template.md), and
-   [fix request template](references/fix-request-template.md).
+   and [verification template](references/verification-report-template.md).
+   Load the [fix request template](references/fix-request-template.md) only on FAIL.
 2. Start at V0/V1 with actual code and diff. For each AC, trace
    `AC → implementation → test → result`. Evaluate every required obligation.
 3. Create or strengthen appropriate automated tests. Where applicable cover negative
    cases, edge cases, errors, state transitions, navigation, API success/failure,
    loading/empty states, platform behavior, and regression risks. Do not mirror
    implementation details in tests without checking observable requirements.
-4. Run V2 first, then broaden according to the verification ladder and contract.
+   Any code, test, fixture, snapshot, or behavior-affecting configuration change
+   invalidates approval. Run necessary authoring checks, record the new baseline and
+   diff, then hand back to code-review. Do not certify before that baseline is APPROVED.
+   Pending review alone is BLOCKED with unchanged failed_cycles; a known defect is FAIL.
+4. Reuse recorded executed checks only after independently confirming their scope,
+   raw results, source/test/config content, and environment match the current baseline.
+   Rerun when any relevant input changed, freshness is uncertain, or policy requires it.
+   Run missing V2 evidence first, then broaden according to the ladder and contract.
    Record directory, command, exit status, and concise observed results. Distinguish
    mock evidence from real external acceptance; do not perform unauthorized live writes.
-5. Assess regression risk, quality, architecture compliance, uncovered edges, and
-   test coverage. A passing test count alone is not proof of acceptance.
+5. Verify observable behavior, regression risks, and coverage. Reference approved
+   engineering findings without repeating architecture/style review; reassess only
+   changed boundaries or new contradictory evidence. Test counts alone prove no AC.
 6. Mark checks and individual ACs PASS, FAIL, NOT_RUN, or BLOCKED. PASS requires
    sufficient executed evidence for every required criterion/obligation. A required
    NOT_RUN/BLOCKED check prevents final PASS.
@@ -83,7 +91,9 @@ not proof that all affected tests were found; apply contract and architecture ev
    route to implementation; every production repair then returns through code-review
    before re-verification. On the third failure stop for human intervention with
    cumulative attempts. Carry the counter unchanged on PASS/BLOCKED.
-9. Emit the VERIFICATION REPORT and any FIX REQUEST, then perform the stated handoff.
+9. Confirm the final code/test/config baseline still matches review approval; check
+   for generated changes from test commands. Emit the report and perform the handoff.
+   Any relevant edit requires code-review again, even if all checks passed.
 
 ## Outputs
 

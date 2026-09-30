@@ -66,14 +66,17 @@ decisive evidence, not a transcript of every search. Never explore code "just in
    implementation constraints, and whether the proposed checks can prove each AC.
 7. Emit the report. Use BLOCKED if any hard blocker remains; otherwise use
    NEEDS_CLARIFICATION if a decision remains; otherwise use READY.
-8. With READY, emit the complete finalized TASK CONTRACT using the original contract
-   sections, with accepted assumptions, resolved decisions, and report reference.
-   Otherwise hand the questions/actions to the human and stop implementation.
+8. With READY and changed requirements, emit the complete finalized TASK CONTRACT with
+   accepted assumptions, resolved decisions, and report reference. If its entire body
+   is unchanged and accessible, explicitly promote that exact revision to READY by
+   reference. The recipient must resolve it; never implement from an unavailable body.
+   Otherwise hand questions/actions to the human and stop implementation.
 
 ## Outputs
 
 A concise VALIDATION REPORT with one final status: READY, NEEDS_CLARIFICATION, or BLOCKED.
-READY also includes a finalized TASK CONTRACT at the same revision. The other
+READY includes the finalized TASK CONTRACT or explicit promotion of the accessible,
+unchanged revision. The other
 statuses include questions and required actions sufficient to resume validation.
 Reuse contract IDs and sources instead of restating established analysis.
 

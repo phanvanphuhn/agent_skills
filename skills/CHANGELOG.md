@@ -1,5 +1,62 @@
 # Skill-system changelog
 
+## 2026-09-30 — Review precedence and behavioral decision cases
+
+- Confirmed blocking findings now take precedence over missing review evidence:
+  count the issued report once, returning CHANGES_REQUIRED or REVIEW_ESCALATION.
+  With no confirmed blocking findings, required gaps yield BLOCKED; only sufficient
+  evidence permits APPROVED. Counter history and unrelated verification counters persist.
+- Review reports retain coverage gaps separately, with scope, owner, action, and resume
+  condition. Correcting known findings does not erase unresolved review blockers.
+- Added four isolated candidate packets and three control variants for evidence reuse,
+  mixed findings/blockers, authorization, and context recovery. Evaluator expectations
+  stay separate from candidate inputs; results require captured responses, not keyword checks.
+- The evaluation set is opt-in and decision-level: it neither launches agents nor calls
+  paid APIs. Structural success or a same-agent walkthrough is not an independent
+  behavioral pass, an end-to-end run, or evidence of token savings.
+
+## 2026-09-30 — Lean entrypoints and bounded agent inputs
+
+- Removed repeated instructions from routing, discovery, and review while retaining
+  their scope, evidence requirements, approval boundaries, and cycle limits.
+- Input reports no longer imply loading their producers' skills/templates or recursively
+  expanding artifact history. Required contracts and raw evidence remain accessible.
+- Parallel work assigns one owner per write scope/check and shares results before review.
+- The three edited entrypoints decreased from 2,458 to 1,493 words (39%); including
+  the shared root policy, 4,094 to 3,176 words (22%). These are instruction-size
+  measurements against the pre-edit working tree, not measured token or billing savings.
+- Structural validation and whitespace checks passed; added a focused calibration case
+  for consuming upstream artifacts without loading upstream skills.
+
+## 2026-09-30 — Review consistency and reusable check evidence
+
+- Review now covers later test, fixture, snapshot, and behavior-affecting configuration
+  changes, including edits or generated changes during verification. Certification
+  waits for approval of the final baseline; pending review alone consumes no failure cycle.
+- Unified review_cycles: the initial blocking review counts as one; counts 1–2 request
+  changes and count 3 escalates. Approval, blockers, and fixes retain the count.
+- Added one shared check-evidence format referenced by seven producer templates,
+  covering input identity, environment, execution provenance, outcomes, and safe reuse.
+- Verification reuses approved engineering findings and focuses on behavior/coverage;
+  new changes or contradictory evidence trigger targeted re-review.
+- Added calibration cases and compact usage measurements; real token savings remain
+  unmeasured until representative tasks provide client usage data.
+
+## 2026-09-30 — Token-conscious context and handoffs
+
+- Condensed the root instructions while preserving routing, authority, review,
+  verification, evidence, and retry limits.
+- Load stage skills/templates only when needed; defer failure templates and examples.
+  Reuse instructions already in context and pass bounded context when delegation is authorized.
+- Refresh project context by affected source facts, including dirty/untracked state;
+  avoid rescanning solely because a commit changed. Allow narrow task-scoped discovery.
+- Group empty optional report sections; promote an accessible unchanged contract to
+  READY by reference. Changed requirements still require a complete finalized contract.
+- Reuse executed checks only with matching inputs, environment, baseline, and observable
+  results; preserve independent code review and mandatory checks.
+- Clarified that explicit manual review can inspect existing files without a diff.
+- Instruction word counts are size measurements; real token/cost savings need task-level measurement.
+
 ## 2026-09-29 — Generic project discovery baseline
 
 - Removed application-specific repository names, machine paths, and workspace-layout

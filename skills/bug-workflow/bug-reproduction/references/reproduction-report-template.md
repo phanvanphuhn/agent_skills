@@ -20,7 +20,8 @@
 
 ## Attempts
 
-1. <exact steps/variation; result; evidence produced>
+Use the shared [check evidence record](../../../references/check-evidence.md).
+1. <CHK-* ID; exact steps/variation; result; links to produced evidence>
 
 ## Confirmation Evidence
 

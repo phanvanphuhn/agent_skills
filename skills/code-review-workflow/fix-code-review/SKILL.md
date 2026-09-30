@@ -15,7 +15,8 @@ code-review. Never approve the result.
 
 Run only when all conditions hold:
 
-- A CODE REVIEW REPORT has decision CHANGES_REQUIRED and identifies open issues.
+- A CODE REVIEW REPORT identifies open issues with decision CHANGES_REQUIRED, or
+  REVIEW_ESCALATION accompanied by new human direction authorizing another attempt.
 - The user explicitly says to fix the review findings/issues, invokes fix-code-review,
   or originally requested `review and fix`.
 - The reviewed baseline and current worktree can be matched safely.
@@ -58,7 +59,7 @@ correct code.
 ## Procedure
 
 1. Confirm explicit authorization, compatible report/baseline, open issue IDs, scope,
-   upstream artifact revisions, and current review-fix cycle; read the
+   upstream artifact revisions, and review_cycles from the review report; read the
    [fix report template](references/fix-code-review-report-template.md).
 2. Inspect only the issue evidence and directly affected code/tests. Stop and route an
    invalid requirement to requirement-validator or incorrect bug cause to bug-root-cause.
@@ -71,8 +72,10 @@ correct code.
    compatibility, and new regression risk. Do not mark issues APPROVED.
 6. Emit the FIX CODE REVIEW REPORT with each issue disposition, corrections, checks,
    exact new baseline, and READY_FOR_RE_REVIEW or BLOCKED status.
-7. Hand the result to code-review for an independent targeted re-review. A new production
-   edit after that re-review requires another explicit fix-code-review invocation.
+7. Hand the result to code-review for an independent targeted re-review. Any later code,
+   test, fixture, snapshot, or behavior-affecting configuration edit invalidates approval.
+   Further review-issue corrections need explicit authorization; verification-authored
+   tests return directly through review under the existing verification scope.
 
 ## Outputs
 
@@ -99,5 +102,7 @@ changes visible, name the owner/action/resume condition, and never bypass re-rev
 
 Ask for direction when a finding depends on product intent, the review evidence is
 incorrect but cannot be disproved locally, authorization does not cover the required
-change, or three review-fix cycles have failed. Present issue IDs, attempted fixes,
+change, or review_cycles reaches 3. The initial blocking review counts as one; fixes
+never increment or reset this counter. Beyond the limit, require human direction and
+retain history. Present issue IDs, attempted fixes,
 test results, and the exact decision needed.

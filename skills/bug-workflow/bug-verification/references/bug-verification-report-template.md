@@ -7,6 +7,7 @@
 - Root-cause revision: <rcN>
 - Fix revision: <fN>
 - Approved code review: <CODE REVIEW REPORT revision and exact baseline>
+- Final baseline: <code/test/config content identity; matches approval or changed paths requiring review>
 - Status: <PASS / FAIL / BLOCKED>
 - Failure classification: <IMPLEMENTATION_ISSUE / ROOT_CAUSE_INCORRECT / REQUIREMENT_UNCLEAR / N/A>
 - Verification level: <V0-V6 and reason for stopping/escalating>
@@ -40,11 +41,12 @@
 
 ## Code and Architecture Review
 
-- <scope, correctness, interfaces, errors, style, security/secrets, diagnostics result>
+- <approved review reference; only new contradictory evidence or affected changes>
 
 ## Commands Executed
 
-- `<command>` from `<working directory>` — <PASS/FAIL/BLOCKED; exit/result>
+Use the shared [check evidence record](../../../references/check-evidence.md).
+List new CHK-* records or REUSED references with matching inputs/environment/baseline.
 - NOT_RUN: <required command/evidence and reason>
 
 ## Failures and Limitations
@@ -61,8 +63,10 @@
 
 ## Handoff
 
-- PASS: DONE.
+- PASS: DONE only with final baseline matching review approval.
 - FAIL / IMPLEMENTATION_ISSUE: bug-fix with BUG FIX REQUEST, then code-review before re-verification.
 - FAIL / ROOT_CAUSE_INCORRECT: bug-root-cause with new evidence and request.
 - FAIL / REQUIREMENT_UNCLEAR: human/bug-analysis; revise the contract before resuming.
 - BLOCKED: named owner/action/resume condition.
+- Pending review: changed diff/baseline → code-review → bug-verification; counters
+  unchanged, classification N/A unless a known defect establishes FAIL.

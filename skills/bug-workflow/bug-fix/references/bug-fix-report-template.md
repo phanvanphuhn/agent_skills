@@ -35,7 +35,8 @@
 
 ## Developer Checks
 
-- `<command>` from `<working directory>` — <PASS/FAIL/NOT_RUN/BLOCKED; exit/result>
+Use the shared [check evidence record](../../../references/check-evidence.md).
+List CHK-* records here; reference their IDs in regression results and later reports.
 
 ## Diff Review
 

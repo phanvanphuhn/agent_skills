@@ -2,9 +2,10 @@
 
 - Task / bug / review target: <matching CODE REVIEW REPORT>
 - Project context: <PROJECT CONTEXT revision for the reviewed/current baseline>
-- Input CODE REVIEW REPORT: <revision/baseline and CHANGES_REQUIRED decision>
+- Input CODE REVIEW REPORT: <revision/baseline; CHANGES_REQUIRED or human-directed REVIEW_ESCALATION>
 - Explicit authorization: <user instruction authorizing fixes>
-- Review-fix cycle: <1-3; retain prior history>
+- Review cycle: <review_cycles carried unchanged from CODE REVIEW REPORT>
+- Fix attempt: <attempt identity; separate from review_cycles>
 - Status: <READY_FOR_RE_REVIEW / BLOCKED>
 - Pre-fix baseline: <exact commit/diff/worktree state>
 - Post-fix baseline: <exact commit/diff/worktree state or partial state>
@@ -25,7 +26,8 @@
 
 ## Self-Tests
 
-- `<working directory; exact command>` — <PASS / FAIL / NOT_RUN / BLOCKED; result>
+Use the shared [check evidence record](../../../references/check-evidence.md).
+List CHK-* records and reference their IDs for each corrected issue.
 
 ## Fix Diff Review
 

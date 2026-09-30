@@ -47,6 +47,8 @@ skills/
 │   │   ├── SKILL.md
 │   │   └── references/{bug-verification-report-template.md,bug-fix-request-template.md}
 │   └── examples/workflow.md
+├── references/check-evidence.md
+├── evals/{behavioral-evals.md,case-01.md,case-02.md,case-03.md,case-04.md}
 └── scripts/validate-skill-system.sh
 ```
 
@@ -125,10 +127,52 @@ direction, runtime/data flow, and commands. It progresses from P0 to P4 and stop
 soon as the selected route has sufficient evidence; it does not read every file.
 
 The resulting PROJECT CONTEXT is a versioned conversation artifact. Later stages cite
-and reuse it instead of repeating general architecture discovery. Refresh it when the
-target, instructions, manifests, baseline, or architecture-relevant files materially
-change. Pure non-repository conversation skips discovery, and a PARTIAL/BLOCKED result
+and reuse it instead of repeating general architecture discovery. Check tracked, dirty,
+and untracked changes against its source paths; refresh only affected facts. A new
+commit alone does not require a full rescan. Pure conversation skips discovery; PARTIAL/BLOCKED
 states exactly what is missing and whether downstream work may proceed.
+
+## Token budget and context reuse
+
+Load the current stage skill and its needed output template only. Keep unchanged
+instructions already in context; defer examples, failure templates, other workflows,
+and this guide until required. Narrow questions use a small project map; an architecture
+overview still reads representative source.
+Receiving an input report does not require its producer's skill or template. Resolve
+the required baseline and evidence without recursively loading the entire artifact history.
+
+The root instructions define compact handoffs, selective freshness checks, and reuse
+of executed evidence. Empty optional report sections can be grouped as N/A; retain all
+ACs, risks, blockers, counters, and evidence. An unchanged accessible contract can be
+promoted to READY by reference; changed requirements need a complete finalized contract.
+An unavailable referenced artifact must be recovered before work continues.
+
+When delegation is authorized, pass only the bounded task, applicable instructions,
+current artifacts, code locations, evidence, counters, and output requirements. Each
+stage can run in the current agent; routing does not create another agent. Reviewers
+still inspect actual code independently. Reuse executed checks only when their inputs,
+environment, baseline, results, and policy permit it.
+For parallel work, assign one owner per write scope/check, share its result, and
+reconcile changes before final review; independent review still challenges the actual code.
+
+Measure input/output tokens, duplicate file reads, repeated commands, and missed defects
+on comparable real tasks. File word counts show instruction size only; they do not
+measure billing, caching, or end-to-end savings.
+
+For a cheap instruction-size sample, run from the workspace root:
+
+```bash
+wc -w AGENTS.md skills/task-router/SKILL.md skills/project-discovery/SKILL.md
+```
+
+During real calibration, keep one compact row per task in the conversation:
+
+| Task / source baseline | Model / skill revision | Input / cached / output tokens | Duplicate reads / reruns | Missed defects / outcome |
+| --- | --- | --- | --- | --- |
+| Actual task and repository revision | Observed client values | Client-reported values, or UNKNOWN | Observed counts | Evidence-backed result |
+
+Compare like-for-like tasks with the same source, model, and rubric. Do not estimate
+token counts from word counts or run paid comparisons automatically.
 
 ## Feature reasoning and handoffs
 
@@ -172,7 +216,8 @@ If earlier artifacts become unavailable, recover them before continuing.
 The TASK CONTRACT preserves original ACs and adds testable interpretations. The
 VALIDATION REPORT resolves uncertainty using code, explicit decisions, or documented
 low-risk assumptions. NEEDS_CLARIFICATION/BLOCKED stops implementation. Answers
-produce an updated contract and another validation pass.
+produce an updated contract and another validation pass. READY may promote an unchanged,
+accessible complete contract by reference; otherwise emit the finalized contract body.
 
 The IMPLEMENTATION REPORT maps ACs to actual code but is not proof of correctness.
 The CODE REVIEW REPORT independently challenges the actual diff and is always read-only.
@@ -190,12 +235,30 @@ reach the three-cycle limit. At that point the agent stops with cumulative evide
 and asks for direction. A missing external prerequisite or product decision can stop
 the workflow sooner. No silent reset or infinite retry loop is allowed.
 
-Review uses its own three-cycle `review → explicit fix → self-test → re-review` limit.
-It does not change verification failure counters. Handoffs contain decisions, stable IDs,
+Review counts issued reports with confirmed blocking findings, including the initial review
+and reports with incomplete coverage. Confirmed findings take precedence over missing
+evidence; retain the findings and blockers separately. Without confirmed blocking findings,
+required gaps yield BLOCKED; only sufficient evidence permits APPROVED. Fixing a finding
+does not clear unrelated review blockers.
+Counts 1–2 return CHANGES_REQUIRED; count 3 returns REVIEW_ESCALATION. APPROVED/BLOCKED
+and fix attempts preserve the count. Human-directed work after escalation retains history.
+This counter does not change verification failure counters. Handoffs contain decisions, stable IDs,
 evidence, risks, and next actions. They omit
 exploration transcripts and repeated upstream prose. A failure returns the focused
 FIX REQUEST and READY baseline directly to implementation. Earlier stages rerun only
 when the failure exposes a requirements ambiguity.
+
+Any change to code, tests, fixtures, snapshots, or behavior-affecting configuration
+invalidates approval. Verification may author tests and run authoring checks, then
+must return the changed baseline to code-review before certification. Pending review
+alone is BLOCKED and consumes no failure cycle; an established defect remains FAIL.
+The same rule applies to bug verification and command-generated test/config changes.
+On re-review, inspect the new diff and affected boundaries; reuse unaffected findings.
+
+Record checks using the shared [check evidence record](references/check-evidence.md).
+Downstream reports cite artifact revision and CHK-* ID, including an explicit reuse
+decision. Verification proves behavior and coverage; it reopens engineering findings
+only for changed boundaries or new contradictory evidence.
 
 ## Bug reasoning and handoffs
 
@@ -284,6 +347,13 @@ References use ordinary inline Markdown links with relative paths and no spaces.
 Structural validation does not prove semantic quality, runtime discovery, or task
 correctness. Review the instructions and exercise the scenarios below as well.
 
+For repeatable decision-level checks, use the small
+[behavioral evaluation set](evals/behavioral-evals.md). It covers stale evidence,
+mixed findings/blockers, authorization, and context recovery, with separate candidate
+inputs and evaluator-only expectations. Load it only during explicit evaluation or
+skill maintenance. Structural PASS is not behavioral PASS; record actual candidate
+responses and distinguish decision probes from tool-execution or end-to-end evaluations.
+
 ## Calibration and feedback
 
 Use the [feature example](feature-workflow/examples/workflow.md) and
@@ -308,10 +378,19 @@ several real tasks before treating the skills as reliable:
     authorized fix skill, self-test, and targeted re-review.
 13. A HIGH review finding without fix authorization: expect CHANGES_REQUIRED and no
     code edit. After explicit authorization, expect a fix before verification and a new
-    review after every later production-code repair.
+    review after every later code, test, fixture, snapshot, or behavior-affecting config change.
 14. A disproven review finding: expect REJECTED_FINDING and no unnecessary code edit.
-15. Three unsuccessful review-fix cycles: expect REVIEW_ESCALATION with review history,
+15. Three blocking reviews including the initial review: expect REVIEW_ESCALATION with review history,
     while feature and bug verification counters remain unchanged.
+16. A new test after approval: expect pending-review BLOCKED, unchanged failure counters,
+    targeted code-review of the changed baseline, then verification before PASS.
+17. An unchanged check with accessible evidence: expect a REUSED record, no duplicate
+    execution, and independent confirmation of input/environment and coverage.
+18. Changed inputs or unavailable raw evidence: expect a rerun or BLOCKED; never reuse
+    a success solely because the report or commit ID matches.
+19. A review with complete upstream artifacts: load the review skill/template, not the
+    implementation or bug-investigation skills; still resolve the governing requirements,
+    inspect actual code, and retrieve any evidence needed to challenge the artifacts.
 
 Review trigger precision, AC preservation, evidence quality, assumption visibility,
 context/verification escalation, handoff size, and repeatability. Mechanical checks should be deterministic; design
