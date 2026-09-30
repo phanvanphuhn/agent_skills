@@ -49,10 +49,13 @@ List new CHK-* records or REUSED references. Independent inspection still uses a
 
 ## Review Blockers
 
-- <unreviewed scope; missing evidence/access; owner; action; resume condition, or none>
+- <BLK-ID>: <OPEN / EVIDENCE_SUPPLIED / RESOLVED>; <scope; missing evidence/access;
+  owner; action; resume condition; originating report and closure/reopening evidence>
 
 Retain blockers alongside confirmed issues, including on CHANGES_REQUIRED/REVIEW_ESCALATION.
-Resolving an issue does not resolve an unrelated blocker.
+Reconcile inherited IDs; cite unchanged details by accessible report reference. Only
+reviewer-confirmed closure permits RESOLVED. Resolving an issue does not resolve a blocker.
+State `None` only when there are no inherited or new blockers; retain closed history by reference.
 
 ## Review History
 

@@ -50,6 +50,15 @@ Prefer the smallest implementation that fully satisfies the ACs. Do not refactor
 inspect unrelated modules, rewrite working abstractions, improve unrelated technical
 debt, or create a new abstraction without demonstrated reuse or a contract need.
 
+## Execution routing
+
+Apply [shared execution routing](../../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: STANDARD
+- `ESCALATE_WHEN`: High-risk architectural ambiguity requires DEEP; localized mechanical READY work may use ECONOMY.
+- `DELEGATE_WHEN`: Components do not overlap and have explicit path ownership; one owner retains dependent edits and shared interfaces.
+
 ## Procedure
 
 1. Read the entire contract, workspace `AGENTS.md`, and applicable repository

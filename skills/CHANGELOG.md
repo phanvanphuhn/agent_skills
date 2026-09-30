@@ -1,5 +1,40 @@
 # Skill-system changelog
 
+## 2026-09-30 — Dynamic agent and model walk-down
+
+- Added a shared execution-routing policy that separates context depth, agent topology,
+  model capability, and reasoning effort instead of pinning an entire workflow to one model.
+- Added ECONOMY, STANDARD, and DEEP profiles with explicit escalation, de-escalation,
+  delegation-value, runtime-fallback, and single-write-owner rules.
+- Added a concise execution profile to all thirteen skills and made the validator require
+  the profile and shared-policy link for every current or future `SKILL.md`.
+- Added three isolation-ready routing probes for cheap single-agent work, high-risk deep
+  reasoning, and worthwhile low-cost parallel delegation.
+- Replaced prose-only stage profiles with validator-enforced `START_CLASS`,
+  `ESCALATE_WHEN`, and `DELEGATE_WHEN` fields; empty or placeholder profiles now fail.
+- Added a highest-applicable-minimum decision table so security/data risks, unresolved
+  concurrency, cross-system contradictions, and repeated failed reasoning route consistently.
+- Ran the corrected E6 routing matrix across Luna, Sol, and Astra: 8/9 decision PASS.
+  Recorded the Luna DEEP failure, unknown token/per-run latency telemetry, shared-workspace
+  isolation limitation, batch times, packet hashes, and excluded stale-fixture runs.
+- Kept routine defaults artifact-free; an EXECUTION ROUTE is recorded only for delegation,
+  a profile override, or an audit requirement, reducing repeated coordination tokens.
+
+## 2026-09-30 — Persistent review blockers and auditable evaluation packets
+
+- Added stable BLK-* identities and OPEN/EVIDENCE_SUPPLIED/RESOLVED lifecycle rules.
+  Fix reports must carry every unresolved blocker; only code-review may confirm closure.
+- Added a fix-code-review scenario proving that an unrelated open review gap survives
+  a completed correction without incorrectly blocking READY_FOR_RE_REVIEW.
+- Expanded behavioral evaluation to five base cases and five controls, including
+  successful evidence reuse and APPROVED review paths so always-blocking behavior fails.
+- Added a standard-library packet builder that allowlists the selected stage inputs,
+  rejects fixture drift and symlinked inputs, and emits content hashes. Packet filtering
+  does not enforce runtime isolation; results record ENFORCED, ISOLATION_UNVERIFIED,
+  or CONTAMINATED separately from the decision result.
+- Added six deterministic builder regression tests covering the then-current ten packets, variants,
+  forbidden-file exclusion, invalid IDs, symlinks, hashes, and stdout/stderr separation.
+
 ## 2026-09-30 — Review precedence and behavioral decision cases
 
 - Confirmed blocking findings now take precedence over missing review evidence:

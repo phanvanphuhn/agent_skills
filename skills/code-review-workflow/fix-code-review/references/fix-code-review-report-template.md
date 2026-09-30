@@ -40,6 +40,15 @@ List CHK-* records and reference their IDs for each corrected issue.
 
 - <open/rejected/context-dependent issue, risk, or none>
 
+## Carried Review Blockers
+
+- <BLK-ID>: <OPEN / EVIDENCE_SUPPLIED>; <originating report; scope; owner; action;
+  resume condition; new evidence or unchanged reference>
+
+Reconcile every inherited unresolved ID. Only code-review confirms RESOLVED; fixing
+CR-* findings does not close BLK-* gaps. Cite already-resolved history without copying it.
+State `None` only if the input review has no unresolved blockers and none were discovered.
+
 ## Cycle History
 
 1. <review decision → explicit authorization → fix attempt → self-test result>

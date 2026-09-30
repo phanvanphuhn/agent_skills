@@ -43,6 +43,15 @@ can state the current evidence and remaining unknown. Record deeper questions fo
 the validator rather than expanding into dependencies, analogous features, or broad
 architecture. Every escalation must name the requirement it is trying to clarify.
 
+## Execution routing
+
+Apply [shared execution routing](../../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: ECONOMY
+- `ESCALATE_WHEN`: Conflicting sources or requirements need engineering judgment.
+- `DELEGATE_WHEN`: Supplied artifacts can be assessed independently without overlap; one owner builds the contract.
+
 ## Procedure
 
 1. Read workspace `AGENTS.md` and the task context. Identify the target repository

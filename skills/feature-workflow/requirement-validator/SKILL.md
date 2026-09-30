@@ -42,6 +42,15 @@ Investigate each unknown progressively and stop as soon as evidence answers it:
 Tie every expansion to a stable unknown/requirement ID. Record the maximum level and
 decisive evidence, not a transcript of every search. Never explore code "just in case."
 
+## Execution routing
+
+Apply [shared execution routing](../../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: STANDARD
+- `ESCALATE_WHEN`: Unresolved cross-system, security, concurrency, or irreversible product risk requires DEEP; bounded lookup may use ECONOMY.
+- `DELEGATE_WHEN`: Evidence gathering is independent; one validator owns the final contract decision.
+
 ## Procedure
 
 1. Read the contract, workspace `AGENTS.md`, applicable repository instructions,

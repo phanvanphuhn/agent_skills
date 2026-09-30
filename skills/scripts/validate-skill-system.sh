@@ -39,6 +39,32 @@ require_pattern() {
   fi
 }
 
+require_execution_profile() {
+  if ! awk '
+    $0 == "## Execution routing" { section=1; next }
+    section && /^## / { section=0 }
+    section && /^- `START_CLASS`:/ {
+      start_seen++
+      if ($0 ~ /^- `START_CLASS`: (ECONOMY|STANDARD|DEEP)$/) start_valid++
+    }
+    section && /^- `ESCALATE_WHEN`:/ {
+      escalate_seen++
+      value=$0; sub(/^- `ESCALATE_WHEN`: /, "", value)
+      normalized=toupper(value)
+      if (length(value) >= 12 && normalized !~ /^(TBD|TODO|UNKNOWN|N\/A|NONE|PLACEHOLDER)([ .:-].*)?$/) escalate_valid++
+    }
+    section && /^- `DELEGATE_WHEN`:/ {
+      delegate_seen++
+      value=$0; sub(/^- `DELEGATE_WHEN`: /, "", value)
+      normalized=toupper(value)
+      if (length(value) >= 12 && normalized !~ /^(TBD|TODO|UNKNOWN|N\/A|NONE|PLACEHOLDER)([ .:-].*)?$/) delegate_valid++
+    }
+    END { exit !(start_seen == 1 && start_valid == 1 && escalate_seen == 1 && escalate_valid == 1 && delegate_seen == 1 && delegate_valid == 1) }
+  ' "$workspace_root/$1"; then
+    fail "$1: execution profile requires exactly one START_CLASS (ECONOMY/STANDARD/DEEP) and non-placeholder ESCALATE_WHEN and DELEGATE_WHEN fields"
+  fi
+}
+
 reject_pattern() {
   if awk -v unwanted="$2" '$0 ~ unwanted { found=1 } END { exit !found }' "$workspace_root/$1"; then
     fail "$1: contains project-specific guidance forbidden by generic workflow policy: $3"
@@ -94,11 +120,15 @@ documents=(
   skills/README.md
   skills/CHANGELOG.md
   skills/references/check-evidence.md
+  skills/references/execution-routing.md
   skills/evals/behavioral-evals.md
+  skills/evals/routing-eval-results.md
   skills/evals/case-01.md
   skills/evals/case-02.md
   skills/evals/case-03.md
   skills/evals/case-04.md
+  skills/evals/case-05.md
+  skills/evals/case-06.md
   skills/task-router/SKILL.md
   skills/project-discovery/SKILL.md
   skills/project-discovery/references/project-context-template.md
@@ -138,9 +168,20 @@ for doc in "${documents[@]}"; do
   if [ -s "$workspace_root/$doc" ]; then check_links "$doc"; fi
 done
 require_file skills/scripts/validate-skill-system.sh
+require_file skills/evals/build_packet.py
+require_file skills/evals/test_build_packet.py
+require_file skills/evals/test_validator.py
 
 require_heading skills/references/check-evidence.md '## Record'
 require_heading skills/references/check-evidence.md '## Reuse decision'
+for heading in 'Walk It Down' 'Agent selection' 'Model classes' 'Escalation and fallback'; do
+  require_heading skills/references/execution-routing.md "## $heading"
+done
+require_pattern skills/references/execution-routing.md 'Decisive condition.*Minimum class' 'deterministic class decision table'
+require_pattern skills/references/execution-routing.md 'choose the highest minimum class' 'execution-class tie-breaker'
+for class in ECONOMY STANDARD DEEP; do
+  require_pattern skills/references/execution-routing.md "$class" "execution class $class"
+done
 for report in \
   skills/feature-workflow/implementation/references/implementation-report-template.md \
   skills/feature-workflow/verification/references/verification-report-template.md \
@@ -232,6 +273,10 @@ fi
 
 while IFS= read -r candidate; do
   candidate_path=${candidate#"$workspace_root/"}
+  check_links "$candidate_path"
+  require_heading "$candidate_path" '## Execution routing'
+  require_pattern "$candidate_path" 'references/execution-routing[.]md' 'shared execution routing policy'
+  require_execution_profile "$candidate_path"
   case "$candidate_path" in
     skills/task-router/SKILL.md|\
 skills/project-discovery/SKILL.md|\
@@ -350,7 +395,7 @@ fi
 report=skills/code-review-workflow/fix-code-review/references/fix-code-review-report-template.md
 if [ -s "$workspace_root/$report" ]; then
   for heading in 'Issue Disposition' 'Files Changed' 'Self-Tests' 'Fix Diff Review' \
-    'Remaining Issues and Risks' 'Cycle History' Handoff; do
+    'Remaining Issues and Risks' 'Carried Review Blockers' 'Cycle History' Handoff; do
     require_heading "$report" "## $heading"
   done
 fi
@@ -412,6 +457,12 @@ if [ -s "$workspace_root/AGENTS.md" ]; then
   require_pattern AGENTS.md 'L0.*existing trusted structured artifact' 'L0 context level'
   require_pattern AGENTS.md 'L5.*broad repository exploration' 'L5 context level'
   require_pattern AGENTS.md 'Every escalation must name' 'evidence-based context escalation'
+  require_pattern AGENTS.md 'execution routing policy' 'shared agent and model routing policy'
+  for class in ECONOMY STANDARD DEEP; do
+    require_pattern AGENTS.md "$class" "dynamic execution class $class"
+  done
+  require_pattern AGENTS.md 'do not hard-code one model' 'no fixed workflow model'
+  require_pattern AGENTS.md 'added context and' 'delegation value threshold'
   require_pattern AGENTS.md '### Handoff economy' 'compact handoff policy'
   require_pattern AGENTS.md 'repair consumes only failed ACs' 'targeted repair handoff'
   require_pattern AGENTS.md 'USER REQUEST.*TASK ROUTER' 'automatic task-router entry'

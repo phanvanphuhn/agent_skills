@@ -41,6 +41,15 @@ Narrow maintenance, explanation, or review may stop at P0/P1 plus relevant sourc
 mark unrelated fields out of scope. A first project-wide overview or cross-cutting
 change requires P2. Record depth and the question justifying P3/P4.
 
+## Execution routing
+
+Apply [shared execution routing](../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: ECONOMY
+- `ESCALATE_WHEN`: P2-P3 needs architecture/dependency judgment, or unresolved high-risk P4 requires DEEP.
+- `DELEGATE_WHEN`: Repository areas are independent with no duplicate reads or shared writes.
+
 ## Procedure
 
 1. Resolve the target and read applicable instructions broadest to most specific;

@@ -47,8 +47,8 @@ skills/
 │   │   ├── SKILL.md
 │   │   └── references/{bug-verification-report-template.md,bug-fix-request-template.md}
 │   └── examples/workflow.md
-├── references/check-evidence.md
-├── evals/{behavioral-evals.md,case-01.md,case-02.md,case-03.md,case-04.md}
+├── references/{check-evidence.md,execution-routing.md}
+├── evals/{behavioral-evals.md,routing-eval-results.md,case-01.md,…,case-06.md,build_packet.py,test_build_packet.py,test_validator.py}
 └── scripts/validate-skill-system.sh
 ```
 
@@ -155,6 +155,20 @@ environment, baseline, results, and policy permit it.
 For parallel work, assign one owner per write scope/check, share its result, and
 reconcile changes before final review; independent review still challenges the actual code.
 
+Execution also walks down by capability. Each skill declares a starting class and
+links the shared [execution routing policy](references/execution-routing.md): ECONOMY
+for bounded/mechanical work, STANDARD for normal engineering judgment, and DEEP for
+ambiguous or high-risk cross-system reasoning. These are portable capability classes;
+map them to the cheapest suitable models currently offered by the runtime instead of
+pinning a workflow to one model name. Model availability and pricing change over time.
+
+Choose agent topology separately. A short ordered task remains in the current agent;
+independent, non-overlapping scopes may be delegated when their quality/latency benefit
+exceeds prompt, context, and reconciliation cost. Escalate only for a named question or
+risk, pass decisive evidence instead of replaying discovery, and return bounded work to
+a cheaper class after the difficult decision. Runtime inability to switch models or
+delegate is disclosed, not hidden by pretending a reassignment occurred.
+
 Measure input/output tokens, duplicate file reads, repeated commands, and missed defects
 on comparable real tasks. File word counts show instruction size only; they do not
 measure billing, caching, or end-to-end savings.
@@ -239,7 +253,8 @@ Review counts issued reports with confirmed blocking findings, including the ini
 and reports with incomplete coverage. Confirmed findings take precedence over missing
 evidence; retain the findings and blockers separately. Without confirmed blocking findings,
 required gaps yield BLOCKED; only sufficient evidence permits APPROVED. Fixing a finding
-does not clear unrelated review blockers.
+does not clear unrelated review blockers. BLK-* IDs persist through the fix report;
+new closure evidence is EVIDENCE_SUPPLIED until code-review confirms RESOLVED.
 Counts 1–2 return CHANGES_REQUIRED; count 3 returns REVIEW_ESCALATION. APPROVED/BLOCKED
 and fix attempts preserve the count. Human-directed work after escalation retains history.
 This counter does not change verification failure counters. Handoffs contain decisions, stable IDs,
@@ -353,6 +368,14 @@ mixed findings/blockers, authorization, and context recovery, with separate cand
 inputs and evaluator-only expectations. Load it only during explicit evaluation or
 skill maintenance. Structural PASS is not behavioral PASS; record actual candidate
 responses and distinguish decision probes from tool-execution or end-to-end evaluations.
+The set has thirteen runs, including successful reuse/review, blocker handoff, and
+dynamic execution-routing controls.
+Its packet builder excludes the rubric and records input hashes. Enforced candidate
+isolation also requires runtime access restrictions; shared-workspace runs must disclose
+ISOLATION_UNVERIFIED. Packet-builder regression checks use only the Python standard library:
+`python3 -m unittest discover -s skills/evals -p 'test_*.py'`.
+The [recorded routing matrix](evals/routing-eval-results.md) preserves failures and
+telemetry/isolation limits; it is decision evidence, not a claim of measured cost savings.
 
 ## Calibration and feedback
 
@@ -402,11 +425,18 @@ revalidate, and log the result in [CHANGELOG.md](CHANGELOG.md). Keep proposed ch
 separate from demonstrated improvements; do not automatically rewrite the skills
 while working on unrelated production tasks.
 
-Optional model walk-down uses the same task fixtures, source snapshot, contract,
+Model calibration uses the same task fixtures, source snapshot, contract,
 and rubric across models supported by the user's client. Repeat each scenario and
 compare correctness, clarification decisions, missed regressions, time, and cost.
-Choose a cheaper model only if repeated evidence meets the same quality bar. This
-system neither switches models nor launches paid comparisons automatically.
+Choose a cheaper model only if repeated evidence meets the same quality bar. The
+orchestrator applies the resulting capability mapping when its runtime supports model
+selection; it never launches paid comparisons automatically.
+
+Every new `SKILL.md` must include an `## Execution routing` profile that links the
+shared policy, states its normal starting class, names concrete escalation signals, and
+sets a delegation boundary. Keep the profile short; universal rules belong in the shared
+reference. Use the validator-enforced fields `START_CLASS`, `ESCALATE_WHEN`, and
+`DELEGATE_WHEN`; placeholder values fail. Add the skill to routing and validation intentionally.
 
 ## Design references
 

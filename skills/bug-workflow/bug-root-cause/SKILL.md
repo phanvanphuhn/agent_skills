@@ -39,6 +39,15 @@ Prefer reproduced failure plus a failing test, then deterministic code/stack evi
 then logs/network/monitoring, then media/report evidence. This is guidance, not a rule
 that discards valid lower-level or combined evidence.
 
+## Execution routing
+
+Apply [shared execution routing](../../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: STANDARD
+- `ESCALATE_WHEN`: Contradictory evidence, races, distributed state, security, or repeated failed hypotheses require DEEP; a deterministic single path may use ECONOMY.
+- `DELEGATE_WHEN`: Hypotheses can be tested independently; one owner reconciles the confirmed cause.
+
 ## Procedure
 
 1. State the symptom and strongest reproduction/evidence boundary.

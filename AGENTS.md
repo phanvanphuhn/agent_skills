@@ -77,6 +77,15 @@ Search before reading, batch independent reads, and stop when evidence supports 
 decision. Read whole selected instruction files; use targeted excerpts for source.
 Prefer deterministic tools for file lists, diffs, and mechanical checks.
 
+For every task and stage, also walk down execution cost using the shared
+[execution routing policy](skills/references/execution-routing.md). Choose context depth,
+agent topology, and model capability separately. Start with deterministic tools, the
+current agent, and the lowest capable class: ECONOMY for mechanical/bounded work,
+STANDARD for normal engineering judgment, and DEEP for ambiguity or high-risk
+cross-system reasoning. Escalate only for a named unresolved question or risk, then
+step back down for bounded work. Map classes to the runtime's current model catalog;
+do not hard-code one model for an entire workflow.
+
 Reuse source findings and commands by stable evidence IDs. Before reuse, check relevant
 source/test/config content and environment, including uncommitted changes. A check record
 needs command, directory, exit status, observed result, baseline, and scope. Invalidate
@@ -91,14 +100,17 @@ Keep routine tool output to filenames/counts or decisive excerpts; retain failur
 needed to diagnose. Load failure templates only on failure, examples only to resolve a
 format question, and README/calibration material only for installation or skill maintenance.
 
-Do not create an agent per stage by default. When delegation is authorized and useful,
+Do not create an agent per stage by default. Delegate only when authorized and when an
+independent bounded scope, check, or review is expected to justify its added context and
+coordination cost. When delegation is useful,
 send only the objective, scope/authority, applicable instructions, current stage skill,
 relevant artifact excerpts, baseline, owned paths, evidence IDs, counters, and expected
 output. Avoid full conversation forks. Recipients request missing evidence instead of
 restarting discovery. Independent review must retain raw code access and may challenge
 upstream claims. For parallel work, assign one owner per write scope or check; share
 results instead of duplicating execution and reconcile changes before final review.
-These rules do not authorize delegation or switch models.
+If the runtime cannot select a model or delegate, continue with the current capable
+agent and disclose material limitations; never lower a high-risk decision silently.
 
 ## Shared handoff contract
 
@@ -180,7 +192,8 @@ Each issue records ID, HIGH/MEDIUM/LOW, location, evidence, impact, and recommen
 HIGH/MEDIUM block; LOW ordinarily does not. Unknown behavior is NEEDS_CONTEXT.
 Confirmed blocking findings take precedence over missing evidence; preserve both in
 the report. Without confirmed blocking findings, required review gaps yield BLOCKED;
-only sufficient evidence permits APPROVED. Carry unresolved blockers into re-review.
+only sufficient evidence permits APPROVED. Carry stable BLK-* IDs through fixes and
+re-review; only the reviewer closes them with evidence. Recover missing blocker history.
 Code-review never edits. Fix-code-review handles accepted issues, self-tests, and emits
 READY_FOR_RE_REVIEW before independent re-review. Requirements contradictions return to
 requirement-validator; an invalid confirmed cause returns to bug-root-cause.

@@ -31,6 +31,15 @@ Do not investigate, plan, implement, or test. An active downstream workflow owns
 The orchestrator runs project-discovery after classification for repository-dependent
 work; this router never pre-scans the codebase.
 
+## Execution routing
+
+Apply [shared execution routing](../references/execution-routing.md) through this profile;
+open the linked reference only for an override or runtime fallback.
+
+- `START_CLASS`: ECONOMY
+- `ESCALATE_WHEN`: NEVER for model/context; ask one question when only user intent can resolve the route.
+- `DELEGATE_WHEN`: NEVER; routing is one bounded intent classification.
+
 ## Output
 
 Emit the selected `ROUTE: …` line and `CONFIDENCE: HIGH`. Only when an unresolved

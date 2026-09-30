@@ -87,9 +87,13 @@ Choose the first applicable decision, in this order:
 3. Sufficient evidence and no blocking findings: return APPROVED and preserve the count.
 
 Keep confirmed findings and unresolved review blockers separate in every outcome.
-For each blocker name the unreviewed scope, missing evidence, owner, action, and resume
-condition. Fixing known findings does not clear these blockers; re-review stays BLOCKED
-until required gaps are resolved if no confirmed blocking findings remain.
+Give each blocker a stable task-scoped BLK-* ID. Record scope, missing evidence, owner,
+action, resume condition, and status: OPEN, EVIDENCE_SUPPLIED, or RESOLVED. Preserve IDs
+across fixes, re-review, and context recovery; closing or reopening retains its history.
+Only code-review marks RESOLVED after inspecting closure evidence. Reconcile every
+inherited unresolved ID before deciding; missing blocker history must be recovered.
+Fixing findings does not clear blockers. OPEN/EVIDENCE_SUPPLIED prevent approval;
+without confirmed blocking findings, unresolved required gaps yield BLOCKED.
 
 Count the initial blocking report. APPROVED/BLOCKED, fixes, unproven concerns, and
 rereading a report never increment or reset the count. At the limit, further attempts
@@ -98,6 +102,15 @@ require human direction with history retained. Verification failure counters are
 CHANGES_REQUIRED stops for explicit fix authorization. An original `review and fix`
 request supplies it after the report exists; otherwise never invoke fix-code-review
 automatically.
+
+## Execution routing
+
+Apply [shared execution routing](../../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: STANDARD
+- `ESCALATE_WHEN`: Security, data loss, concurrency, public-contract, or cross-system risk requires DEEP; a small complete low-risk diff may use ECONOMY.
+- `DELEGATE_WHEN`: A distinct capable reviewer is authorized and available; SLP perspectives never require three agents.
 
 ## Independence and routing
 

@@ -39,6 +39,15 @@ behavior, style, and user changes outside the fix boundary. Add or strengthen th
 root-cause regression test where technically practical. Do not weaken assertions,
 silence failures, or hide errors to obtain a pass.
 
+## Execution routing
+
+Apply [shared execution routing](../../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: STANDARD
+- `ESCALATE_WHEN`: New evidence exposes high-risk architectural uncertainty requiring DEEP; a localized deterministic correction may use ECONOMY.
+- `DELEGATE_WHEN`: Checks or components do not overlap; one owner retains coupled production and test edits.
+
 ## Procedure
 
 1. Confirm matching artifact revisions, authorization, clean scope, affected symbols,

@@ -34,7 +34,7 @@ or approve your own corrections.
 
 - Current PROJECT CONTEXT revision covering the reviewed repository/workspace.
 - Explicit user fix authorization and the latest CODE REVIEW REPORT.
-- Exact reviewed baseline, actual current diff/worktree, and all open issue IDs.
+- Exact reviewed baseline, actual current diff/worktree, open issue IDs, and unresolved BLK-* IDs.
 - Feature TASK CONTRACT/VALIDATION/IMPLEMENTATION artifacts or bug CONTRACT/ROOT CAUSE/
   BUG FIX artifacts when the review was a required gate.
 - Directly related code/tests, repository instructions, prior FIX CODE REVIEW REPORTS,
@@ -56,6 +56,15 @@ REJECTED_FINDING, NEEDS_CONTEXT, or BLOCKED before editing. Reject a finding onl
 new code/repository evidence disproves it; record that evidence instead of modifying
 correct code.
 
+## Execution routing
+
+Apply [shared execution routing](../../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: ECONOMY
+- `ESCALATE_WHEN`: Coupled or judgment-heavy fixes require STANDARD; high-risk evidence invalidating an upstream boundary requires DEEP.
+- `DELEGATE_WHEN`: Fix scopes have separate write ownership; independent review remains a separate handoff.
+
 ## Procedure
 
 1. Confirm explicit authorization, compatible report/baseline, open issue IDs, scope,
@@ -72,6 +81,11 @@ correct code.
    compatibility, and new regression risk. Do not mark issues APPROVED.
 6. Emit the FIX CODE REVIEW REPORT with each issue disposition, corrections, checks,
    exact new baseline, and READY_FOR_RE_REVIEW or BLOCKED status.
+   Carry each unresolved BLK-* ID, owner, action, and resume condition unchanged unless
+   new evidence updates it. Mark proposed closure EVIDENCE_SUPPLIED, never RESOLVED;
+   code-review must confirm it. Missing blocker history requires retrieval.
+   An unrelated review gap does not prevent READY_FOR_RE_REVIEW when accepted fixes
+   are complete; a gap preventing a safe authorized correction makes this stage BLOCKED.
 7. Hand the result to code-review for an independent targeted re-review. Any later code,
    test, fixture, snapshot, or behavior-affecting configuration edit invalidates approval.
    Further review-issue corrections need explicit authorization; verification-authored

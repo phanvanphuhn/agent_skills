@@ -55,6 +55,15 @@ Use [verify.sh](scripts/verify.sh) to collect the same manifest and optionally r
 one explicit repository-specific command without `eval`. These helpers are seeds,
 not proof that all affected tests were found; apply contract and architecture evidence.
 
+## Execution routing
+
+Apply [shared execution routing](../../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: STANDARD
+- `ESCALATE_WHEN`: Ambiguous high-risk integration evidence requires DEEP; mapped deterministic checks may use ECONOMY.
+- `DELEGATE_WHEN`: Checks are independent, share one baseline, and avoid duplicate setup or execution.
+
 ## Procedure
 
 1. Read workspace `AGENTS.md`, applicable repository instructions, the contract,

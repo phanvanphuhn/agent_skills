@@ -49,6 +49,15 @@ Use [changed-files.sh](../../feature-workflow/verification/scripts/changed-files
 [verify.sh](../../feature-workflow/verification/scripts/verify.sh) for deterministic discovery/execution
 when applicable. Helpers do not decide test completeness.
 
+## Execution routing
+
+Apply [shared execution routing](../../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: STANDARD
+- `ESCALATE_WHEN`: Conflicting high-risk integration or root-cause evidence requires DEEP; mapped deterministic checks may use ECONOMY.
+- `DELEGATE_WHEN`: Checks are independent and baseline/environment provenance remains unambiguous.
+
 ## Procedure
 
 1. Confirm compatible artifact revisions, APPROVED review baseline, and counters.

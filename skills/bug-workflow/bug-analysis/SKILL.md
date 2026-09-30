@@ -39,6 +39,15 @@ repository broadly. At most use L2 targeted search or one L3 directly responsibl
 file to identify a potentially relevant area; leave technical investigation to
 bug-reproduction. Tie escalation to a specific missing contract fact and stop early.
 
+## Execution routing
+
+Apply [shared execution routing](../../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: ECONOMY
+- `ESCALATE_WHEN`: Supplied artifacts conflict or require STANDARD technical interpretation.
+- `DELEGATE_WHEN`: Media or log extraction is independently bounded and worth its context cost; one owner builds the BUG CONTRACT.
+
 ## Procedure
 
 1. Identify the target repository/component and authorized scope. Inventory every

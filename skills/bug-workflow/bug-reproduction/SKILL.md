@@ -42,6 +42,15 @@ For each unresolved reproduction question, progress only as necessary:
 
 Every escalation names a stable unknown/hypothesis and stops when evidence is enough.
 
+## Execution routing
+
+Apply [shared execution routing](../../references/execution-routing.md) through this profile;
+open the linked reference only for an override, delegation, or runtime fallback.
+
+- `START_CLASS`: STANDARD
+- `ESCALATE_WHEN`: Unstable distributed, concurrency, or high-risk environment behavior requires DEEP; a known deterministic command may use ECONOMY.
+- `DELEGATE_WHEN`: Environments or evidence checks are isolated; one owner coordinates stateful reproduction.
+
 ## Procedure
 
 1. Compare EXPECTED, REPORTED ACTUAL, and OBSERVED. Select the smallest safe
