@@ -1,5 +1,17 @@
 # Skill-system changelog
 
+## 2026-10-01 — Contract-first skills with model-owned reasoning
+
+- Reframed `AGENTS.md` and all stage skills as workflow, input/output, boundary, and
+  handoff contracts instead of prescribed reasoning procedures.
+- Removed context ladders, execution/model classes, delegation profiles, mandatory
+  Supervisor/Lead/Peer review role-play, and forced hypothesis/investigation formats.
+- Removed the shared execution-routing reference and obsolete workflow examples.
+- Simplified templates to capture decisions and evidence without requiring a particular
+  thought process.
+- Updated documentation, evaluations, and structural validation to enforce paths,
+  safety, evidence, and stop conditions while leaving technical judgment to the model.
+
 ## 2026-09-30 — Dynamic agent and model walk-down
 
 - Added a shared execution-routing policy that separates context depth, agent topology,

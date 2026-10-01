@@ -23,13 +23,12 @@ class PacketTests(unittest.TestCase):
                 "AGENTS.md", *build_packet.STAGES[stage],
                 f"skills/evals/{scenario}",
             }
-            if stage != "execution-routing":
-                expected.add("skills/references/check-evidence.md")
+            expected.add("skills/references/check-evidence.md")
             with self.subTest(case=case_id), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory).resolve()
                 all_inputs = {"AGENTS.md", "skills/references/check-evidence.md"}
                 all_inputs.update(path for paths in build_packet.STAGES.values() for path in paths)
-                all_inputs.update(f"skills/evals/case-0{i}.md" for i in range(1, 7))
+                all_inputs.update(f"skills/evals/case-0{i}.md" for i in range(1, 6))
                 for relative in all_inputs:
                     path = root / relative
                     path.parent.mkdir(parents=True, exist_ok=True)
@@ -69,8 +68,6 @@ class PacketTests(unittest.TestCase):
             "E2-gap-only": ("Prior review_cycles=2;", "return amount * 0.20"),
             "E2-approved": ("return amount * 0.20", "def regional_tax(amount):", "return tax(amount)"),
             "E3-authorized": ("Review and fix this access check.",),
-            "E6-deep": ("authorization race spanning four services", "another tenant's data", "Production"),
-            "E6-parallel": ("three independent plugins", "shares no source or mutable state", "Delegation is"),
         }
         for case_id in build_packet.CASES:
             with self.subTest(case=case_id):

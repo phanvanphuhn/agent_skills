@@ -9,7 +9,6 @@
 - Status: <READY_FOR_RE_REVIEW / BLOCKED>
 - Pre-fix baseline: <exact commit/diff/worktree state>
 - Post-fix baseline: <exact commit/diff/worktree state or partial state>
-- Context used: <maximum F0-F4 and reason for expansion beyond F1>
 
 ## Issue Disposition
 
@@ -28,13 +27,6 @@
 
 Use the shared [check evidence record](../../../references/check-evidence.md).
 List CHK-* records and reference their IDs for each corrected issue.
-
-## Fix Diff Review
-
-- Issue coverage: <all accepted IDs mapped or exact gap>
-- Scope/unrelated changes: <result>
-- Compatibility/security/secrets/diagnostics: <result>
-- New regression risk: <concrete risk or none identified>
 
 ## Remaining Issues and Risks
 

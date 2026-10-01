@@ -9,7 +9,6 @@
 - Review cycle: <review_cycles: prior + 1 for confirmed blocking findings, otherwise unchanged; initially 0>
 - Independence: <reviewer separation and any disclosed limitation>
 - Coverage: <complete / incomplete; required gaps listed under Review Blockers>
-- Context used: <maximum R0-R5 and question justifying expansion beyond R1>
 
 ## Review Scope
 
@@ -17,18 +16,11 @@
 - Excluded/pre-existing changes: <identified unrelated work or none>
 - Requirements/root-cause baseline: <artifact revision or NEEDS_CONTEXT>
 
-## SLP Summary
-
-- Supervisor: <intent, completeness, compatibility, delivery/regression result>
-- Lead: <architecture, conventions, safety, and maintainability result>
-- Peer: <diff-level logic, edge, async, cleanup, and test result>
-
 ## Issues
 
 ### <CR-ID> — <short title>
 
 - Severity: <HIGH / MEDIUM / LOW>
-- Found by: <SUPERVISOR / LEAD / PEER; one or more>
 - File / location: <path:symbol-or-line>
 - Problem: <specific defect>
 - Evidence: <code/repository evidence establishing it>

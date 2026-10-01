@@ -8,7 +8,6 @@
 - Fix revision: <f1; increment for each material implementation revision>
 - Input fix request: <none or request ID>
 - Status: <IMPLEMENTED / BLOCKED>
-- Context used: <max L0-L5 and reason for escalation>
 - Fix cycles: <total and per-root-cause counts before verification>
 
 ## Summary
@@ -38,19 +37,9 @@
 Use the shared [check evidence record](../../../references/check-evidence.md).
 List CHK-* records here; reference their IDs in regression results and later reports.
 
-## Diff Review
-
-- Scope/unrelated changes: <result>
-- Secrets/temporary diagnostics/generated files: <result>
-- Architecture/style/error handling: <result>
-
 ## Risks and Limitations
 
 - <remaining risk, unexecuted integration evidence, or none>
-
-## Contradictory Evidence
-
-- <evidence that challenges the root cause, or none>
 
 ## Handoff
 

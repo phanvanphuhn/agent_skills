@@ -6,7 +6,6 @@
 - Selected route / scope: <route and repository-dependent purpose>
 - Repository baseline: <Git root(s), branch/commit or non-Git identity, worktree state>
 - Sources: <instructions, manifests, docs, entry points, representative source paths>
-- Discovery depth: <P0-P4; question justifying P3/P4, or none>
 - Freshness basis: <relevant source paths, baseline/content fingerprints, dirty/untracked state>
 - Prior revision / changes: <initial or material reason for refresh>
 

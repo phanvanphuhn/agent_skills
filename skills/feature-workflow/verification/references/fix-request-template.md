@@ -17,7 +17,7 @@
 - Actual behavior: <observed result>
 - Evidence: <reproduction command, exit code, relevant output or test failure>
 - Relevant file: <path/symbol/line>
-- Recommended correction: <bounded change, with reasoning>
+- Required correction: <bounded observable outcome; avoid unsupported implementation prescriptions>
 - Regression verification: <test proving the fix and protecting existing behavior>
 
 <Repeat per defect; do not mix unresolved product decisions into assumed fixes.>

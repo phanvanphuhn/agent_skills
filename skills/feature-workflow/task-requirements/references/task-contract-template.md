@@ -8,7 +8,6 @@
 - Requested scope: <analysis/planning/implementation>
 - Sources: <S1: user story; S2: source path/section; S3: confirmed stakeholder answer>
 - Prior revision / changes: <what changed and why, or initial>
-- Context used: <L0-L3; unresolved question that justified any move above L1>
 
 ## Task
 

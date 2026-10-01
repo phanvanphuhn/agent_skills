@@ -25,7 +25,6 @@ STAGES = {
         "skills/code-review-workflow/fix-code-review/SKILL.md",
         "skills/code-review-workflow/fix-code-review/references/fix-code-review-report-template.md",
     ),
-    "execution-routing": ("skills/references/execution-routing.md",),
 }
 CASES = {
     "E1": ("verification", "case-01.md"),
@@ -38,9 +37,6 @@ CASES = {
     "E3-authorized": ("code-review", "case-03.md"),
     "E4": ("implementation", "case-04.md"),
     "E5": ("fix-code-review", "case-05.md"),
-    "E6": ("execution-routing", "case-06.md"),
-    "E6-deep": ("execution-routing", "case-06.md"),
-    "E6-parallel": ("execution-routing", "case-06.md"),
 }
 REGIONAL_GAP = (
     "Review of the regional override is also explicitly required, but `regional.py` cannot\n"
@@ -58,22 +54,6 @@ REGIONAL_AVAILABLE = (
 )
 PRIOR_TWO = ("Prior review_cycles=0;", "Prior review_cycles=2;")
 CORRECT_TAX = ("    return amount * 0.02\n", "    return amount * 0.20\n")
-BASE_ROUTING_EVIDENCE = (
-    "PROJECT CONTEXT pc1 is CURRENT at P1. There are no dirty overlapping changes, safety\n"
-    "risks, architectural decisions, or unresolved requirements. The validator command and\n"
-    "its last current-baseline PASS record are accessible; the changed README still requires\n"
-    "the validator to run once after the edit."
-)
-DEEP_ROUTING_EVIDENCE = (
-    "PROJECT CONTEXT pc1 is CURRENT at P1 for all four services. The conflicting traces are\n"
-    "available, but no source path or service boundary is yet confirmed responsible. Production\n"
-    "writes are unauthorized; bounded read-only evidence collection is available."
-)
-PARALLEL_ROUTING_EVIDENCE = (
-    "PROJECT CONTEXT pc1 is CURRENT at P1 for all three plugin directories. Delegation is\n"
-    "authorized. The directories, inputs, and outputs are independent; setup is negligible,\n"
-    "and the coordinator needs only the three schema-conforming summaries."
-)
 SUBSTITUTIONS = {
     "E1-current": (
         (
@@ -96,28 +76,6 @@ SUBSTITUTIONS = {
             "Review and fix this access check.",
         ),
     ),
-    "E6-deep": (
-        (
-            "Correct one known typo in `README.md`. The exact line and replacement are supplied,\n"
-            "the file is available, and success is an exact text match plus the existing structural\n"
-            "validator. No other files or behavior are involved.",
-            "Diagnose an intermittent authorization race spanning four services. Conflicting traces\n"
-            "suggest requests may expose another tenant's data; causality and the responsible boundary\n"
-            "are unknown. Produce a diagnosis plan only, with no production changes.",
-        ),
-        (BASE_ROUTING_EVIDENCE, DEEP_ROUTING_EVIDENCE),
-    ),
-    "E6-parallel": (
-        (
-            "Correct one known typo in `README.md`. The exact line and replacement are supplied,\n"
-            "the file is available, and success is an exact text match plus the existing structural\n"
-            "validator. No other files or behavior are involved.",
-            "Inventory the public entry points of three independent plugins in separate directories.\n"
-            "Each is read-only, has the same explicit output schema, shares no source or mutable state,\n"
-            "and can be summarized independently before the coordinator combines the results.",
-        ),
-        (BASE_ROUTING_EVIDENCE, PARALLEL_ROUTING_EVIDENCE),
-    ),
 }
 
 
@@ -139,7 +97,7 @@ def build_packet(root, case_id):
     root = Path(root).resolve()
     stage, scenario_name = CASES[case_id]
     scenario_path = f"skills/evals/{scenario_name}"
-    shared = () if stage == "execution-routing" else ("skills/references/check-evidence.md",)
+    shared = ("skills/references/check-evidence.md",)
     paths = ("AGENTS.md", *STAGES[stage], *shared, scenario_path)
     parts = [
         "# Candidate evaluation packet\n\n"

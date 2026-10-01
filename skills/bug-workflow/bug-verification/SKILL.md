@@ -1,115 +1,44 @@
 ---
 name: bug-verification
-description: "Independently verifies that an APPROVED reviewed bug fix removes the reproduced failure without regressions and routes failures to the necessary prior stage."
+description: "Verifies an APPROVED bug-fix baseline against the reproduced failure and required regressions, returning PASS, FAIL, or BLOCKED."
 ---
 
 # Bug verification
 
-## Responsibility
+## Purpose
 
-Act as an independent senior reviewer and test engineer. Determine whether the actual
-fix resolves the confirmed bug, covers its cause, and preserves required behavior.
+Prove whether the reviewed fix removes the confirmed failure and preserves required
+behavior.
 
-## Trigger
+## Use when
 
-Run after code-review returns APPROVED for the current IMPLEMENTED BUG FIX REPORT and
-code baseline, including repair revisions. Verification is required even when developer
-and review checks passed.
-
-## When not to run
-
-Do not verify a code baseline without a matching APPROVED CODE REVIEW REPORT, implement
-production fixes, infer success from reports alone, or mark PASS when a required check
-is NOT_RUN/BLOCKED. Do not rerun unrelated stages by default.
+Run only after code-review APPROVES the exact current bug-fix baseline.
 
 ## Inputs
 
-- Current PROJECT CONTEXT revision covering the target repository/workspace.
-- BUG CONTRACT, REPRODUCTION REPORT, ROOT CAUSE REPORT, BUG FIX REPORT, and matching
+- Current PROJECT CONTEXT and repository instructions.
+- Compatible BUG CONTRACT, REPRODUCTION REPORT, ROOT CAUSE REPORT, BUG FIX REPORT, and
   APPROVED CODE REVIEW REPORT.
-- Actual diff/worktree, tests, repository instructions, and available environments.
-- Prior BUG VERIFICATION REPORT/FIX REQUEST and complete cycle history, when present.
+- Actual baseline, tests, available environments, prior verification/fix requests, and
+  complete cycle counters.
 
-## Verification strategy — Walk It Down
+## Required outcome
 
-Inspect independently and escalate only as evidence requires:
+Produce a [BUG VERIFICATION REPORT](references/bug-verification-report-template.md) with
+PASS, FAIL, or BLOCKED. Verify the original failure, cause coverage, required preserved
+behavior, regressions, and checks against the approved baseline.
 
-- V0 — validate artifact revisions, statuses, scope, and required evidence.
-- V1 — inspect actual changed files/diff and root-cause-to-change mapping.
-- V2 — run the original reproduction/regression test; where technically possible,
-  establish that it failed before the fix and passes after it.
-- V3 — run directly related module/component tests and boundaries.
-- V4 — run repository-required lint, type, build, security, or static checks.
-- V5 — run broader regression/integration checks justified by the risk surface.
-- V6 — run full-suite or real-environment validation only when required by the bug,
-  contract, repository, release risk, or unresolved lower-level evidence.
+FAIL must be classified as IMPLEMENTATION_ISSUE, ROOT_CAUSE_INCORRECT, or
+REQUIREMENT_UNCLEAR and include a [BUG FIX REQUEST](references/bug-fix-request-template.md).
 
-Use [changed-files.sh](../../feature-workflow/verification/scripts/changed-files.sh),
-[related-tests.sh](../../feature-workflow/verification/scripts/related-tests.sh), and
-[verify.sh](../../feature-workflow/verification/scripts/verify.sh) for deterministic discovery/execution
-when applicable. Helpers do not decide test completeness.
+## Boundaries
 
-## Execution routing
+Do not change production code, weaken expected behavior, invent execution evidence, or
+certify a baseline changed after approval. Required NOT_RUN or BLOCKED evidence prevents
+PASS unless a known defect independently requires FAIL.
 
-Apply [shared execution routing](../../references/execution-routing.md) through this profile;
-open the linked reference only for an override, delegation, or runtime fallback.
+## Handoff
 
-- `START_CLASS`: STANDARD
-- `ESCALATE_WHEN`: Conflicting high-risk integration or root-cause evidence requires DEEP; mapped deterministic checks may use ECONOMY.
-- `DELEGATE_WHEN`: Checks are independent and baseline/environment provenance remains unambiguous.
-
-## Procedure
-
-1. Confirm compatible artifact revisions, APPROVED review baseline, and counters.
-   Inspect the actual diff rather than relying on implementation or review summaries.
-2. Check that the edit addresses the confirmed cause and contains no unrelated change,
-   secret, temporary diagnostic, weakened assertion, or hidden failure.
-3. Verify `reported failure → reproduction evidence → root cause → change → regression
-   test → result`. Reuse executed original-path checks only after independently matching
-   raw results, relevant source/test/config content, environment, and baseline. Rerun
-   for changed or unknown inputs, unstable state, or policy requiring a fresh run.
-   Execute uncovered original-path checks and meaningful boundaries.
-4. Check preserved behavior, regressions, observable interfaces/errors, and required
-   checks through the necessary V-level. Reuse approved engineering findings; reopen
-   architecture/style review only for affected changes or new contradictory evidence.
-5. Record every command, working directory, exit status, result, and limitation.
-   Required unexecuted evidence is NOT_RUN or BLOCKED, never PASS.
-6. Return PASS only when the failure is resolved and required evidence passes. On
-   failure, classify it as IMPLEMENTATION_ISSUE, ROOT_CAUSE_INCORRECT, or
-   REQUIREMENT_UNCLEAR and produce a focused BUG FIX REQUEST.
-7. Route IMPLEMENTATION_ISSUE to bug-fix and require code-review again after its
-   production repair; route ROOT_CAUSE_INCORRECT to bug-root-cause and REQUIREMENT_UNCLEAR
-   to human/bug-analysis. BLOCKED names owner/resume condition.
-8. Update `failed_cycles_for_root_cause` and `total_fix_cycles`. The initial FAIL is
-   cycle one. Stop at the third FAIL for the same root-cause revision and request human
-   intervention with cumulative evidence. A materially different evidence-backed root
-   cause resets only its per-root-cause count; never reset the total history.
-9. Confirm code, tests, fixtures, snapshots, and behavior-affecting configuration still
-   match review approval, including changes generated by commands. If any changed,
-   hand the new diff/baseline to code-review before certification. Pending review alone
-   is BLOCKED, classification N/A, with unchanged counters; a known defect is still FAIL.
-   Produce the [BUG VERIFICATION REPORT](references/bug-verification-report-template.md)
-   and, on FAIL, the [BUG FIX REQUEST](references/bug-fix-request-template.md).
-
-## Outputs
-
-A BUG VERIFICATION REPORT with final status PASS, FAIL, or BLOCKED. FAIL includes one
-failure classification and a BUG FIX REQUEST routed only to the necessary stage.
-
-## Completion criteria
-
-The actual diff and original failure are independently assessed; cause coverage,
-regression behavior, required checks, limitations, and cycle history are explicit.
-Only PASS permits the bug workflow to reach DONE.
-
-## Failure and blocked behavior
-
-Known fix defects produce FAIL even if another check is blocked; record both. Otherwise
-missing required evidence produces BLOCKED. Do not weaken the expected behavior, revise
-the cause without evidence, or silently reset counters to obtain completion.
-
-## Human intervention
-
-Stop at the third FAIL for one root-cause revision, or earlier for a product ambiguity,
-missing authority, unsafe environment, or unavailable external dependency. Provide a
-concise ticket-ready summary of attempts, decisive evidence, and the exact action needed.
+PASS permits DONE. Failure routes only to the owning stage and must return through
+code-review before re-verification. Preserve `failed_cycles_for_root_cause` and
+`total_fix_cycles`; the third FAIL for one root-cause revision stops for human action.

@@ -13,8 +13,6 @@
 
 - Changed files: <deterministic manifest or inspected baseline>
 - Related tests: <discovered candidates and how completeness was assessed>
-- Highest level: <V0-V6>
-- Escalations: <V3+ level, risk/policy/evidence that required it; or none>
 
 ## AC Verification
 
@@ -35,14 +33,6 @@
 ## Regression Risk
 
 <Affected existing behavior and supporting checks.>
-
-## Code Quality
-
-<Approved review reference; report only new findings or affected changes.>
-
-## Architecture Compliance
-
-<Approved review reference; reassess only changed boundaries or contradictory evidence.>
 
 ## Uncovered Edge Cases
 

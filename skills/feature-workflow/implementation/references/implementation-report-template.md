@@ -28,18 +28,10 @@
 
 - <validated assumption IDs and how applied; none if unused>
 
-## Developer Self-Review
-
-<AC coverage, scope/diff, errors, edge cases, types, compatibility, architecture.>
-
 ## Developer Checks
 
 Use the shared [check evidence record](../../../references/check-evidence.md).
 List CHK-* records here; cite their IDs in AC mappings and later reports.
-
-## Context Escalation
-
-- <max L0-L5 level; question that required any search beyond contract-listed files; decisive evidence; or none>
 
 ## Risks
 

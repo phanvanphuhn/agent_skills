@@ -6,8 +6,6 @@
 - Reproduction report/status: <artifact and REPRODUCED/EVIDENCE_CONFIRMED/qualified exception>
 - Root-cause revision: <rc1; increment only for materially changed cause/evidence>
 - Status: <CONFIRMED / INSUFFICIENT_EVIDENCE / BLOCKED>
-- Confidence: <HIGH / MEDIUM / LOW with one-sentence reason>
-- Context used: <max L0-L6 and hypothesis justifying escalation>
 
 ## Symptom
 
@@ -20,10 +18,6 @@
 ## Failure Path
 
 <Concise causal sequence from trigger/state to symptom.>
-
-## Hypotheses
-
-- H1: <hypothesis> — <CONFIRMED/REJECTED/UNCONFIRMED>; evidence/test/result.
 
 ## Confirmed Root Cause
 

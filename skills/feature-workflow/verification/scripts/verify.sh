@@ -41,9 +41,9 @@ repo_root=$(CDPATH= cd -- "$repo_root" && pwd)
 
 printf 'Repository: %s\n' "$repo_root"
 printf 'Base: %s\n' "$base_ref"
-printf '\nChanged files (V0/V1 input):\n'
+printf '\nChanged files:\n'
 bash "$script_dir/changed-files.sh" "$repo_root" "$base_ref"
-printf '\nName-based related test candidates (V2 seed):\n'
+printf '\nName-based related test candidates:\n'
 bash "$script_dir/related-tests.sh" "$repo_root" "$base_ref"
 
 if [ "$#" -eq 0 ]; then

@@ -8,7 +8,6 @@
 - Requested scope: <investigation/fix/verification>
 - Sources: <E1 report; E2 attachment/path; E3 ticket comment; E4 monitoring query>
 - Prior revision / changes: <initial or exact evidence/requirement change>
-- Context used: <L0-L3 and question justifying any move above L1>
 
 ## Bug Summary
 
@@ -56,10 +55,6 @@
 
 - U1: <missing information and investigation impact>
 
-## Initial Suspicions
-
-- H1 HYPOTHESIS: <possible explanation; supporting/contradicting evidence; never fact>
-
 ## Potentially Relevant Areas
 
 - <component/service/route/API/file suggested by evidence; why>
@@ -67,10 +62,6 @@
 ## Reproduction Requirements
 
 - <environment, build, account/state/data/device/tool/access requirement or UNKNOWN>
-
-## Investigation Priority
-
-1. <highest-value next evidence/reproduction action and question it answers>
 
 ## Handoff
 

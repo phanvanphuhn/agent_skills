@@ -5,7 +5,6 @@
 - Bug contract revision: <bN>
 - Input artifacts: <contract and evidence IDs>
 - Status: <REPRODUCED / EVIDENCE_CONFIRMED / CANNOT_REPRODUCE / NEEDS_INFORMATION / BLOCKED>
-- Context used: <max L0-L6; question and evidence that justified escalation>
 - Attempt number: <n; retain prior attempts>
 
 ## Expected / Reported / Observed
@@ -30,10 +29,6 @@ Use the shared [check evidence record](../../../references/check-evidence.md).
 ## Reproduction Steps
 
 <For REPRODUCED: exact deterministic/intermittent steps, state, and observed output. Otherwise N/A.>
-
-## Investigation Log
-
-- <unknown/hypothesis ID>: <level, targeted action, decisive evidence, stop reason>
 
 ## Missing Information or Blocker
 

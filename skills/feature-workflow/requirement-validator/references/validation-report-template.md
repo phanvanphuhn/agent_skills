@@ -12,10 +12,6 @@
 - Inspected behavior: <architecture/data flow/navigation/state/API/errors/flags/platform/tests as applicable>
 - Unavailable evidence: <what could not be inspected and why>
 
-## Investigation Log
-
-- <unknown/requirement ID>: <max L0-L5 level; unresolved question; decisive search/file/test; stop reason>
-
 ## Uncertainty Assessment
 
 ### U1 — <uncertainty>

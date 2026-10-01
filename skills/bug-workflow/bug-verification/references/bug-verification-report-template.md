@@ -10,7 +10,6 @@
 - Final baseline: <code/test/config content identity; matches approval or changed paths requiring review>
 - Status: <PASS / FAIL / BLOCKED>
 - Failure classification: <IMPLEMENTATION_ISSUE / ROOT_CAUSE_INCORRECT / REQUIREMENT_UNCLEAR / N/A>
-- Verification level: <V0-V6 and reason for stopping/escalating>
 - Failed cycles for root cause: <0-3 after this result>
 - Total fix cycles: <count retained across root-cause revisions>
 
@@ -38,10 +37,6 @@
 ## Preserved Behavior and Regression
 
 - <behavior/boundary/check/result>
-
-## Code and Architecture Review
-
-- <approved review reference; only new contradictory evidence or affected changes>
 
 ## Commands Executed
 
