@@ -14,6 +14,7 @@ skills/
 ├── project-discovery/{SKILL.md,references/project-context-template.md}
 ├── feature-workflow/
 │   ├── task-requirements/{SKILL.md,references/task-contract-template.md}
+│   ├── break-task/{SKILL.md,references/task-breakdown-template.md}
 │   ├── requirement-validator/{SKILL.md,references/validation-report-template.md}
 │   ├── implementation/{SKILL.md,references/implementation-report-template.md}
 │   └── verification/{SKILL.md,references/,scripts/}
@@ -47,6 +48,9 @@ invocation unless installed separately.
 ```text
 FEATURE
   TASK CONTRACT → VALIDATION → IMPLEMENTATION → CODE REVIEW → VERIFICATION → DONE
+
+BREAK_TASK (explicit mention only, after the feature has been read)
+  TASK BREAKDOWN
 
 BUG
   BUG CONTRACT → REPRODUCTION → ROOT CAUSE → FIX → CODE REVIEW → VERIFICATION → DONE

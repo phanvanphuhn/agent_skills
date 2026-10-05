@@ -1,5 +1,14 @@
 # Skill-system changelog
 
+## 2026-10-05 — Explicit break-task skill
+
+- Added `break-task`. It runs only when the user mentions breaking a task, after a
+  feature has been read, and emits a TASK BREAKDOWN whose tasks each have a title and
+  a description.
+- Left the default feature path unchanged. The mention is a separate router route.
+- Registered the skill and its template with the workspace instructions and the
+  structural validator.
+
 ## 2026-10-01 — Contract-first skills with model-owned reasoning
 
 - Reframed `AGENTS.md` and all stage skills as workflow, input/output, boundary, and

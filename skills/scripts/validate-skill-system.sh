@@ -83,6 +83,7 @@ skills=(
   'skills/task-router/SKILL.md:task-router'
   'skills/project-discovery/SKILL.md:project-discovery'
   'skills/feature-workflow/task-requirements/SKILL.md:task-requirements'
+  'skills/feature-workflow/break-task/SKILL.md:break-task'
   'skills/feature-workflow/requirement-validator/SKILL.md:requirement-validator'
   'skills/feature-workflow/implementation/SKILL.md:implementation'
   'skills/feature-workflow/verification/SKILL.md:verification'
@@ -110,6 +111,7 @@ done < <(find "$workspace_root/skills" -name SKILL.md -type f -print)
 templates=(
   skills/project-discovery/references/project-context-template.md
   skills/feature-workflow/task-requirements/references/task-contract-template.md
+  skills/feature-workflow/break-task/references/task-breakdown-template.md
   skills/feature-workflow/requirement-validator/references/validation-report-template.md
   skills/feature-workflow/implementation/references/implementation-report-template.md
   skills/feature-workflow/verification/references/verification-report-template.md
@@ -172,7 +174,7 @@ for route in FEATURE BUG CODE_REVIEW FIX_CODE_REVIEW NORMAL; do
   require_pattern skills/task-router/SKILL.md "$route" "router route $route"
 done
 
-for marker in task-requirements requirement-validator implementation verification \
+for marker in task-requirements break-task requirement-validator implementation verification \
   bug-analysis bug-reproduction bug-root-cause bug-fix bug-verification code-review \
   fix-code-review NEEDS_CLARIFICATION BLOCKED CHANGES_REQUIRED APPROVED PASS DONE; do
   require_pattern AGENTS.md "$marker" "workflow marker $marker"
@@ -209,6 +211,11 @@ for report in \
 done
 
 require_heading skills/feature-workflow/task-requirements/references/task-contract-template.md '## Acceptance Criteria'
+require_heading skills/feature-workflow/break-task/references/task-breakdown-template.md '## Tasks'
+require_pattern skills/feature-workflow/break-task/SKILL.md 'explicitly mentions' 'mention-only break-task trigger'
+require_pattern skills/feature-workflow/break-task/references/task-breakdown-template.md '<title>' 'task title field'
+require_pattern skills/feature-workflow/break-task/references/task-breakdown-template.md 'Description:' 'task description field'
+require_pattern skills/task-router/SKILL.md 'BREAK_TASK' 'explicit break-task route'
 require_heading skills/feature-workflow/requirement-validator/references/validation-report-template.md '## Uncertainty Assessment'
 require_heading skills/feature-workflow/implementation/references/implementation-report-template.md '## AC Mapping'
 require_heading skills/feature-workflow/verification/references/verification-report-template.md '## AC Verification'
