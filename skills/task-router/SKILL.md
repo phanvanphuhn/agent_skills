@@ -10,6 +10,12 @@ description: "Routes a new top-level request to the applicable development workf
 Select one route from the user's intent, pass the untouched request and authority to
 that route, and stop.
 
+## Walk It Down
+
+- Start: Use the user's stated intent and explicit routing.
+- Expand: Check only immediately available request metadata when the route is materially ambiguous.
+- Stop: Emit one confident route, or one clarification question when the route remains unclear.
+
 ## Routes
 
 | Route | Use when | Destination |
@@ -18,18 +24,15 @@ that route, and stop.
 | `CODE_REVIEW` | Explicitly review code, files, a diff, commit, branch, or PR | [code-review](../code-review-workflow/code-review/SKILL.md) |
 | `BUG` | Investigate or fix behavior that should already work | [bug-analysis](../bug-workflow/bug-analysis/SKILL.md) |
 | `FEATURE` | Introduce or intentionally change product behavior | [task-requirements](../feature-workflow/task-requirements/SKILL.md) |
-| `BREAK_TASK` | User explicitly mentions breaking a task | [break-task](../feature-workflow/break-task/SKILL.md) |
 | `NORMAL` | Explanation, documentation, planning, maintenance, or other work | Normal Codex behavior |
 
-Explicit user routing wins. Mentioning break task selects `BREAK_TASK` and does not
-insert that skill into the default feature path. `Review and fix` starts with
-`CODE_REVIEW` and carries authorization for the later fix stage. Follow-up messages
-stay with an active workflow.
+Explicit user routing wins. `Review and fix` starts with `CODE_REVIEW` and carries
+authorization for the later fix stage. Follow-up messages stay with an active workflow.
 
 ## Output
 
 ```text
-ROUTE: <FEATURE | BUG | CODE_REVIEW | FIX_CODE_REVIEW | BREAK_TASK | NORMAL>
+ROUTE: <FEATURE | BUG | CODE_REVIEW | FIX_CODE_REVIEW | NORMAL>
 CONFIDENCE: HIGH
 ```
 

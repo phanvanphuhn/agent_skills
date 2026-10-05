@@ -19,13 +19,8 @@ USER REQUEST → TASK ROUTER
       → code-review → bug-verification
   CODE_REVIEW → code-review
   FIX_CODE_REVIEW → fix-code-review → code-review
-  BREAK_TASK → break-task
   NORMAL → normal Codex behavior
 ```
-
-[break-task](skills/feature-workflow/break-task/SKILL.md) runs only when the user
-explicitly mentions breaking a task. It is not a step on the feature path. The feature
-must already have been read, or be supplied with the mention.
 
 ## Project context
 
@@ -33,6 +28,13 @@ Use [project-discovery](skills/project-discovery/SKILL.md) when repository-depen
 work lacks a current PROJECT CONTEXT. Reuse a current context and refresh only facts
 affected by relevant repository, instruction, manifest, interface, or architecture
 changes. Pure conversation does not require discovery.
+
+## Walk It Down
+
+Every active skill applies its `Start`, `Expand`, and `Stop` contract. Begin with the
+smallest relevant request, artifact, context, or code scope. Expand only to answer a
+named material question that the current evidence cannot resolve. Stop when evidence
+supports the stage outcome; do not broaden discovery merely because more context exists.
 
 ## Feature path
 

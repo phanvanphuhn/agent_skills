@@ -23,6 +23,12 @@ REQUEST and verification history.
 - Authorized scope and current worktree.
 - In repair mode: FIX REQUEST, prior reports, and `failed_cycles`.
 
+## Walk It Down
+
+- Start: Use the READY contract or focused FIX REQUEST and its named files, patterns, and checks.
+- Expand: Inspect direct dependencies or analogous code only for a named implementation or regression-risk question.
+- Stop: Stop at the smallest contract-complete change and evidence needed for code review, or a precise blocker.
+
 ## Required outcome
 
 Make the scoped code/test/configuration changes and produce an

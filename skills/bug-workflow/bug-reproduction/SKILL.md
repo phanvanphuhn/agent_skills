@@ -21,6 +21,12 @@ reconfirmation. Production code must not be changed in this stage.
 - BUG CONTRACT and all cited evidence.
 - Available environment, build, state/data, access, tools, and prior reproduction report.
 
+## Walk It Down
+
+- Start: Try the supplied steps in the stated environment and assess the strongest direct evidence first.
+- Expand: Vary state, inspect responsible code/tests, or follow one dependency only for a named reproduction question.
+- Stop: Stop when one reproduction status is supported, or when the exact missing evidence/access is identified.
+
 ## Required outcome
 
 Produce a [REPRODUCTION REPORT](references/reproduction-report-template.md) with one

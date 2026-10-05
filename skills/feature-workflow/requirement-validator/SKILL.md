@@ -22,6 +22,12 @@ a requirements conflict. Do not implement or silently choose product behavior.
 - Relevant repository code, configuration, tests, interfaces, and decisions.
 - Prior validation report and stakeholder answers when resuming.
 
+## Walk It Down
+
+- Start: Evaluate the contract's stated unknowns, conflicts, assumptions, and cited evidence.
+- Expand: Inspect only the code, tests, interfaces, or direct dependency needed to resolve one named uncertainty.
+- Stop: Stop when every material uncertainty has an evidence-backed classification or a named owner/action.
+
 ## Required outcome
 
 Produce a [VALIDATION REPORT](references/validation-report-template.md) with exactly one

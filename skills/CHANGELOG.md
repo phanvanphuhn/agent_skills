@@ -1,5 +1,22 @@
 # Skill-system changelog
 
+## 2026-10-05 — Walk It Down across all skills
+
+- Added a stage-specific `Walk It Down` section to every registered skill.
+- Standardized each section on `Start`, `Expand`, and `Stop`: begin from the smallest
+  relevant evidence, broaden only for a named unresolved question, and stop when the
+  stage outcome is supported.
+- Kept model selection, numeric context ladders, role-play, and hidden reasoning out of
+  the method; the sections constrain evidence scope rather than prescribe thought.
+- Updated workspace guidance and documentation. Validation now requires exactly those
+  three fields with no extra section content; regression tests cover both omissions and
+  attempts to add broad procedural instructions.
+
+## 2026-10-05 — Removed break-task skill
+
+- Removed the mention-only `break-task` skill, its TASK BREAKDOWN template, router route,
+  workspace instructions, documentation, and validator registrations.
+
 ## 2026-10-05 — Explicit break-task skill
 
 - Added `break-task`. It runs only when the user mentions breaking a task, after a

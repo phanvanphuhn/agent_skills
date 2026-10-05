@@ -23,6 +23,12 @@ unvalidated contract, changed baseline, or unavailable implementation.
 - Actual code/diff, tests, available environments, prior verification reports, and
   `failed_cycles`.
 
+## Walk It Down
+
+- Start: Map each acceptance criterion to the approved implementation, focused test, and existing evidence.
+- Expand: Run affected suites, static checks, regression checks, or real integration only when required by the contract or unresolved risk.
+- Stop: Stop when required evidence supports PASS, establishes FAIL, or identifies the exact BLOCKED prerequisite.
+
 ## Required outcome
 
 Produce a [VERIFICATION REPORT](references/verification-report-template.md) mapping

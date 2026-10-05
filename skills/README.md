@@ -2,8 +2,8 @@
 
 This package gives Codex a reusable path through an unfamiliar software project. It
 defines stage boundaries, required inputs and outputs, authorization rules, evidence
-contracts, and handoffs. It intentionally does not prescribe a reasoning method, model
-class, context ladder, role-play perspective, or implementation algorithm.
+contracts, and handoffs. Every skill uses a lightweight Walk It Down contract while
+avoiding fixed model classes, numeric context ladders, role-play, or implementation algorithms.
 
 ## Layout
 
@@ -14,7 +14,6 @@ skills/
 ├── project-discovery/{SKILL.md,references/project-context-template.md}
 ├── feature-workflow/
 │   ├── task-requirements/{SKILL.md,references/task-contract-template.md}
-│   ├── break-task/{SKILL.md,references/task-breakdown-template.md}
 │   ├── requirement-validator/{SKILL.md,references/validation-report-template.md}
 │   ├── implementation/{SKILL.md,references/implementation-report-template.md}
 │   └── verification/{SKILL.md,references/,scripts/}
@@ -49,9 +48,6 @@ invocation unless installed separately.
 FEATURE
   TASK CONTRACT → VALIDATION → IMPLEMENTATION → CODE REVIEW → VERIFICATION → DONE
 
-BREAK_TASK (explicit mention only, after the feature has been read)
-  TASK BREAKDOWN
-
 BUG
   BUG CONTRACT → REPRODUCTION → ROOT CAUSE → FIX → CODE REVIEW → VERIFICATION → DONE
 
@@ -72,6 +68,7 @@ Each `SKILL.md` contains:
 - a discriminating name and trigger description;
 - the stage purpose and when it applies;
 - required inputs;
+- a stage-specific `Walk It Down` section with `Start`, `Expand`, and `Stop`;
 - the required observable output;
 - boundaries that protect scope, evidence, authorization, and safety; and
 - the next-stage handoff.
@@ -79,6 +76,11 @@ Each `SKILL.md` contains:
 Detailed output schemas live in linked templates. Deterministic scripts are used only
 for repeatable mechanical operations such as changed-file discovery and structural
 validation.
+
+Walk It Down starts with the smallest relevant evidence set, expands only for a named
+unresolved question, and stops once the stage can produce its required outcome. The
+stage sections define evidence boundaries, not a hidden reasoning transcript or fixed
+number of investigation steps.
 
 ## Artifact contract
 
@@ -132,10 +134,10 @@ bash skills/scripts/validate-skill-system.sh
 python3 -m unittest discover -s skills/evals -p 'test_*.py'
 ```
 
-The structural validator checks required files, frontmatter, stage contracts, links,
-templates, routes, and stop conditions. It rejects reintroduction of prescribed model
-classes, context ladders, or review role-play in active instructions. Structural PASS
-does not prove application behavior or native client discovery.
+The structural validator checks required files, frontmatter, exact Walk It Down fields, stage
+contracts, links, templates, routes, and stop conditions. It rejects prescribed model
+classes, numeric context ladders, or review role-play in active instructions. Structural
+PASS does not prove application behavior or native client discovery.
 
 ## Maintenance
 

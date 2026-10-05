@@ -25,6 +25,12 @@ coverage, architecture, security, regressions, maintainability, and test adequac
 - For re-review: prior CODE REVIEW REPORT and FIX CODE REVIEW REPORT or changed-baseline
   evidence.
 
+## Walk It Down
+
+- Start: Inspect the actual scoped code or diff against its governing requirements, cause, and tests.
+- Expand: Inspect affected interfaces, callers, dependencies, or analogous patterns only for a named correctness or risk question.
+- Stop: Stop when evidence supports one review decision while preserving any separate coverage blocker.
+
 ## Required outcome
 
 Produce a [CODE REVIEW REPORT](references/code-review-report-template.md) with one

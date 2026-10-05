@@ -22,6 +22,12 @@ Run only after code-review APPROVES the exact current bug-fix baseline.
 - Actual baseline, tests, available environments, prior verification/fix requests, and
   complete cycle counters.
 
+## Walk It Down
+
+- Start: Recheck the original reproduction, confirmed cause, approved diff, and focused regression evidence.
+- Expand: Run related suites, static checks, integrations, or real-environment checks only when required by risk or the bug contract.
+- Stop: Stop when required evidence supports PASS, establishes FAIL, or identifies the exact BLOCKED prerequisite.
+
 ## Required outcome
 
 Produce a [BUG VERIFICATION REPORT](references/bug-verification-report-template.md) with

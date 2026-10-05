@@ -22,6 +22,12 @@ contract once the bug has moved to reproduction, root cause, fix, or verificatio
 - Supplied screenshots, videos, logs, traces, network data, comments, and documents.
 - Applicable instructions and prior BUG CONTRACT when revising.
 
+## Walk It Down
+
+- Start: Use every supplied report, artifact, environment fact, and current PROJECT CONTEXT.
+- Expand: Search metadata or one directly relevant component only when needed to identify the affected area or reproduction prerequisite.
+- Stop: Stop when the BUG CONTRACT separates facts, observations, hypotheses, and unknowns without claiming a cause.
+
 ## Required outcome
 
 Produce a DRAFT [BUG CONTRACT](references/bug-contract-template.md) that separates

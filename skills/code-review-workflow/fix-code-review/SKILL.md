@@ -22,6 +22,12 @@ requests fixes or originally requested `review and fix`. Never start automatical
   current worktree, issue IDs, blocker IDs, and cycle history.
 - Governing feature/bug artifacts and directly related code/tests.
 
+## Walk It Down
+
+- Start: Use the authorized finding IDs, reviewed baseline, issue locations, and directly related tests.
+- Expand: Inspect affected interfaces, callers, or dependencies only when the accepted finding cannot be corrected safely within its current boundary.
+- Stop: Stop when every authorized finding has an evidence-backed disposition and the changed baseline is ready for re-review, or blocked.
+
 ## Required outcome
 
 Apply scoped corrections and produce a

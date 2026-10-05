@@ -21,6 +21,12 @@ bug-verification. The user must have authorized the correction.
 - Authorized scope, current worktree, relevant code/tests, and cycle history.
 - In repair mode: current BUG FIX REQUEST and prior fix report.
 
+## Walk It Down
+
+- Start: Use the confirmed cause, preservation boundary, named code, and regression obligations.
+- Expand: Inspect direct dependencies, consumers, or analogous tests only for a named correction or regression-risk question.
+- Stop: Stop at the smallest cause-correcting change and evidence needed for review, or return contradictory evidence upstream.
+
 ## Required outcome
 
 Make the scoped correction and regression-test changes, then produce a

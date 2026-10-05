@@ -31,6 +31,29 @@ require_pattern() {
     "$workspace_root/$1" || fail "$1: missing required marker: $3"
 }
 
+require_walk_it_down() {
+  if ! awk '
+    $0 == "## Walk It Down" { headings++; section=1; next }
+    section && /^## / { section=0 }
+    section && /^- (Start|Expand|Stop):[ ]+/ {
+      field=$0; sub(/^- /, "", field); sub(/:.*/, "", field)
+      seen[field]++
+      value=$0; sub(/^- [^:]+:[ ]*/, "", value)
+      normalized=toupper(value)
+      if (length(value) >= 12 && normalized !~ /^(TBD|TODO|UNKNOWN|N\/A|NONE|PLACEHOLDER)([ .:-].*)?$/) valid[field]++
+      next
+    }
+    section && $0 !~ /^[[:space:]]*$/ { extra=1 }
+    END {
+      required[1]="Start"; required[2]="Expand"; required[3]="Stop"
+      for (i=1; i<=3; i++) if (seen[required[i]] != 1 || valid[required[i]] != 1) bad=1
+      exit (bad || headings != 1 || extra)
+    }
+  ' "$workspace_root/$1"; then
+    fail "$1: Walk It Down requires exactly one non-placeholder Start, Expand, and Stop field and no extra content"
+  fi
+}
+
 reject_pattern() {
   if awk -v unwanted="$2" '$0 ~ unwanted { found=1 } END { exit !found }' \
     "$workspace_root/$1"; then
@@ -83,7 +106,6 @@ skills=(
   'skills/task-router/SKILL.md:task-router'
   'skills/project-discovery/SKILL.md:project-discovery'
   'skills/feature-workflow/task-requirements/SKILL.md:task-requirements'
-  'skills/feature-workflow/break-task/SKILL.md:break-task'
   'skills/feature-workflow/requirement-validator/SKILL.md:requirement-validator'
   'skills/feature-workflow/implementation/SKILL.md:implementation'
   'skills/feature-workflow/verification/SKILL.md:verification'
@@ -111,7 +133,6 @@ done < <(find "$workspace_root/skills" -name SKILL.md -type f -print)
 templates=(
   skills/project-discovery/references/project-context-template.md
   skills/feature-workflow/task-requirements/references/task-contract-template.md
-  skills/feature-workflow/break-task/references/task-breakdown-template.md
   skills/feature-workflow/requirement-validator/references/validation-report-template.md
   skills/feature-workflow/implementation/references/implementation-report-template.md
   skills/feature-workflow/verification/references/verification-report-template.md
@@ -153,6 +174,8 @@ for entry in "${skills[@]}"; do
   check_frontmatter "$doc" "$name"
   lines=$(awk 'END { print NR }' "$workspace_root/$doc")
   [ "$lines" -lt 200 ] || fail "$doc: must remain below 200 lines"
+  require_heading "$doc" '## Walk It Down'
+  require_walk_it_down "$doc"
 
   if [ "$name" = task-router ]; then
     for heading in Purpose Routes Output Boundaries; do
@@ -165,7 +188,7 @@ for entry in "${skills[@]}"; do
   fi
 
   reject_pattern "$doc" 'Execution routing|START_CLASS|ESCALATE_WHEN|DELEGATE_WHEN' 'model/agent routing profile'
-  reject_pattern "$doc" 'Walk It Down|Investigation strategy|Verification strategy|Review strategy' 'reasoning strategy'
+  reject_pattern "$doc" 'Investigation strategy|Verification strategy|Review strategy' 'alternate reasoning strategy'
   reject_pattern "$doc" 'SLP review|### Supervisor|### Lead|### Peer' 'review role-play'
   reject_pattern "$doc" '(^|[^A-Z])[LRVPF][0-6]([^0-9]|$)' 'context-level ladder'
 done
@@ -174,7 +197,7 @@ for route in FEATURE BUG CODE_REVIEW FIX_CODE_REVIEW NORMAL; do
   require_pattern skills/task-router/SKILL.md "$route" "router route $route"
 done
 
-for marker in task-requirements break-task requirement-validator implementation verification \
+for marker in task-requirements requirement-validator implementation verification \
   bug-analysis bug-reproduction bug-root-cause bug-fix bug-verification code-review \
   fix-code-review NEEDS_CLARIFICATION BLOCKED CHANGES_REQUIRED APPROVED PASS DONE; do
   require_pattern AGENTS.md "$marker" "workflow marker $marker"
@@ -182,9 +205,11 @@ done
 require_pattern AGENTS.md 'third FAIL' 'three-failure stop condition'
 require_pattern AGENTS.md 'third blocking review' 'three-review stop condition'
 require_pattern AGENTS.md 'Do not deploy' 'external mutation boundary'
+require_heading AGENTS.md '## Walk It Down'
+require_pattern AGENTS.md 'Start.*Expand.*Stop' 'shared Walk It Down contract'
 
 reject_pattern AGENTS.md 'Execution routing|START_CLASS|ESCALATE_WHEN|DELEGATE_WHEN' 'model/agent routing profile'
-reject_pattern AGENTS.md 'Walk It Down|Investigation strategy|Verification strategy|Review strategy' 'reasoning strategy'
+reject_pattern AGENTS.md 'Investigation strategy|Verification strategy|Review strategy' 'alternate reasoning strategy'
 reject_pattern AGENTS.md 'SLP review|### Supervisor|### Lead|### Peer' 'review role-play'
 reject_pattern AGENTS.md '(^|[^A-Z])[LRVPF][0-6]([^0-9]|$)' 'context-level ladder'
 
@@ -211,11 +236,6 @@ for report in \
 done
 
 require_heading skills/feature-workflow/task-requirements/references/task-contract-template.md '## Acceptance Criteria'
-require_heading skills/feature-workflow/break-task/references/task-breakdown-template.md '## Tasks'
-require_pattern skills/feature-workflow/break-task/SKILL.md 'explicitly mentions' 'mention-only break-task trigger'
-require_pattern skills/feature-workflow/break-task/references/task-breakdown-template.md '<title>' 'task title field'
-require_pattern skills/feature-workflow/break-task/references/task-breakdown-template.md 'Description:' 'task description field'
-require_pattern skills/task-router/SKILL.md 'BREAK_TASK' 'explicit break-task route'
 require_heading skills/feature-workflow/requirement-validator/references/validation-report-template.md '## Uncertainty Assessment'
 require_heading skills/feature-workflow/implementation/references/implementation-report-template.md '## AC Mapping'
 require_heading skills/feature-workflow/verification/references/verification-report-template.md '## AC Verification'
@@ -246,4 +266,4 @@ if [ "$errors" -ne 0 ]; then
   exit 1
 fi
 
-printf 'PASS: workflow routes, stage contracts, templates, links, evidence rules, and stop conditions validated.\n'
+printf 'PASS: workflow routes, Walk It Down contracts, stage contracts, templates, links, evidence rules, and stop conditions validated.\n'

@@ -22,6 +22,12 @@ cause. Do not proceed from NEEDS_INFORMATION or BLOCKED evidence.
 - Relevant execution evidence, logs/traces, code, tests, configuration, and history.
 - Prior ROOT CAUSE REPORT and contradictory verification evidence when revising.
 
+## Walk It Down
+
+- Start: Trace the confirmed symptom through the directly responsible code and state boundary.
+- Expand: Follow the next caller, dependency, service, or competing hypothesis only when current evidence cannot explain the failure.
+- Stop: Stop when the cause is confirmed with contradictions resolved, or the precise missing evidence prevents confirmation.
+
 ## Required outcome
 
 Produce a [ROOT CAUSE REPORT](references/root-cause-report-template.md) with status

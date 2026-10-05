@@ -47,6 +47,52 @@ class ContractValidationTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("missing heading '## Required outcome'", result.stderr)
 
+    def test_missing_walk_it_down_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_workspace(root)
+            skill = root / SKILL
+            text = skill.read_text(encoding="utf-8")
+            skill.write_text(
+                text.replace("## Walk It Down", "## Evidence scope", 1),
+                encoding="utf-8",
+            )
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("missing heading '## Walk It Down'", result.stderr)
+
+    def test_incomplete_walk_it_down_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_workspace(root)
+            skill = root / SKILL
+            text = skill.read_text(encoding="utf-8")
+            skill.write_text(
+                text.replace("- Stop:", "- Finish:", 1),
+                encoding="utf-8",
+            )
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("requires exactly one non-placeholder", result.stderr)
+
+    def test_extra_walk_it_down_content_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_workspace(root)
+            skill = root / SKILL
+            text = skill.read_text(encoding="utf-8")
+            skill.write_text(
+                text.replace(
+                    "## Required outcome",
+                    "Always inspect the entire repository.\n\n## Required outcome",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("no extra content", result.stderr)
+
     def test_execution_profile_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

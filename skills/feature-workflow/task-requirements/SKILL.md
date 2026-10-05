@@ -21,6 +21,12 @@ for an unchanged repair, standalone explanation, or verification-only request.
 - Referenced repository evidence and prior TASK CONTRACT when revising.
 - Authorized scope and applicable instructions.
 
+## Walk It Down
+
+- Start: Use the request, acceptance criteria, supplied artifacts, and current PROJECT CONTEXT.
+- Expand: Search targeted repository evidence only when a contract fact cannot otherwise be normalized.
+- Stop: Stop when the DRAFT contract preserves all requirements and exposes every conflict or unknown.
+
 ## Required outcome
 
 Produce a DRAFT [TASK CONTRACT](references/task-contract-template.md) that:

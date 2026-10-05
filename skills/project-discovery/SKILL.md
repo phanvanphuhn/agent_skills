@@ -23,6 +23,12 @@ manifests, interfaces, architecture, or dirty files changed. Skip pure conversat
 - Relevant manifests, entry points, source, tests, and prior PROJECT CONTEXT if present.
 - Current Git/worktree state where available.
 
+## Walk It Down
+
+- Start: Resolve repository boundaries, applicable instructions, worktree state, and reusable context.
+- Expand: Inspect structure, manifests, entry points, representative source, then direct dependencies only for a named context gap.
+- Stop: Stop when the active route has enough evidence, or report the exact immaterial gap or blocker.
+
 ## Required outcome
 
 Produce the [PROJECT CONTEXT](references/project-context-template.md) with status
