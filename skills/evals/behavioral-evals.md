@@ -23,6 +23,18 @@ They test choices made from supplied evidence, not whether instructions contain 
 5. Run the five base cases and five controls below. Run only the cases needed for the
    evaluation, with no live services or dependency installation.
 
+The repository runner creates a fresh ephemeral read-only working directory and records
+trace-derived usage and latency:
+
+```bash
+python3 skills/evals/run_behavioral_eval.py --case E4 --model <model> --output /tmp/E4.json
+```
+
+Inspect the captured response and commands against the evaluator-only expectation before
+assigning PASS or FAIL. The runner deliberately does not grade prose by keyword.
+The latest targeted run is recorded in
+[results/2026-10-05-walk-it-down-smoke.md](results/2026-10-05-walk-it-down-smoke.md).
+
 ### Candidate isolation
 
 For enforced isolation, use a fresh runtime with tools disabled or a filesystem that

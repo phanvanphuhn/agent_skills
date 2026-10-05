@@ -1,5 +1,18 @@
 # Skill-system changelog
 
+## 2026-10-05 — Measured behavior and native packaging
+
+- Added a Codex plugin manifest, repo-local marketplace, and project enablement that expose
+  all four skill roots. A deterministic package validator rejects missing, duplicate, or
+  disconnected native skill exposure.
+- Added a fresh-context, read-only `codex exec --json` behavioral runner that records
+  responses, command activity, actual token usage, and per-run latency without pretending
+  that a clean trace proves enforced filesystem isolation.
+- Added regression coverage and documented the boundary between structural package
+  readiness, live client discovery, and graded behavioral evidence.
+- Recorded three passing, zero-command behavioral probes with actual token and latency
+  metrics, plus an explicit `$task-router` discovery pass on Codex CLI `0.160.0`.
+
 ## 2026-10-05 — Walk It Down across all skills
 
 - Added a stage-specific `Walk It Down` section to every registered skill.

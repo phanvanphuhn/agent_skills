@@ -1,0 +1,32 @@
+{
+  "name": "agent-skills",
+  "version": "1.0.0",
+  "description": "Contract-first project discovery, feature, bug, review, and verification workflows for Codex.",
+  "author": {
+    "name": "phanvanphuhn"
+  },
+  "repository": "https://github.com/phanvanphuhn/agent_skills",
+  "keywords": [
+    "codex",
+    "development-workflow",
+    "code-review",
+    "bug-fixing",
+    "verification"
+  ],
+  "skills": [
+    "./skills/",
+    "./skills/feature-workflow/",
+    "./skills/bug-workflow/",
+    "./skills/code-review-workflow/"
+  ],
+  "interface": {
+    "displayName": "Agent Skills",
+    "shortDescription": "Contract-first software development workflows",
+    "developerName": "phanvanphuhn",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ]
+  }
+}

@@ -9,6 +9,9 @@ avoiding fixed model classes, numeric context ladders, role-play, or implementat
 
 ```text
 AGENTS.md
+.codex-plugin/plugin.json
+.agents/plugins/marketplace.json
+.codex/config.toml
 skills/
 ├── task-router/SKILL.md
 ├── project-discovery/{SKILL.md,references/project-context-template.md}
@@ -38,9 +41,12 @@ inside a child repository. The workspace routes every new top-level request thro
 `task-router`; repository-dependent work receives a reusable PROJECT CONTEXT before its
 selected stage runs.
 
-`skills/` is a workspace-selected directory, not a standard native skill-discovery
-location. These skills may not appear in a client skill picker or support `$skill-name`
-invocation unless installed separately.
+Opening the workspace uses `AGENTS.md`. The repo-local marketplace and Codex configuration
+enable the plugin for trusted projects, while its manifest declares every skill root for
+native `$skill-name` discovery. Structural validation proves package coverage; live
+invocation still depends on the target client/version loading repo marketplaces. Explicit
+discovery is currently smoke-tested on Codex CLI `0.160.0`; see the
+[recorded result](evals/results/2026-10-05-walk-it-down-smoke.md).
 
 ## Workflow paths
 
@@ -122,8 +128,19 @@ Build one candidate packet with:
 python3 skills/evals/build_packet.py --case E1 --metadata
 ```
 
-Packet construction does not call a model. Candidate isolation must be enforced by the
-runtime; a shared writable workspace is not an isolated evaluation.
+Run a measured fresh-context probe with:
+
+```bash
+python3 skills/evals/run_behavioral_eval.py --case E4 --model <model> --output /tmp/E4.json
+```
+
+The runner uses an ephemeral, read-only working directory, captures the JSONL-derived
+response, command list, token usage, and wall-clock latency, and labels isolation
+`ISOLATION_UNVERIFIED` until the runtime boundary is independently established. Packet
+construction alone does not call a model.
+
+The current three-stage measured smoke and native discovery result is recorded in
+[evals/results/2026-10-05-walk-it-down-smoke.md](evals/results/2026-10-05-walk-it-down-smoke.md).
 
 ## Validation
 
@@ -134,10 +151,10 @@ bash skills/scripts/validate-skill-system.sh
 python3 -m unittest discover -s skills/evals -p 'test_*.py'
 ```
 
-The structural validator checks required files, frontmatter, exact Walk It Down fields, stage
-contracts, links, templates, routes, and stop conditions. It rejects prescribed model
-classes, numeric context ladders, or review role-play in active instructions. Structural
-PASS does not prove application behavior or native client discovery.
+The structural validator checks required files, frontmatter, exact Walk It Down fields,
+stage contracts, links, templates, routes, stop conditions, and one-to-one native package
+exposure. It rejects prescribed model classes, numeric context ladders, or review role-play
+in active instructions. Structural PASS does not replace live behavioral or client tests.
 
 ## Maintenance
 

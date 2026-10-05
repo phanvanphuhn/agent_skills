@@ -258,12 +258,21 @@ for script in skills/scripts/validate-skill-system.sh \
 done
 
 require_file skills/evals/build_packet.py
+require_file skills/evals/run_behavioral_eval.py
 require_file skills/evals/test_build_packet.py
 require_file skills/evals/test_validator.py
+require_file skills/evals/test_run_behavioral_eval.py
+require_file skills/evals/test_native_package.py
+require_file skills/scripts/validate_native_package.py
+require_file .codex-plugin/plugin.json
+require_file .agents/plugins/marketplace.json
+require_file .codex/config.toml
 
 if [ "$errors" -ne 0 ]; then
   printf 'FAIL: %d structural error(s).\n' "$errors" >&2
   exit 1
 fi
+
+python3 "$workspace_root/skills/scripts/validate_native_package.py" "$workspace_root"
 
 printf 'PASS: workflow routes, Walk It Down contracts, stage contracts, templates, links, evidence rules, and stop conditions validated.\n'
