@@ -9,6 +9,19 @@ import sys
 
 
 STAGES = {
+    "task-router": ("skills/task-router/SKILL.md",),
+    "project-discovery": (
+        "skills/project-discovery/SKILL.md",
+        "skills/project-discovery/references/project-context-template.md",
+    ),
+    "task-requirements": (
+        "skills/feature-workflow/task-requirements/SKILL.md",
+        "skills/feature-workflow/task-requirements/references/task-contract-template.md",
+    ),
+    "bug-analysis": (
+        "skills/bug-workflow/bug-analysis/SKILL.md",
+        "skills/bug-workflow/bug-analysis/references/bug-contract-template.md",
+    ),
     "requirement-validator": (
         "skills/feature-workflow/requirement-validator/SKILL.md",
         "skills/feature-workflow/requirement-validator/references/validation-report-template.md",
@@ -64,6 +77,12 @@ CASES = {
     "E9": ("bug-fix", "case-09.md"),
     "E10": ("bug-verification", "case-10.md"),
     "E11": ("code-review", "case-11.md"),
+    "E11-fresh": ("code-review", "case-11.md"),
+    "E11-defect": ("code-review", "case-11.md"),
+    "E12": ("task-router", "case-12.md"),
+    "E13": ("project-discovery", "case-13.md"),
+    "E14": ("task-requirements", "case-14.md"),
+    "E15": ("bug-analysis", "case-15.md"),
 }
 REGIONAL_GAP = (
     "Review of the regional override is also explicitly required, but `regional.py` cannot\n"
@@ -103,6 +122,22 @@ SUBSTITUTIONS = {
             "Review and fix this access check.",
         ),
     ),
+    "E11-fresh": (
+        (
+            "- This review occurs in the same agent context that implemented i1. No fresh reviewer\n"
+            "  context is available in this scenario. The reviewer can inspect the actual source\n"
+            "  and may disclose the limitation, but cannot cite a separate session or agent.",
+            "- This review occurs in fresh reviewer session RV-1, separate from the implementation\n"
+            "  conversation. RV-1 received the supplied S1 source and governing artifacts, but no\n"
+            "  implementation conversation. Its separate session is recorded in the scenario input.",
+        ),
+    ),
+    "E11-defect": (
+        (
+            "      return round(amount * 1.2, 2)",
+            "      return round(amount * 1.02, 2)",
+        ),
+    ),
 }
 
 
@@ -124,7 +159,9 @@ def build_packet(root, case_id):
     root = Path(root).resolve()
     stage, scenario_name = CASES[case_id]
     scenario_path = f"skills/evals/{scenario_name}"
-    shared = ("skills/references/check-evidence.md",)
+    shared = () if stage in {"task-router", "project-discovery", "task-requirements", "bug-analysis"} else (
+        "skills/references/check-evidence.md",
+    )
     paths = ("AGENTS.md", *STAGES[stage], *shared, scenario_path)
     parts = [
         "# Candidate evaluation packet\n\n"

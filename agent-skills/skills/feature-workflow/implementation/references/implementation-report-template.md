@@ -5,6 +5,7 @@
 - Contract revision: <rN>
 - Input artifacts: <READY TASK CONTRACT, VALIDATION REPORT, and FIX REQUEST if repair>
 - Status: <READY_FOR_REVIEW / BLOCKED>
+- Review baseline: <exact commit plus dirty/untracked content identity, or supplied source snapshot>
 - Mode: <initial / repair>
 - failed_cycles: <carried from latest verification; initially 0>
 
@@ -52,7 +53,7 @@ List CHK-* records here; cite their IDs in AC mappings and later reports.
 ## Handoff
 
 - Next stage / owner: <code-review; validator/human if blocked>
-- Artifacts: <contract, report, diff/code, relevant tests, prior verification/fix request>
+- Artifacts: <accessible contract, report, actual diff/code, relevant tests, prior verification/fix request>
 - Resume condition: <only if blocked>
 
 Keep the report short. Reference contract and fix IDs instead of repeating their

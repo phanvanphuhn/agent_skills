@@ -23,7 +23,8 @@ class PacketTests(unittest.TestCase):
                 "AGENTS.md", *build_packet.STAGES[stage],
                 f"skills/evals/{scenario}",
             }
-            expected.add("skills/references/check-evidence.md")
+            if stage not in {"task-router", "project-discovery", "task-requirements", "bug-analysis"}:
+                expected.add("skills/references/check-evidence.md")
             with self.subTest(case=case_id), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory).resolve()
                 all_inputs = {"AGENTS.md", "skills/references/check-evidence.md"}
@@ -68,6 +69,8 @@ class PacketTests(unittest.TestCase):
             "E2-gap-only": ("Prior review_cycles=2;", "return amount * 0.20"),
             "E2-approved": ("return amount * 0.20", "def regional_tax(amount):", "return tax(amount)"),
             "E3-authorized": ("Review and fix this access check.",),
+            "E11-fresh": ("fresh reviewer session RV-1", "separate from the implementation"),
+            "E11-defect": ("round(amount * 1.02, 2)",),
         }
         for case_id in build_packet.CASES:
             with self.subTest(case=case_id):

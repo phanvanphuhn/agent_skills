@@ -7,7 +7,7 @@
 - Review baseline: <diff/base/head, commit, files, or supplied code>
 - Decision: <APPROVED / CHANGES_REQUIRED / BLOCKED / REVIEW_ESCALATION>
 - Review cycle: <review_cycles: prior + 1 for confirmed blocking findings, otherwise unchanged; initially 0>
-- Reviewer context: <fresh run/session or same implementation context; evidence of separation>
+- Reviewer context: <fresh run/session distinct from implementation or same context; evidence of separation>
 - Independence: <established / unavailable / unverified, with limitation if needed>
 - Coverage: <complete / incomplete; required gaps listed under Review Blockers>
 
@@ -49,6 +49,9 @@ Retain blockers alongside confirmed issues, including on CHANGES_REQUIRED/REVIEW
 Reconcile inherited IDs; cite unchanged details by accessible report reference. Only
 reviewer-confirmed closure permits RESOLVED. Resolving an issue does not resolve a blocker.
 State `None` only when there are no inherited or new blockers; retain closed history by reference.
+For a REQUIRED GATE, unavailable or unverified reviewer separation is an OPEN blocker;
+without a confirmed blocking finding it yields BLOCKED, not APPROVED. A MANUAL REVIEW
+may disclose the limitation without making it a blocker.
 
 ## Review History
 
@@ -65,6 +68,20 @@ only sufficient evidence permits APPROVED. Both preserve the count and prior his
 - Approved baseline: <exact commit/diff/worktree state; N/A unless APPROVED>
 - Next stage / owner: <verification, bug-verification, user/fix-code-review, validator, root-cause, or human>
 - Resume condition: <explicit fix instruction, missing evidence, or escalation decision when applicable>
+
+## Independent Review Handoff
+
+<For a REQUIRED GATE without established reviewer separation, give a copy-ready
+request to a fresh reviewer/session. Identify the exact baseline, governing contract
+or root-cause revision, implementation/fix report, actual code/diff and tests to inspect,
+prior review and OPEN blocker IDs, and available CHK-* evidence. Reference accessible
+artifacts; do not paste private payloads or the implementation conversation. For
+BLOCKED due to separation, ask for a read-only CODE REVIEW REPORT on the current
+baseline. For CHANGES_REQUIRED or REVIEW_ESCALATION, state that authorized correction
+or human direction comes first, then request fresh review of the resulting baseline
+with current finding and blocker IDs carried forward. Require the new reviewer to
+record how separation was established. If an artifact is inaccessible, name its
+owner and required action. Otherwise N/A.>
 
 This report is read-only. Do not claim fixes were applied or tests passed unless the
 recorded command actually ran. Never expose private reasoning, secrets, or unrelated data.

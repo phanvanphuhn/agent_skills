@@ -1,5 +1,31 @@
 # Skill-system changelog
 
+## 2026-10-06 — Portable independent-review handoff
+
+- Implementation and bug-fix reports now state the exact review baseline explicitly.
+- A required-gate review without established reviewer separation now returns a
+  copy-ready handoff naming the baseline, governing artifacts, actual code/test scope,
+  evidence, and open blockers. It can be given to an authorized fresh reviewer/session
+  without copying the implementation conversation or claiming approval prematurely.
+- Expanded the same-context review probe to require this usable handoff while
+  preserving defect-over-blocker precedence.
+- Three targeted follow-up probes passed after the review packet was corrected to
+  include actual scoped source. Client-enforced reviewer separation remains unproven.
+
+## 2026-10-06 — Required review independence and complete stage probes
+
+- Required-gate code review now needs a fresh reviewer context for APPROVED; when
+  separation is unavailable or unverified, it remains an OPEN blocker. Confirmed
+  blocking findings still take precedence, while manual reviews can disclose the
+  limitation without treating it as a gate failure.
+- Added a same-context review probe, a fresh-reviewer control, and a mixed
+  defect/independence control, plus direct decision packets for task routing, project
+  discovery, task requirements, and bug analysis.
+- Omitted shared check-evidence text from packets for stages that do not use executed
+  check evidence, keeping those evaluations scoped to the needed skill and template.
+- Recorded seven passing targeted decision probes with actual token and latency
+  measurements; candidate isolation and full-suite behavior remain unverified.
+
 ## 2026-10-06 — Bug handoffs, review provenance, and targeted evaluations
 
 - Aligned bug reproduction and root-cause templates with their declared statuses:

@@ -39,9 +39,19 @@ decision: APPROVED, CHANGES_REQUIRED, BLOCKED, or REVIEW_ESCALATION.
 Each finding must include a stable ID, HIGH/MEDIUM/LOW severity, location, problem,
 evidence, impact, recommended action, and status. HIGH and MEDIUM findings block by
 default. Unknown product behavior is NEEDS_CONTEXT, not a defect.
-For a required gate, use a fresh reviewer context when one is available within the
-authorized workflow. Record how reviewer separation was established; if review occurs
-in the implementation context, disclose that limitation instead of claiming independence.
+For a REQUIRED GATE, APPROVED requires a fresh reviewer context separate from the
+implementation conversation, with the actual baseline and governing artifacts supplied.
+Record how separation was established. If it is unavailable or unverified, keep an
+OPEN review blocker: confirmed blocking findings still return CHANGES_REQUIRED or
+REVIEW_ESCALATION; otherwise return BLOCKED, never APPROVED. MANUAL REVIEW may use the
+current context with the limitation disclosed.
+When the implementation context cannot establish a fresh reviewer, include the
+template's copy-ready independent-review handoff. Use an available authorized fresh
+session or reviewer with a compact packet of the governing artifacts, actual baseline,
+directly related tests, and available check evidence; otherwise give the handoff to
+the user. A role label or copied implementation conversation is not reviewer separation.
+If confirmed findings require changes, request explicit fix authorization first; the
+fresh reviewer then inspects the corrected baseline, not a known-defective one.
 
 ## Boundaries
 

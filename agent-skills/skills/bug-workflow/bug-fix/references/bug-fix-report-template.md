@@ -8,6 +8,7 @@
 - Fix revision: <f1; increment for each material implementation revision>
 - Input fix request: <none or request ID>
 - Status: <IMPLEMENTED / BLOCKED>
+- Review baseline: <exact commit plus dirty/untracked content identity, or supplied source snapshot>
 - Fix cycles: <total and per-root-cause counts before verification>
 
 ## Summary
@@ -44,6 +45,7 @@ List CHK-* records here; reference their IDs in regression results and later rep
 ## Handoff
 
 - IMPLEMENTED: route to code-review with the BUG CONTRACT, REPRODUCTION REPORT,
-  ROOT CAUSE REPORT, BUG FIX REPORT, actual diff, and directly related tests.
+  ROOT CAUSE REPORT, BUG FIX REPORT, exact review baseline, actual diff, and directly
+  related tests.
 - Contradicted root cause: route to bug-root-cause with exact new evidence.
 - BLOCKED: named owner/action/resume condition.

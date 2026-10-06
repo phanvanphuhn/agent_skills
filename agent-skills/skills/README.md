@@ -71,6 +71,11 @@ AUTHORIZED REVIEW FIX
 
 The files define contracts between these stages. The model remains responsible for
 choosing suitable repository inspection, engineering, debugging, and testing methods.
+The required code-review gate can APPROVE only from a fresh reviewer context separate
+from implementation; when that context is unavailable, it records a blocker instead of
+claiming independent approval and gives a copy-ready handoff to a separate reviewer.
+The handoff references the exact baseline and accessible artifacts without copying the
+implementation conversation. Manual reviews can disclose same-context limitations.
 If a feature ticket or acceptance criterion cannot be implemented safely, validation
 stops and puts specific, forwardable questions for the PM/PO, SM, or actual technical
 owner at the top of the response. Each question identifies the decision or evidence
@@ -126,7 +131,7 @@ They provide deterministic inputs; they do not decide what evidence is sufficien
 
 ## Behavioral evaluations
 
-The `evals/` directory contains 16 decision scenarios for workflow invariants such as
+The `evals/` directory contains 22 decision scenarios for workflow invariants such as
 stale evidence, review authorization, unavailable contracts, blocker retention, bug
 handoffs, reviewer provenance, and counter preservation. They test observable decisions,
 not a required thought process or exact wording.
@@ -155,6 +160,8 @@ The current three-stage measured smoke and native discovery result is recorded i
 The targeted bug/review probes, one paired cost comparison, and implicit discovery
 check are recorded in
 [evals/results/2026-10-06-bug-review-smoke.md](evals/results/2026-10-06-bug-review-smoke.md).
+The required-gate review controls and four previously uncovered stage probes are
+recorded in [evals/results/2026-10-06-gate-and-stage-smoke.md](evals/results/2026-10-06-gate-and-stage-smoke.md).
 
 ## Validation
 
