@@ -1,5 +1,12 @@
 # Skill-system changelog
 
+## 2026-10-06 — Self-contained agent-skills package
+
+- Moved `AGENTS.md`, `skills/`, the Codex plugin manifest, the local marketplace, and
+  plugin enablement into `agent-skills/`.
+- A clone of this repository now keeps the whole agent skill system in that one
+  directory. The repository root only points at it when the root is the open workspace.
+
 ## 2026-10-05 — Measured behavior and native packaging
 
 - Added a Codex plugin manifest, repo-local marketplace, and project enablement that expose

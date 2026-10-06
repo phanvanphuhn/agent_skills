@@ -8,33 +8,38 @@ avoiding fixed model classes, numeric context ladders, role-play, or implementat
 ## Layout
 
 ```text
-AGENTS.md
-.codex-plugin/plugin.json
-.agents/plugins/marketplace.json
-.codex/config.toml
-skills/
-├── task-router/SKILL.md
-├── project-discovery/{SKILL.md,references/project-context-template.md}
-├── feature-workflow/
-│   ├── task-requirements/{SKILL.md,references/task-contract-template.md}
-│   ├── requirement-validator/{SKILL.md,references/validation-report-template.md}
-│   ├── implementation/{SKILL.md,references/implementation-report-template.md}
-│   └── verification/{SKILL.md,references/,scripts/}
-├── bug-workflow/
-│   ├── bug-analysis/{SKILL.md,references/bug-contract-template.md}
-│   ├── bug-reproduction/{SKILL.md,references/reproduction-report-template.md}
-│   ├── bug-root-cause/{SKILL.md,references/root-cause-report-template.md}
-│   ├── bug-fix/{SKILL.md,references/bug-fix-report-template.md}
-│   └── bug-verification/{SKILL.md,references/}
-├── code-review-workflow/
-│   ├── code-review/{SKILL.md,references/code-review-report-template.md}
-│   └── fix-code-review/{SKILL.md,references/fix-code-review-report-template.md}
-├── references/check-evidence.md
-├── evals/
-└── scripts/validate-skill-system.sh
+agent-skills/
+├── AGENTS.md
+├── .codex-plugin/plugin.json
+├── .agents/plugins/marketplace.json
+├── .codex/config.toml
+└── skills/
+    ├── task-router/SKILL.md
+    ├── project-discovery/{SKILL.md,references/project-context-template.md}
+    ├── feature-workflow/
+    │   ├── task-requirements/{SKILL.md,references/task-contract-template.md}
+    │   ├── requirement-validator/{SKILL.md,references/validation-report-template.md}
+    │   ├── implementation/{SKILL.md,references/implementation-report-template.md}
+    │   └── verification/{SKILL.md,references/,scripts/}
+    ├── bug-workflow/
+    │   ├── bug-analysis/{SKILL.md,references/bug-contract-template.md}
+    │   ├── bug-reproduction/{SKILL.md,references/reproduction-report-template.md}
+    │   ├── bug-root-cause/{SKILL.md,references/root-cause-report-template.md}
+    │   ├── bug-fix/{SKILL.md,references/bug-fix-report-template.md}
+    │   └── bug-verification/{SKILL.md,references/}
+    ├── code-review-workflow/
+    │   ├── code-review/{SKILL.md,references/code-review-report-template.md}
+    │   └── fix-code-review/{SKILL.md,references/fix-code-review-report-template.md}
+    ├── references/check-evidence.md
+    ├── evals/
+    └── scripts/validate-skill-system.sh
 ```
 
 ## Invocation
+
+The `agent-skills` directory is the whole package. Clone this repository into another
+project and use that directory: it holds `AGENTS.md`, `skills/`, the plugin manifest,
+the local marketplace, and plugin enablement.
 
 Open the workspace containing `AGENTS.md`, or explicitly supply that file when working
 inside a child repository. The workspace routes every new top-level request through
