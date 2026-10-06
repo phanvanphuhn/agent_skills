@@ -42,6 +42,7 @@ what was tested, environment/build, observation, and actionable request. Otherwi
 ## Handoff
 
 - REPRODUCED/EVIDENCE_CONFIRMED: route to bug-root-cause.
-- CANNOT_REPRODUCE: human unless explicitly documented compelling evidence permits investigation.
+- CANNOT_REPRODUCE: human; if new independent evidence confirms the failure, reclassify
+  the reproduction report as EVIDENCE_CONFIRMED before root-cause work.
 - NEEDS_INFORMATION: human response → update BUG CONTRACT/reproduction.
 - BLOCKED: environment/access owner → reproduction after resolution.

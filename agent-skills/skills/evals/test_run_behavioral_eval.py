@@ -54,6 +54,16 @@ class BehavioralRunnerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "line 2"):
             run_behavioral_eval.parse_events('{}\nnot-json\n')
 
+    @mock.patch("run_behavioral_eval.get_baseline")
+    @mock.patch("run_behavioral_eval.subprocess.run")
+    def test_archive_baseline_label_avoids_git_lookup(self, execute, lookup):
+        execute.return_value = subprocess.CompletedProcess(
+            args=[], returncode=0, stdout='{"type":"turn.completed","usage":{}}', stderr=""
+        )
+        result = run_behavioral_eval.run_case(ROOT, "E1", baseline_label="f62c1f0")
+        self.assertEqual(result["skill_baseline"], "f62c1f0")
+        lookup.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()

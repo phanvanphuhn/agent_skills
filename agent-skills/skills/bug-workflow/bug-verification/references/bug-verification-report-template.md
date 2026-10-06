@@ -59,7 +59,8 @@ List new CHK-* records or REUSED references with matching inputs/environment/bas
 ## Handoff
 
 - PASS: DONE only with final baseline matching review approval.
-- FAIL / IMPLEMENTATION_ISSUE: bug-fix with BUG FIX REQUEST, then code-review before re-verification.
+- FAIL / IMPLEMENTATION_ISSUE: emit BUG FIX REQUEST in this response, route to bug-fix,
+  then code-review before re-verification.
 - FAIL / ROOT_CAUSE_INCORRECT: bug-root-cause with new evidence and request.
 - FAIL / REQUIREMENT_UNCLEAR: human/bug-analysis; revise the contract before resuming.
 - BLOCKED: named owner/action/resume condition.

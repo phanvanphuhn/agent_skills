@@ -3,7 +3,7 @@
 - Bug ID / target: <matching BUG CONTRACT>
 - Project context: <PROJECT CONTEXT revision used>
 - Bug contract revision: <bN>
-- Reproduction report/status: <artifact and REPRODUCED/EVIDENCE_CONFIRMED/qualified exception>
+- Reproduction report/status: <artifact and REPRODUCED or EVIDENCE_CONFIRMED>
 - Root-cause revision: <rc1; increment only for materially changed cause/evidence>
 - Status: <CONFIRMED / INSUFFICIENT_EVIDENCE / BLOCKED>
 
@@ -54,5 +54,5 @@
 ## Handoff
 
 - CONFIRMED with adequate confidence: bug-fix.
-- INSUFFICIENT_EVIDENCE/LOW: bug-reproduction or human, with exact required evidence.
+- INSUFFICIENT_EVIDENCE: bug-reproduction or human, with exact required evidence.
 - BLOCKED: named owner/action/resume condition.

@@ -1,5 +1,20 @@
 # Skill-system changelog
 
+## 2026-10-06 — Bug handoffs, review provenance, and targeted evaluations
+
+- Aligned bug reproduction and root-cause templates with their declared statuses:
+  independent confirming evidence must be classified EVIDENCE_CONFIRMED before root
+  cause work, and INSUFFICIENT_EVIDENCE is the handoff status rather than `LOW`.
+- Required bug verification FAIL to increment both counters once and emit a separate
+  BUG FIX REQUEST in the same response; a missing integration check remains visible
+  without masking an observed defect.
+- Required code review to use a fresh reviewer context when available and record
+  reviewer separation or disclose a same-context limitation.
+- Added five targeted bug/review behavioral packets and archived-baseline comparison
+  support in the measured runner. Recorded five passing decision probes, an implicit
+  native-discovery check, and one paired E1 cost sample; isolation and broad savings
+  remain unproven.
+
 ## 2026-10-06 — Developer-ready feature clarification
 
 - Feature validation now leads blocked or unclear ticket handoffs with specific,

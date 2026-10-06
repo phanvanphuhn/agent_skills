@@ -52,8 +52,8 @@ def get_baseline(root):
     return revision.stdout.strip() + suffix
 
 
-def run_case(root, case_id, model=None, codex="codex"):
-    baseline = get_baseline(root)
+def run_case(root, case_id, model=None, codex="codex", baseline_label=None):
+    baseline = baseline_label or get_baseline(root)
     packet, metadata = build_packet.build_packet(root, case_id)
     with tempfile.TemporaryDirectory(prefix="skill-eval-") as directory:
         command = [
@@ -104,10 +104,17 @@ def main(argv=None):
     )
     parser.add_argument("--case", required=True, choices=build_packet.CASES)
     parser.add_argument("--model", help="Explicit candidate model; omit to use the client default.")
+    parser.add_argument(
+        "--root", type=Path, default=Path(__file__).resolve().parents[2],
+        help="Skill-package root; use an isolated checkout for baseline comparisons.",
+    )
+    parser.add_argument(
+        "--baseline-label", help="Revision label for an archive without Git metadata."
+    )
     parser.add_argument("--output", type=Path, help="Optional JSON result path.")
     args = parser.parse_args(argv)
     try:
-        result = run_case(Path(__file__).resolve().parents[2], args.case, args.model)
+        result = run_case(args.root, args.case, args.model, baseline_label=args.baseline_label)
     except (OSError, ValueError) as error:
         parser.error(str(error))
     rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"

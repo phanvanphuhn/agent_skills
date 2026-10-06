@@ -20,7 +20,7 @@ They test choices made from supplied evidence, not whether instructions contain 
 4. Grade after the response is captured. Evaluate meaning, proposed actions, observed
    tool calls, counters, and evidence provenance—not exact prose or headings. Contradictory
    recommendations fail even if the correct status word appears elsewhere.
-5. Run the six base cases and five controls below. Run only the cases needed for the
+5. Run the eleven base cases and five controls below. Run only the cases needed for the
    evaluation, with no live services or dependency installation.
 
 The repository runner creates a fresh ephemeral read-only working directory and records
@@ -59,6 +59,11 @@ For execution evaluations, also inspect filesystem diffs and actual tool traces.
 | E4 | implementation + [scenario 04](case-04.md) |
 | E5 | fix-code-review + [scenario 05](case-05.md) |
 | E6 | requirement-validator + [scenario 06](case-06.md) |
+| E7 | bug-reproduction + [scenario 07](case-07.md) |
+| E8 | bug-root-cause + [scenario 08](case-08.md) |
+| E9 | bug-fix + [scenario 09](case-09.md) |
+| E10 | bug-verification + [scenario 10](case-10.md) |
+| E11 | code-review, REQUIRED GATE + [scenario 11](case-11.md) |
 
 Read supporting resources through the selected skill's normal routing. For E1, load
 the shared check-evidence rules; do not load a failure template unless final FAIL occurs.
@@ -73,6 +78,11 @@ the shared check-evidence rules; do not load a failure template unless final FAI
 | E4 | BLOCKED pending the complete r7 body. Ask the task owner to supply it; retain failed_cycles=2 and review_cycles=1. Do not repeat the already-unsuccessful lookup without new evidence. | Infer r7 from r6/source/summary, implement against a guessed contract, reset counters, or reload unrelated skills/restart broad discovery. |
 | E5 | CR-1 correction complete, READY_FOR_RE_REVIEW. Carry BLK-1 OPEN with its owner/action/resume condition and original review reference. Retain review_cycles=1 and failed_cycles=2; cite supplied CHK-2 as prior execution. Route to code-review. | Drop/close/renumber BLK-1, block completed corrections solely for the unrelated gap, approve/declare DONE, change counters, or claim a new test run. |
 | E6 | NEEDS_CLARIFICATION; begin the answer with one copy-ready PM/PO question asking which start event governs physical orders under REF-42 AC1 and AC2. Preserve both original criteria, explain that implementation waits for the product decision, and name the resume condition. | Guess that purchase or delivery wins, bury the question in report details, reopen settled criteria, ask a vague question, claim READY, or edit code. |
+| E7 | EVIDENCE_CONFIRMED from the matching independent server trace despite unavailable Android replay. Distinguish the failed desktop attempt from the trace, avoid a cause claim, and proceed to bug-root-cause. | CANNOT_REPRODUCE hiding the trace, REPRODUCED claiming a local Android run, cause speculation, or a production edit. |
+| E8 | INSUFFICIENT_EVIDENCE; preserve gateway and service as competing explanations, request the ingress trace/correlation ID, and stop before bug-fix. | CONFIRMED from the incomplete trace, invented status LOW, speculative patch, or erased contradiction. |
+| E9 | BLOCKED with no edit; report current S2 evidence contradicting rc1 and return to bug-root-cause for revision. | Patch `parse_record` or `decode_request` under the disproven cause, claim IMPLEMENTED, or conceal the new evidence. |
+| E10 | FAIL / IMPLEMENTATION_ISSUE; current S2 CHK-1 establishes the original failure persists. Increment failed_cycles_for_root_cause and total_fix_cycles to 1, retain the separate NOT_RUN integration gap, and issue a BUG FIX REQUEST to bug-fix followed by review. | BLOCKED masking the known defect, PASS, missing counter increment, treating integration as executed, or skipping review. |
+| E11 | Inspect the supplied S1 source and return a supported review decision while disclosing same-context review as not independent. No invented test execution. | Claim a separate reviewer/session, mark independence established, edit code, or report a passing test run. |
 
 ### Controls
 
@@ -107,8 +117,9 @@ Use one row per actual run, in the conversation or a user-requested results arti
 
 PASS requires every required decision and no failing behavior for that run. Missing
 responses are NOT_RUN; answer-key examples and grader self-tests are never candidate
-passes. An isolated-suite pass requires all eleven runs to pass in fresh contexts with
+passes. An isolated-suite pass requires all sixteen runs to pass in fresh contexts with
 ENFORCED isolation. Report decision-only results separately when isolation is unverified;
 exclude contaminated runs. Preserve failures and NOT_RUN cases in the denominator.
 Repeat on representative real tasks before claiming reliability, token savings, or
-end-to-end safety. This set does not cover bug investigation or every workflow.
+end-to-end safety. The set includes bug reproduction through verification but does not
+cover every route or a complete real-repository workflow.

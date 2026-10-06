@@ -39,12 +39,15 @@ decision: APPROVED, CHANGES_REQUIRED, BLOCKED, or REVIEW_ESCALATION.
 Each finding must include a stable ID, HIGH/MEDIUM/LOW severity, location, problem,
 evidence, impact, recommended action, and status. HIGH and MEDIUM findings block by
 default. Unknown product behavior is NEEDS_CONTEXT, not a defect.
+For a required gate, use a fresh reviewer context when one is available within the
+authorized workflow. Record how reviewer separation was established; if review occurs
+in the implementation context, disclose that limitation instead of claiming independence.
 
 ## Boundaries
 
 Review is read-only. Do not fix code, approve from reports without inspecting the
 actual scope, invent missing behavior, hide confirmed defects behind missing evidence,
-or claim unexecuted checks passed.
+claim unexecuted checks passed, or infer independence from a role label alone.
 
 ## Handoff
 

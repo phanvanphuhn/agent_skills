@@ -35,7 +35,11 @@ PASS, FAIL, or BLOCKED. Verify the original failure, cause coverage, required pr
 behavior, regressions, and checks against the approved baseline.
 
 FAIL must be classified as IMPLEMENTATION_ISSUE, ROOT_CAUSE_INCORRECT, or
-REQUIREMENT_UNCLEAR and include a [BUG FIX REQUEST](references/bug-fix-request-template.md).
+REQUIREMENT_UNCLEAR. Emit the separate
+[BUG FIX REQUEST](references/bug-fix-request-template.md) in the same response;
+mentioning a future request in the verification report is not sufficient.
+On each final FAIL, increment `failed_cycles_for_root_cause` and `total_fix_cycles` once;
+retain the total when the root-cause revision changes. BLOCKED does not increment them.
 
 ## Boundaries
 

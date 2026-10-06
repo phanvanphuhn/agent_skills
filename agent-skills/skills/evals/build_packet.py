@@ -29,6 +29,23 @@ STAGES = {
         "skills/code-review-workflow/fix-code-review/SKILL.md",
         "skills/code-review-workflow/fix-code-review/references/fix-code-review-report-template.md",
     ),
+    "bug-reproduction": (
+        "skills/bug-workflow/bug-reproduction/SKILL.md",
+        "skills/bug-workflow/bug-reproduction/references/reproduction-report-template.md",
+    ),
+    "bug-root-cause": (
+        "skills/bug-workflow/bug-root-cause/SKILL.md",
+        "skills/bug-workflow/bug-root-cause/references/root-cause-report-template.md",
+    ),
+    "bug-fix": (
+        "skills/bug-workflow/bug-fix/SKILL.md",
+        "skills/bug-workflow/bug-fix/references/bug-fix-report-template.md",
+    ),
+    "bug-verification": (
+        "skills/bug-workflow/bug-verification/SKILL.md",
+        "skills/bug-workflow/bug-verification/references/bug-verification-report-template.md",
+        "skills/bug-workflow/bug-verification/references/bug-fix-request-template.md",
+    ),
 }
 CASES = {
     "E1": ("verification", "case-01.md"),
@@ -42,6 +59,11 @@ CASES = {
     "E4": ("implementation", "case-04.md"),
     "E5": ("fix-code-review", "case-05.md"),
     "E6": ("requirement-validator", "case-06.md"),
+    "E7": ("bug-reproduction", "case-07.md"),
+    "E8": ("bug-root-cause", "case-08.md"),
+    "E9": ("bug-fix", "case-09.md"),
+    "E10": ("bug-verification", "case-10.md"),
+    "E11": ("code-review", "case-11.md"),
 }
 REGIONAL_GAP = (
     "Review of the regional override is also explicitly required, but `regional.py` cannot\n"

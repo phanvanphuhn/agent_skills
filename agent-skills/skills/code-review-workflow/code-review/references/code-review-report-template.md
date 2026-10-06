@@ -7,7 +7,8 @@
 - Review baseline: <diff/base/head, commit, files, or supplied code>
 - Decision: <APPROVED / CHANGES_REQUIRED / BLOCKED / REVIEW_ESCALATION>
 - Review cycle: <review_cycles: prior + 1 for confirmed blocking findings, otherwise unchanged; initially 0>
-- Independence: <reviewer separation and any disclosed limitation>
+- Reviewer context: <fresh run/session or same implementation context; evidence of separation>
+- Independence: <established / unavailable / unverified, with limitation if needed>
 - Coverage: <complete / incomplete; required gaps listed under Review Blockers>
 
 ## Review Scope

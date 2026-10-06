@@ -126,10 +126,10 @@ They provide deterministic inputs; they do not decide what evidence is sufficien
 
 ## Behavioral evaluations
 
-The `evals/` directory contains isolated decision scenarios for workflow invariants
-such as stale evidence, review authorization, unavailable contracts, blocker retention,
-and counter preservation. They test observable decisions, not a required thought
-process or exact wording.
+The `evals/` directory contains 16 decision scenarios for workflow invariants such as
+stale evidence, review authorization, unavailable contracts, blocker retention, bug
+handoffs, reviewer provenance, and counter preservation. They test observable decisions,
+not a required thought process or exact wording.
 
 Build one candidate packet with:
 
@@ -146,10 +146,15 @@ python3 skills/evals/run_behavioral_eval.py --case E4 --model <model> --output /
 The runner uses an ephemeral, read-only working directory, captures the JSONL-derived
 response, command list, token usage, and wall-clock latency, and labels isolation
 `ISOLATION_UNVERIFIED` until the runtime boundary is independently established. Packet
-construction alone does not call a model.
+construction alone does not call a model. For a comparison with an archived package,
+pass `--root /path/to/archive --baseline-label <revision>`; compare only matching cases,
+models, and runtime conditions, and do not infer savings from a single run.
 
 The current three-stage measured smoke and native discovery result is recorded in
 [evals/results/2026-10-05-walk-it-down-smoke.md](evals/results/2026-10-05-walk-it-down-smoke.md).
+The targeted bug/review probes, one paired cost comparison, and implicit discovery
+check are recorded in
+[evals/results/2026-10-06-bug-review-smoke.md](evals/results/2026-10-06-bug-review-smoke.md).
 
 ## Validation
 
