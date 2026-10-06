@@ -47,6 +47,8 @@ supports the stage outcome; do not broaden discovery merely because more context
    DRAFT TASK CONTRACT.
 2. [requirement-validator](agent-skills/skills/feature-workflow/requirement-validator/SKILL.md)
    returns READY, NEEDS_CLARIFICATION, or BLOCKED.
+   For NEEDS_CLARIFICATION or BLOCKED, lead with copy-ready questions the developer can
+   take to the appropriate decision or dependency owner, tied to the affected ticket/AC.
 3. [implementation](agent-skills/skills/feature-workflow/implementation/SKILL.md) may run only for
    an accessible READY contract and authorized implementation scope.
 4. [code-review](agent-skills/skills/code-review-workflow/code-review/SKILL.md) reviews the actual

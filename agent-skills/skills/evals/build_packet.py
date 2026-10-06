@@ -9,6 +9,10 @@ import sys
 
 
 STAGES = {
+    "requirement-validator": (
+        "skills/feature-workflow/requirement-validator/SKILL.md",
+        "skills/feature-workflow/requirement-validator/references/validation-report-template.md",
+    ),
     "verification": (
         "skills/feature-workflow/verification/SKILL.md",
         "skills/feature-workflow/verification/references/verification-report-template.md",
@@ -37,6 +41,7 @@ CASES = {
     "E3-authorized": ("code-review", "case-03.md"),
     "E4": ("implementation", "case-04.md"),
     "E5": ("fix-code-review", "case-05.md"),
+    "E6": ("requirement-validator", "case-06.md"),
 }
 REGIONAL_GAP = (
     "Review of the regional override is also explicitly required, but `regional.py` cannot\n"

@@ -46,4 +46,5 @@ visible for validation.
 ## Handoff
 
 Send the DRAFT TASK CONTRACT to requirement-validator. If the target or essential
-source is unavailable, identify the missing owner/action without fabricating a contract.
+source is unavailable, give the developer a specific question or request for its owner
+that identifies the missing ticket/AC information and why it blocks validation.

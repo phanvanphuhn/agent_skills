@@ -71,6 +71,10 @@ AUTHORIZED REVIEW FIX
 
 The files define contracts between these stages. The model remains responsible for
 choosing suitable repository inspection, engineering, debugging, and testing methods.
+If a feature ticket or acceptance criterion cannot be implemented safely, validation
+stops and puts specific, forwardable questions for the PM/PO, SM, or actual technical
+owner at the top of the response. Each question identifies the decision or evidence
+needed and the criterion it unblocks.
 
 ## Skill contract
 

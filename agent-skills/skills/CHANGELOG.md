@@ -1,5 +1,16 @@
 # Skill-system changelog
 
+## 2026-10-06 — Developer-ready feature clarification
+
+- Feature validation now leads blocked or unclear ticket handoffs with specific,
+  forwardable questions tied to the affected acceptance criteria and actual owner.
+- Missing essential ticket information in task requirements also produces a direct
+  request the developer can take to the source owner.
+- Added E6 for conflicting ticket acceptance criteria. The first live probe found that
+  the question was buried in the report; after the correction, a read-only Codex CLI
+  run (`gpt-6-luna`) began with one PM/PO question, returned NEEDS_CLARIFICATION, and
+  made zero commands. The packet's runner still labels isolation unverified.
+
 ## 2026-10-06 — Self-contained agent-skills package
 
 - Moved `AGENTS.md`, `skills/`, the Codex plugin manifest, the local marketplace, and

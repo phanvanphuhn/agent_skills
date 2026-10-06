@@ -28,7 +28,7 @@ class PacketTests(unittest.TestCase):
                 root = Path(directory).resolve()
                 all_inputs = {"AGENTS.md", "skills/references/check-evidence.md"}
                 all_inputs.update(path for paths in build_packet.STAGES.values() for path in paths)
-                all_inputs.update(f"skills/evals/case-0{i}.md" for i in range(1, 6))
+                all_inputs.update(f"skills/evals/{name}" for _, name in build_packet.CASES.values())
                 for relative in all_inputs:
                     path = root / relative
                     path.parent.mkdir(parents=True, exist_ok=True)

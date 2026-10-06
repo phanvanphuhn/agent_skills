@@ -32,13 +32,17 @@
 
 ## Questions and Required Actions
 
+For NEEDS_CLARIFICATION or BLOCKED, repeat the questions already placed at the start of
+the user-facing answer. Write each as a sentence the developer can forward without
+editing. Omit this section for READY when no action is needed.
+
 ### Q1 — <owner>
 
+- Ask: <specific question or evidence request, naming the ticket/AC and the decision needed>
 - Unclear: <specific gap>
 - Why it matters: <behavior/effort/AC impact>
 - Repository finding: <evidence or searches that did not answer it>
 - Concrete options: <only real known options, or explain unavailable>
-- Decision/action needed: <one concise stakeholder-ready question/request>
 - Blocks: <ACs/requirements and why>
 
 ## Readiness Assessment

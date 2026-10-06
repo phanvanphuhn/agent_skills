@@ -37,6 +37,13 @@ ANSWERED_BY_CODE, SAFE_ASSUMPTION, NEEDS_CLARIFICATION, or BLOCKER and cite evid
 READY requires unambiguous acceptance criteria, available implementation contracts,
 and adequate verification obligations. If requirements changed, include the finalized
 READY TASK CONTRACT; otherwise promote the accessible unchanged contract by reference.
+For NEEDS_CLARIFICATION or BLOCKED, begin the user-facing answer with the smallest set
+of specific, copy-ready questions the developer can take to the decision owner, before
+the report heading or supporting analysis. Tie each question to the ticket or acceptance
+criterion it unblocks; include the decision needed and its impact. Ask only what remains
+unresolved, without reopening settled criteria. Direct product-behavior questions to
+the PM/PO, delivery or dependency questions to the SM when appropriate, and technical
+access/evidence requests to their actual owner. Do not assign a stakeholder by guesswork.
 
 ## Boundaries
 
@@ -48,4 +55,4 @@ across a material contract change without validation.
 
 READY proceeds to implementation only when the user authorized implementation.
 NEEDS_CLARIFICATION or BLOCKED stops with concise questions/actions, owner, impact, and
-resume condition.
+resume condition. A report alone does not replace the developer-facing questions.
