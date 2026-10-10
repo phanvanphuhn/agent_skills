@@ -1,5 +1,11 @@
 # Skill-system changelog
 
+## 2026-10-10 — Final saved handoff cleanup
+
+- Removed the remaining assembled-review task handoff at the user's request. No saved
+  task handoff folders remain; the handoff skill still creates one when explicitly invoked.
+- Refreshed the project context so it no longer points to the removed evidence artifact.
+
 ## 2026-10-10 — Historical handoff cleanup
 
 - Removed the first three example handoff folders at the user's request. The retained
