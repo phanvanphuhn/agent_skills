@@ -10,12 +10,15 @@ avoiding fixed model classes, numeric context ladders, role-play, or implementat
 ```text
 agent-skills/
 ├── AGENTS.md
+├── project-contexts/README.md (saved PROJECT CONTEXT Markdown files)
+├── handoffs/<taskID>-<description>/{HANDOFF.md,CHANGELOG.md}
 ├── .codex-plugin/plugin.json
 ├── .agents/plugins/marketplace.json
 ├── .codex/config.toml
 └── skills/
     ├── task-router/SKILL.md
     ├── project-discovery/{SKILL.md,references/project-context-template.md}
+    ├── handoff/{SKILL.md,agents/openai.yaml,references/}
     ├── feature-workflow/
     │   ├── task-requirements/{SKILL.md,references/task-contract-template.md}
     │   ├── requirement-validator/{SKILL.md,references/validation-report-template.md}
@@ -45,6 +48,23 @@ Open the workspace containing `AGENTS.md`, or explicitly supply that file when w
 inside a child repository. The workspace routes every new top-level request through
 `task-router`; repository-dependent work receives a reusable PROJECT CONTEXT before its
 selected stage runs.
+
+Project discovery saves a reusable Markdown snapshot in
+[`project-contexts/`](../project-contexts/README.md) for each target repository. The
+snapshot records high-level architecture, important flows, project notes, edge cases,
+evidence, and unknowns. It is refreshed only when relevant facts change; each target
+gets a distinct filename. Discovery uses a compact folder tree and, where they clarify
+the project, Mermaid component and workflow diagrams with source paths beside them.
+
+Only when the user explicitly requests a handoff, `handoff` writes one
+`handoffs/<taskID>-<description>/` folder per task, containing `HANDOFF.md` and
+`CHANGELOG.md`. Task completion alone does not invoke the skill; client metadata
+disables implicit invocation. It uses the supplied task ID or a stable local ID if none
+was supplied. The handoff records inputs, outputs, Definition of Done and evidence,
+implementation flow, exact baseline, and
+fresh-session resume instructions. An explicit unfinished checkpoint remains labeled
+CHECKPOINT with blockers. Fresh sessions compare the saved baseline with the current
+worktree before relying on the summary.
 
 Opening the workspace uses `AGENTS.md`. The repo-local marketplace and Codex configuration
 enable the plugin for trusted projects, while its manifest declares every skill root for
@@ -104,7 +124,9 @@ number of investigation steps.
 
 ## Artifact contract
 
-Artifacts are Markdown in the active conversation unless the user requests files.
+PROJECT CONTEXT is saved as Markdown in `project-contexts/`; completed-task handoffs
+are saved in `handoffs/`. Other artifacts are Markdown in the active conversation
+unless the user requests files.
 They identify the target, input revisions, status, exact baseline, evidence, unresolved
 items, counters, and next owner. Requirements and bug evidence retain their source
 provenance. Reports cite actual code and executed checks rather than restating analysis.

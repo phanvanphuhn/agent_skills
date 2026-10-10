@@ -24,6 +24,7 @@ USER REQUEST → TASK ROUTER
   CODE_REVIEW → code-review
   FIX_CODE_REVIEW → fix-code-review → code-review
   NORMAL → normal Codex behavior
+  explicit user handoff request → handoff
 ```
 
 ## Project context
@@ -31,7 +32,20 @@ USER REQUEST → TASK ROUTER
 Use [project-discovery](skills/project-discovery/SKILL.md) when repository-dependent
 work lacks a current PROJECT CONTEXT. Reuse a current context and refresh only facts
 affected by relevant repository, instruction, manifest, interface, or architecture
-changes. Pure conversation does not require discovery.
+changes. Save its Markdown snapshot under [project-contexts](project-contexts/README.md),
+one file per target repository. Include evidenced high-level architecture, flows,
+project notes, edge cases, and unknowns. Pure conversation does not require discovery.
+
+## Task handoff
+
+Use [handoff](skills/handoff/SKILL.md) only when the user explicitly requests it.
+Task completion alone does not trigger the skill. Save the task summary and task
+changelog as `HANDOFF.md` and `CHANGELOG.md` in a
+dedicated `handoffs/<taskID>-<description>/` folder. Use the supplied task ID or
+generate a stable local ID when none exists. Feature and bug DONE still require their
+verification PASS; a requested handoff for unfinished work is a CHECKPOINT and must
+retain open items. The handoff is the fresh-session entry point, not a substitute for
+the PROJECT CONTEXT or current-baseline inspection.
 
 ## Walk It Down
 
@@ -97,8 +111,8 @@ return to code-review before verification.
 Use the template linked by the active skill. Artifacts must identify the task and
 target, input artifact revisions, exact baseline, status, evidence, unresolved items,
 counters, and next owner. Keep original acceptance-criterion IDs and wording alongside
-testable interpretations. Store artifacts in the conversation unless the user requests
-files.
+testable interpretations. Save PROJECT CONTEXT and task handoffs as described above;
+store other artifacts in the conversation unless the user requests files.
 
 The TASK CONTRACT is the feature requirements baseline. The BUG CONTRACT and confirmed
 ROOT CAUSE REPORT are the bug baseline. Reports do not replace inspection of actual code

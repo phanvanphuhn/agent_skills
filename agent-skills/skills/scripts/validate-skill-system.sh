@@ -105,6 +105,7 @@ check_links() {
 skills=(
   'skills/task-router/SKILL.md:task-router'
   'skills/project-discovery/SKILL.md:project-discovery'
+  'skills/handoff/SKILL.md:handoff'
   'skills/feature-workflow/task-requirements/SKILL.md:task-requirements'
   'skills/feature-workflow/requirement-validator/SKILL.md:requirement-validator'
   'skills/feature-workflow/implementation/SKILL.md:implementation'
@@ -132,6 +133,8 @@ done < <(find "$workspace_root/skills" -name SKILL.md -type f -print)
 
 templates=(
   skills/project-discovery/references/project-context-template.md
+  skills/handoff/references/handoff-template.md
+  skills/handoff/references/task-changelog-template.md
   skills/feature-workflow/task-requirements/references/task-contract-template.md
   skills/feature-workflow/requirement-validator/references/validation-report-template.md
   skills/feature-workflow/implementation/references/implementation-report-template.md
@@ -215,6 +218,14 @@ done
 require_pattern AGENTS.md 'third FAIL' 'three-failure stop condition'
 require_pattern AGENTS.md 'third blocking review' 'three-review stop condition'
 require_pattern AGENTS.md 'Do not deploy' 'external mutation boundary'
+require_pattern AGENTS.md 'Task completion alone does not trigger the skill' 'manual-only handoff instruction'
+require_pattern skills/handoff/SKILL.md 'HANDOFF[.]md' 'handoff artifact'
+require_pattern skills/handoff/SKILL.md 'CHANGELOG[.]md' 'task changelog artifact'
+require_pattern skills/handoff/SKILL.md 'Run only when the user explicitly' 'manual-only handoff trigger'
+require_file skills/handoff/agents/openai.yaml
+require_pattern skills/handoff/agents/openai.yaml '^[[:space:]]*allow_implicit_invocation: false[[:space:]]*$' 'disabled implicit handoff invocation'
+require_heading skills/handoff/references/handoff-template.md '## Definition of Done'
+require_heading skills/handoff/references/handoff-template.md '## Resume in a Fresh Session'
 require_heading AGENTS.md '## Walk It Down'
 require_pattern AGENTS.md 'Start.*Expand.*Stop' 'shared Walk It Down contract'
 

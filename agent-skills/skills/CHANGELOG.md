@@ -1,5 +1,63 @@
 # Skill-system changelog
 
+## 2026-10-10 — Historical handoff cleanup
+
+- Removed the first three example handoff folders at the user's request. The retained
+  assembled-review handoff now marks its deleted source manifest as unavailable for
+  reuse, and the saved project context records the resulting evidence gap.
+
+## 2026-10-10 — Manual-only handoff invocation
+
+- Removed completion-based handoff triggers from the skill and workspace instructions.
+- Added client policy that disables implicit invocation; users invoke `$handoff` or
+  explicitly request a handoff for a completed task or unfinished checkpoint.
+- Refreshed the saved project context to show the manual handoff path.
+
+## 2026-10-10 — Exact handoff evidence baselines
+
+- Handoff snapshots now require content identity for relevant dirty and untracked
+  inputs, with a reproducible file list and digest method. Check and review evidence
+  must identify the baseline it applies to; historical unknowns stay UNKNOWN.
+- Corrected the naming example's relative handoffs link and clarified baseline limits
+  in generated examples after the assembled-worktree review.
+
+## 2026-10-10 — Task-ID handoff folders
+
+- Handoff folders now use `<taskID>-<description>`, with the supplied task ID or a
+  generated stable local ID when a task has no ticket. Each folder still contains
+  exactly `HANDOFF.md` and `CHANGELOG.md`.
+- Renamed the existing example handoffs to the new convention and updated their
+  internal task IDs and references.
+
+## 2026-10-10 — Visual project discovery
+
+- Project discovery now favors a compact repository tree, an evidence-backed component
+  diagram, and a workflow flowchart when those visuals make structure or direction
+  clearer. Simple cases may use a table or short list.
+- The PROJECT CONTEXT template provides visual slots, source notes, and a text fallback
+  so diagrams remain readable and do not imply unsupported runtime behavior.
+- Refreshed this repository's saved context with a visual map of the package.
+
+## 2026-10-10 — Task handoff skill
+
+- Added `handoff` as a top-level plugin skill for completed tasks and explicit
+  unfinished checkpoints. Each task gets a dedicated `handoffs/<taskID>-<description>/` folder
+  with a self-contained `HANDOFF.md` and a task-specific `CHANGELOG.md`.
+- The handoff records inputs, outputs, Definition of Done, observable implementation
+  flow, exact baseline, check evidence, open items, and fresh-session resume steps.
+- Updated workspace instructions, package documentation, and structural validation to
+  invoke and expose the new skill without weakening feature/bug verification gates.
+
+## 2026-10-10 — Persisted project discovery notes
+
+- Project discovery now saves one Markdown PROJECT CONTEXT per target repository in
+  `agent-skills/project-contexts/`, replacing the ambiguous empty `skills/memories/`
+  location. It refreshes the saved file when relevant facts change.
+- The context template now explicitly covers high-level architecture, control and data
+  flows, project notes, edge cases, and unverified assumptions with evidence.
+- Updated both workspace instruction files and the package guide to point to the saved
+  context. Discovery's write scope is limited to its context document.
+
 ## 2026-10-06 — Portable independent-review handoff
 
 - Implementation and bug-fix reports now state the exact review baseline explicitly.

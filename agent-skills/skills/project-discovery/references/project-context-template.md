@@ -1,6 +1,7 @@
 # PROJECT CONTEXT
 
 - Target: <absolute or workspace-relative repository/workspace identity>
+- Saved path: <agent-skills/project-contexts/repository-name.md, or unsaved with reason>
 - Revision: <pc1; increment for material context changes>
 - Status: <CURRENT / PARTIAL / BLOCKED>
 - Selected route / scope: <route and repository-dependent purpose>
@@ -11,8 +12,17 @@
 
 ## Repository Topology
 
-- <root or nested repository>: <role, boundary, relevant status>
-- Excluded areas: <generated/vendor/build/unrelated roots and reason>
+Show only relevant directories and entry points as a compact tree; annotate roles rather
+than copying a full file listing.
+
+```text
+repository/
+├── <entry point or module>/    # <role>
+└── <tests or package>/         # <role>
+```
+
+- Boundaries / excluded areas: <nested repositories, generated/vendor/build/unrelated roots and reason>
+- Tree evidence: <paths or manifest references used to build the tree>
 
 ## Governing Instructions
 
@@ -27,14 +37,42 @@
 
 ## Structure and Responsibilities
 
-- <path/module>: <evidence-backed responsibility and public boundary>
+| Path / component | Responsibility and public boundary | Evidence |
+| --- | --- | --- |
+| <path/module> | <concise role> | <source path/symbol> |
 
 ## Architecture and Flows
 
-- Style/pattern: <layered, modular, service, event-driven, plugin, library, CLI, etc.; evidence>
-- Dependency direction: <major relationships with source evidence>
-- Runtime/control flow: <entry to important boundary; unknown if not established>
-- Data/state flow: <source, transformation, persistence/external boundary; if applicable>
+Use one small Mermaid diagram for meaningful component/dependency relationships. Show
+direction explicitly; omit it for a simple single-component project. Replace the
+placeholder labels with evidenced components and cite the supporting paths below it.
+
+```mermaid
+flowchart LR
+  Entry["<entry point>"] --> Core["<core component>"]
+  Core --> Boundary["<storage or external boundary>"]
+```
+
+- Architecture / dependency evidence: <path or symbol supporting each material edge>
+- Style / boundary notes: <only non-obvious responsibilities, ownership, or constraints>
+
+Use a separate flowchart for an important request, build, or data workflow when its
+sequence or branching matters. A short ordered list is sufficient for a linear path.
+
+```mermaid
+flowchart TD
+  Input["<input>"] --> Step["<processing step>"]
+  Step --> Result["<output or persisted state>"]
+```
+
+- Workflow / data-flow evidence: <entry point, transformation, persistence or external boundary>
+- Text fallback: <one sentence for readers whose Markdown renderer does not show Mermaid>
+
+## Project Notes and Edge Cases
+
+- Notes: <non-obvious conventions or decisions relevant to future work; evidence>
+- Edge cases: <observed boundary conditions, failure paths, or documented constraints; evidence>
+- Unverified assumptions: <question and evidence needed; never present as established behavior>
 
 ## Entry Points and Interfaces
 
@@ -64,7 +102,9 @@
 - Required refresh triggers: <target, instructions, manifest, baseline, or architecture change>
 - Remaining action: <none or exact owner/action/resume condition>
 
-Emit only task-relevant sections; group unrelated fields as out of scope. On refresh,
+Emit only task-relevant sections and visuals; remove unused placeholder diagrams and
+group unrelated fields as out of scope. Keep labels short and visuals readable at a
+glance; use a table or concise text when a diagram would add clutter. On refresh,
 cite the accessible prior revision and changed facts; supply the full snapshot when
 that prior revision is unavailable. Cite paths, symbols, and stable evidence IDs rather
 than copied source. A different commit alone does not invalidate unchanged facts.
