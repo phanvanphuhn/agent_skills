@@ -1,5 +1,18 @@
 # Skill-system changelog
 
+## 2026-10-10 — Focused improvements to five skills
+
+- Project discovery now distinguishes a reusable architecture map from the observed
+  Git/worktree baseline, which must be rechecked before evidence reuse.
+- Handoff now creates its parent directory when absent and keeps its evidence manifest
+  in the task's own document, so another handoff's deletion cannot remove the only copy.
+- Requirement validation records partial stakeholder answers without reopening settled
+  criteria. Review fixes retain independent OPEN blockers while returning completed
+  corrections for re-review.
+- Required code review now links a reproducible fresh-reviewer packet and launch guide.
+  Added targeted handoff and partial-answer evaluation cases and included the guide
+  in required-gate review packets.
+
 ## 2026-10-10 — Final saved handoff cleanup
 
 - Removed the remaining assembled-review task handoff at the user's request. No saved

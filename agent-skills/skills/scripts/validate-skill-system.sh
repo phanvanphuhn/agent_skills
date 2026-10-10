@@ -171,6 +171,7 @@ documents=(
   skills/evals/case-13.md
   skills/evals/case-14.md
   skills/evals/case-15.md
+  skills/evals/case-16.md
 )
 for entry in "${skills[@]}"; do documents+=("${entry%%:*}"); done
 for template in "${templates[@]}"; do documents+=("$template"); done

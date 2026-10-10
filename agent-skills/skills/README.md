@@ -94,6 +94,8 @@ choosing suitable repository inspection, engineering, debugging, and testing met
 The required code-review gate can APPROVE only from a fresh reviewer context separate
 from implementation; when that context is unavailable, it records a blocker instead of
 claiming independent approval and gives a copy-ready handoff to a separate reviewer.
+The [independent review packet guide](code-review-workflow/code-review/references/independent-review.md)
+describes the evidence to carry and one fresh local CLI launch pattern.
 The handoff references the exact baseline and accessible artifacts without copying the
 implementation conversation. Manual reviews can disclose same-context limitations.
 If a feature ticket or acceptance criterion cannot be implemented safely, validation
@@ -153,7 +155,7 @@ They provide deterministic inputs; they do not decide what evidence is sufficien
 
 ## Behavioral evaluations
 
-The `evals/` directory contains 22 decision scenarios for workflow invariants such as
+The `evals/` directory contains 24 decision scenarios for workflow invariants such as
 stale evidence, review authorization, unavailable contracts, blocker retention, bug
 handoffs, reviewer provenance, and counter preservation. They test observable decisions,
 not a required thought process or exact wording.
@@ -184,6 +186,8 @@ check are recorded in
 [evals/results/2026-10-06-bug-review-smoke.md](evals/results/2026-10-06-bug-review-smoke.md).
 The required-gate review controls and four previously uncovered stage probes are
 recorded in [evals/results/2026-10-06-gate-and-stage-smoke.md](evals/results/2026-10-06-gate-and-stage-smoke.md).
+Targeted probes for the five improved skills are recorded in
+[evals/results/2026-10-10-below-eight-probes.md](evals/results/2026-10-10-below-eight-probes.md).
 
 ## Validation
 

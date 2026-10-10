@@ -23,12 +23,15 @@ class PacketTests(unittest.TestCase):
                 "AGENTS.md", *build_packet.STAGES[stage],
                 f"skills/evals/{scenario}",
             }
+            if case_id.startswith("E11"):
+                expected.add("skills/code-review-workflow/code-review/references/independent-review.md")
             if stage not in {"task-router", "project-discovery", "task-requirements", "bug-analysis"}:
                 expected.add("skills/references/check-evidence.md")
             with self.subTest(case=case_id), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory).resolve()
                 all_inputs = {"AGENTS.md", "skills/references/check-evidence.md"}
                 all_inputs.update(path for paths in build_packet.STAGES.values() for path in paths)
+                all_inputs.add("skills/code-review-workflow/code-review/references/independent-review.md")
                 all_inputs.update(f"skills/evals/{name}" for _, name in build_packet.CASES.values())
                 for relative in all_inputs:
                     path = root / relative
@@ -71,6 +74,7 @@ class PacketTests(unittest.TestCase):
             "E3-authorized": ("Review and fix this access check.",),
             "E11-fresh": ("fresh reviewer session RV-1", "separate from the implementation"),
             "E11-defect": ("round(amount * 1.02, 2)",),
+            "E6-partial": ("digital orders use purchase", "physical orders start at purchase or delivery"),
         }
         for case_id in build_packet.CASES:
             with self.subTest(case=case_id):

@@ -37,6 +37,9 @@ ANSWERED_BY_CODE, SAFE_ASSUMPTION, NEEDS_CLARIFICATION, or BLOCKER and cite evid
 READY requires unambiguous acceptance criteria, available implementation contracts,
 and adequate verification obligations. If requirements changed, include the finalized
 READY TASK CONTRACT; otherwise promote the accessible unchanged contract by reference.
+When an answer resolves only part of a conflict, record exactly which criterion and
+uncertainty it settles, retain the remaining open items, and validate the revised
+contract before READY. Do not ask again for a decision already supplied.
 For NEEDS_CLARIFICATION or BLOCKED, begin the user-facing answer with the smallest set
 of specific, copy-ready questions the developer can take to the decision owner, before
 the report heading or supporting analysis. Tie each question to the ticket or acceptance

@@ -59,6 +59,12 @@ STAGES = {
         "skills/bug-workflow/bug-verification/references/bug-verification-report-template.md",
         "skills/bug-workflow/bug-verification/references/bug-fix-request-template.md",
     ),
+    "handoff": (
+        "skills/handoff/SKILL.md",
+        "skills/handoff/references/handoff-template.md",
+        "skills/handoff/references/task-changelog-template.md",
+        "skills/handoff/agents/openai.yaml",
+    ),
 }
 CASES = {
     "E1": ("verification", "case-01.md"),
@@ -72,6 +78,7 @@ CASES = {
     "E4": ("implementation", "case-04.md"),
     "E5": ("fix-code-review", "case-05.md"),
     "E6": ("requirement-validator", "case-06.md"),
+    "E6-partial": ("requirement-validator", "case-06.md"),
     "E7": ("bug-reproduction", "case-07.md"),
     "E8": ("bug-root-cause", "case-08.md"),
     "E9": ("bug-fix", "case-09.md"),
@@ -83,6 +90,7 @@ CASES = {
     "E13": ("project-discovery", "case-13.md"),
     "E14": ("task-requirements", "case-14.md"),
     "E15": ("bug-analysis", "case-15.md"),
+    "E16": ("handoff", "case-16.md"),
 }
 REGIONAL_GAP = (
     "Review of the regional override is also explicitly required, but `regional.py` cannot\n"
@@ -122,6 +130,17 @@ SUBSTITUTIONS = {
             "Review and fix this access check.",
         ),
     ),
+    "E6-partial": (
+        (
+            "- No PM/PO decision, policy document, or ticket amendment resolves AC1 versus AC2.\n"
+            "- DRAFT TASK CONTRACT r1 preserves AC1 and AC2 exactly as written and flags their\n"
+            "  physical-order start event as unknown U1. No additional criteria or conflicts exist.",
+            "- A PM/PO answer confirms digital orders use purchase as the start event under AC1.\n"
+            "  It does not decide whether physical orders start at purchase or delivery.\n"
+            "- DRAFT TASK CONTRACT r1 preserves AC1 and AC2 exactly as written and flags their\n"
+            "  physical-order start event as unknown U1. No additional criteria or conflicts exist.",
+        ),
+    ),
     "E11-fresh": (
         (
             "- This review occurs in the same agent context that implemented i1. No fresh reviewer\n"
@@ -159,10 +178,13 @@ def build_packet(root, case_id):
     root = Path(root).resolve()
     stage, scenario_name = CASES[case_id]
     scenario_path = f"skills/evals/{scenario_name}"
+    required_review = (
+        "skills/code-review-workflow/code-review/references/independent-review.md",
+    ) if case_id.startswith("E11") else ()
     shared = () if stage in {"task-router", "project-discovery", "task-requirements", "bug-analysis"} else (
         "skills/references/check-evidence.md",
     )
-    paths = ("AGENTS.md", *STAGES[stage], *shared, scenario_path)
+    paths = ("AGENTS.md", *STAGES[stage], *required_review, *shared, scenario_path)
     parts = [
         "# Candidate evaluation packet\n\n"
         f"Selected stage: `{stage}`. Continue this explicitly selected stage using the\n"

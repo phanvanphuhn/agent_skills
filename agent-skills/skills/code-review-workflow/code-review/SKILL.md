@@ -50,6 +50,8 @@ template's copy-ready independent-review handoff. Use an available authorized fr
 session or reviewer with a compact packet of the governing artifacts, actual baseline,
 directly related tests, and available check evidence; otherwise give the handoff to
 the user. A role label or copied implementation conversation is not reviewer separation.
+For a REQUIRED GATE, use the [independent review packet guide](references/independent-review.md)
+to assemble a reproducible packet and record how the fresh reviewer was started.
 If confirmed findings require changes, request explicit fix authorization first; the
 fresh reviewer then inspects the corrected baseline, not a known-defective one.
 

@@ -15,6 +15,11 @@ interfaces, and commands without assuming a language or architecture.
 Run before repository-dependent work when no current PROJECT CONTEXT covers the target.
 Refresh an existing context only when relevant repository boundaries, instructions,
 manifests, interfaces, architecture, or dirty files changed. Skip pure conversation.
+Treat Git HEAD and worktree state as observations made at a stated time, not as facts
+that remain current after the task. On reuse, compare them with the live repository;
+if the active task needs a changed baseline fact, refresh that observation and increment
+the context revision while reusing unchanged architecture visuals. A commit alone need
+not trigger a refresh when the saved baseline is only historical context.
 
 ## Inputs
 
@@ -47,7 +52,9 @@ revision instead of redrawing it.
 Save one Markdown snapshot per target repository in
 [`../../project-contexts/`](../../project-contexts/README.md), using a stable,
 distinct filename. On refresh, update that file in place, increment its revision only
-for material context changes, and preserve relevant notes. Include the saved path in
+for material context changes, and preserve relevant notes. Mark the baseline observation
+separately from the map's CURRENT/PARTIAL/BLOCKED status so a later commit cannot make
+an old dirty-worktree description look current. Include the saved path in
 the handoff. Keep other workflow reports in the conversation unless requested as files.
 
 ## Boundaries

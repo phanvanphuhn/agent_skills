@@ -3,9 +3,9 @@
 - Target: <absolute or workspace-relative repository/workspace identity>
 - Saved path: <agent-skills/project-contexts/repository-name.md, or unsaved with reason>
 - Revision: <pc1; increment for material context changes>
-- Status: <CURRENT / PARTIAL / BLOCKED>
+- Status: <CURRENT / PARTIAL / BLOCKED for the evidenced repository map, not a claim that Git state is still current>
 - Selected route / scope: <route and repository-dependent purpose>
-- Repository baseline: <Git root(s), branch/commit or non-Git identity, worktree state>
+- Repository baseline observation: <when observed; Git root(s), branch/commit or non-Git identity, worktree state; recheck before reusing execution evidence>
 - Sources: <instructions, manifests, docs, entry points, representative source paths>
 - Freshness basis: <relevant source paths, baseline/content fingerprints, dirty/untracked state>
 - Prior revision / changes: <initial or material reason for refresh>

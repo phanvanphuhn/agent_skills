@@ -32,7 +32,7 @@ only after verification PASS. Label an unfinished handoff CHECKPOINT and retain 
 
 ## Required outcome
 
-Create one dedicated folder under `../../handoffs/` for the task. It contains exactly
+Create `../../handoffs/` if absent, then one dedicated folder there for the task. It contains exactly
 `HANDOFF.md` and `CHANGELOG.md`, following the
 [handoff template](references/handoff-template.md) and
 [task changelog template](references/task-changelog-template.md). Name the folder
@@ -51,6 +51,8 @@ retain original acceptance-criterion wording, revisions, statuses, and evidence 
 For relevant dirty or untracked inputs, record content fingerprints or an immutable
 snapshot with a reproducible file list and digest method; paths plus HEAD are not an
 exact baseline. Tie each reusable check or review result to its recorded input baseline.
+Keep the manifest and digest method needed to check this handoff's own evidence in
+`HANDOFF.md`; do not rely on another task's handoff as their only copy.
 If a historical result lacks content identity, mark that baseline UNKNOWN and require
 fresh evidence before reuse.
 Record applicable review and verification counters with their governing revision and

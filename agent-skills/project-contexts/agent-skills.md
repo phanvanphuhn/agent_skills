@@ -2,13 +2,13 @@
 
 - Target: `/Users/pro14inch/Desktop/Code/skills/agent_skills` (Git repository containing the `agent-skills/` package).
 - Saved path: `agent-skills/project-contexts/agent-skills.md`.
-- Revision: pc8.
+- Revision: pc9.
 - Status: CURRENT for repository-level architecture; the Git baseline is a point-in-time observation.
-- Selected route / scope: Remove the final saved task handoff and correct the affected repository map.
-- Repository baseline: Git root at target path, branch `main`. At pc8 refresh, HEAD was `fccb847c6c97a532a40c48a36ac91b923c2b0567` and the worktree was clean before the requested handoff deletion. Recheck HEAD and worktree state before reusing check or review evidence; this snapshot does not claim they remain unchanged.
+- Selected route / scope: Improve project-discovery, handoff, requirement-validator, code-review, and fix-code-review after their below-8 evaluation.
+- Repository baseline observation: Git root at target path, branch `main`. At the start of pc9 refresh, HEAD was `5328fd63bf339e2ab001e14ec4b0204991ae0d97` and the worktree was clean. The current skill changes make the worktree dirty; recheck HEAD and worktree state before reusing check or review evidence. This snapshot does not claim that Git state remains unchanged.
 - Sources: `AGENTS.md`, `agent-skills/AGENTS.md`, `agent-skills/skills/README.md`, `agent-skills/skills/task-router/SKILL.md`, `agent-skills/skills/project-discovery/SKILL.md`, representative feature/bug/review skills, package manifests, validator and evaluation source listed below.
-- Freshness basis: Directly inspected the named files and Git status at pc1 creation; refreshed pc2 for the handoff skill, pc3 for visual discovery, pc4 for folder naming, pc5 for exact evidence baselines, pc6 for manual invocation, pc7 for removal of three historical handoff folders, and pc8 for removal of the last saved handoff. Recheck governing instructions, manifests, changed skill files, and worktree status before reusing affected facts. A new commit by itself does not invalidate unchanged architecture facts.
-- Prior revision / changes: pc7 recorded removal of the first three example handoffs. pc8 records removal of the final saved handoff; the handoff skill remains available on explicit user request.
+- Freshness basis: Directly inspected the named files and Git status at pc1 creation; refreshed pc2–pc8 for the changes recorded in those revisions and pc9 for five skill contracts plus targeted evaluation wiring. Recheck governing instructions, manifests, changed skill files, and worktree status before reusing affected facts. A new commit by itself does not invalidate unchanged architecture facts.
+- Prior revision / changes: pc8 recorded removal of the last saved handoff. pc9 records stronger baseline freshness, self-contained handoff evidence, partial-answer validation, repeatable fresh review, and carried review blockers.
 
 ## Repository Topology
 
@@ -41,8 +41,8 @@ agent_skills/                         # Git workspace
 
 - `AGENTS.md`: applies when the repository root is the workspace. Route each new top-level request; run discovery for repository-dependent work; preserve unrelated work; use stage contracts and review/verification gates; validate authorized skill-system maintenance.
 - `agent-skills/AGENTS.md`: equivalent package-level workflow for a workspace using the cloned `agent-skills/` directory. It directs PROJECT CONTEXT snapshots to `project-contexts/`, user-requested task handoffs to `handoffs/`, and other artifacts to the conversation by default.
-- `agent-skills/skills/project-discovery/SKILL.md`: discovery may write only its context Markdown file, uses repository evidence, refreshes material facts, and reports unavailable persistence.
-- `agent-skills/skills/handoff/SKILL.md` and `agents/openai.yaml`: only an explicit user request invokes handoff; it writes a handoff and changelog under `<taskID>-<description>/` and records content identity for dirty/untracked inputs. An unfinished checkpoint remains labeled CHECKPOINT.
+- `agent-skills/skills/project-discovery/SKILL.md`: discovery may write only its context Markdown file, uses repository evidence, refreshes material facts, distinguishes a CURRENT architecture map from its point-in-time Git observation, and reports unavailable persistence.
+- `agent-skills/skills/handoff/SKILL.md` and `agents/openai.yaml`: only an explicit user request invokes handoff; it creates the parent directory if needed, writes a handoff and changelog under `<taskID>-<description>/`, and keeps its own content manifest. An unfinished checkpoint remains labeled CHECKPOINT.
 
 ## Technology and Tooling
 
@@ -58,7 +58,7 @@ agent_skills/                         # Git workspace
 | `skills/task-router/` | Selects one route; stops before downstream work | `task-router/SKILL.md` |
 | `skills/project-discovery/` and `project-contexts/` | Creates and stores versioned repository maps | `project-discovery/SKILL.md`, template |
 | `skills/handoff/` and `handoffs/` | On explicit user request, captures a completed task or unfinished checkpoint as two files per `<taskID>-<description>/` folder | `handoff/SKILL.md`, `agents/openai.yaml` |
-| `skills/feature-workflow/`, `bug-workflow/`, `code-review-workflow/` | Stage contracts, gates, and report templates | Representative `SKILL.md` files; `agent-skills/AGENTS.md` |
+| `skills/feature-workflow/`, `bug-workflow/`, `code-review-workflow/` | Stage contracts, gates, report templates, and required-gate independent review packet guide | Representative `SKILL.md` files; `code-review/references/independent-review.md`; `agent-skills/AGENTS.md` |
 | `skills/references/check-evidence.md` | Shared executed-check provenance | `check-evidence.md` |
 | `skills/scripts/` and `skills/feature-workflow/verification/scripts/` | Package validation and focused verification helpers | `validate-skill-system.sh`, `verify.sh` |
 | `skills/evals/` | Scenario packets, unit tests, and measured decision probes | `build_packet.py`, `run_behavioral_eval.py` |
@@ -118,7 +118,7 @@ flowchart TD
 
 - Workflow / data-flow evidence: `agent-skills/AGENTS.md` workflow diagrams and artifact rules, `skills/feature-workflow/requirement-validator/SKILL.md`, `skills/bug-workflow/bug-reproduction/SKILL.md`, `skills/bug-workflow/bug-root-cause/SKILL.md`, `skills/code-review-workflow/code-review/SKILL.md`, and `skills/handoff/SKILL.md`. Stop outcomes retain their owner and resume conditions; FAIL returns through its owning stage and review. An explicit unfinished handoff records CHECKPOINT and open items rather than DONE.
 - Text fallback: The router selects a route and repository work uses PROJECT CONTEXT. Feature implementation needs READY and authority; bug fixing needs confirming reproduction evidence, a confirmed cause, and authority. Feature/bug changes need APPROVED review and verification PASS before DONE. Handoff runs only on explicit user request.
-- Evaluation flow: Separately, `build_packet.py` selects allowlisted skill/scenario files; `run_behavioral_eval.py` sends the packet to `codex exec` and records trace-derived results.
+- Evaluation flow: Separately, `build_packet.py` selects allowlisted skill/scenario files, including the required-gate review guide only for E11 and handoff resources for E16; `run_behavioral_eval.py` sends the packet to `codex exec` and records trace-derived results.
 
 ## Project Notes and Edge Cases
 
@@ -149,17 +149,17 @@ flowchart TD
 
 ## Task-Relevant Map
 
-- Current request: Remove the last saved task handoff, then commit and push the cleanup.
+- Current request: Improve the five skills previously scored below 8 and test their affected decisions.
 
 ## Risks and Unknowns
 
-- R1: No saved task handoff remains after this cleanup. Historical review and check results formerly summarized there cannot be independently reused from that removed artifact. A future reader must compare current Git content and executed evidence before relying on those results.
+- R1: No saved task handoff currently exists. Historical review and check results formerly summarized in removed artifacts cannot be independently reused. A future reader must compare current Git content and executed evidence before relying on those results.
 - U1: Live Codex discovery of this edited local package was not checked. This does not block repository-level context; it matters only for a native-client integration claim.
 - U2: No application runtime exists in inspected manifests/docs, and no full behavioral evaluation was run. This does not block repository-level context; structural and behavioral claims need their respective checks.
 
 ## Handoff
 
 - Context disposition: CURRENT for this repository's workflow/package architecture; refresh only affected facts after relevant edits.
-- Next stage / owner: The current commit and push task may use pc8. Future repository-dependent work may reuse pc8 after a freshness check.
+- Next stage / owner: The current five-skill improvement task may use pc9. Future repository-dependent work may reuse pc9 after a freshness check.
 - Required refresh triggers: Changed governing instructions, plugin manifests, stage contracts, templates, validator/evaluation architecture, or another change affecting a fact cited here. A different commit alone is insufficient.
 - Remaining action: None for discovery; live client discovery and behavior checks remain separate if later requested.

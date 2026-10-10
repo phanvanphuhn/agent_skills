@@ -28,7 +28,8 @@
 
 ## Resolved Decisions
 
-- <uncertainty ID>: <stakeholder/source answer, provenance, previous classification, contract effect>
+- <uncertainty ID>: <stakeholder/source answer, provenance, previous classification,
+  exact ACs settled, contract revision or wording affected, and any still-open part>
 
 ## Questions and Required Actions
 

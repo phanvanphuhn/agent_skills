@@ -34,6 +34,10 @@ Apply scoped corrections and produce a
 [FIX CODE REVIEW REPORT](references/fix-code-review-report-template.md) with status
 READY_FOR_RE_REVIEW or BLOCKED. Give every reported issue a disposition: ACCEPTED,
 REJECTED_FINDING, NEEDS_CONTEXT, or BLOCKED, with evidence and checks.
+Carry every OPEN review blocker and its owner/action into the report. If authorized
+corrections are complete but an independent, unrelated review gap remains, return
+READY_FOR_RE_REVIEW with that blocker still OPEN; do not claim review approval or
+turn the completed correction into a BLOCKED fix. Keep `review_cycles` unchanged.
 
 ## Boundaries
 

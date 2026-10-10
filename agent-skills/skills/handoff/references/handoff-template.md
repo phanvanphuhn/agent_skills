@@ -5,7 +5,7 @@
 - Handoff folder: <agent-skills/handoffs/TASK-YYYYMMDD-NN-description/ or supplied-ID-description/>
 - Handoff revision / date: <h1 and local date>
 - Status: <DONE / REVIEW_COMPLETE / NORMAL_COMPLETE / CHECKPOINT>
-- Target and repository baseline: <repository root, branch, full commit; relevant dirty/untracked file list AND content identity, such as per-file SHA-256 or a reproducible sorted-path manifest digest; name any generated handoff files excluded from the digest>
+- Target and repository baseline: <repository root, branch, full commit; relevant dirty/untracked file list AND content identity, such as per-file SHA-256 or a reproducible sorted-path manifest digest; include the manifest and digest method here, and name any generated handoff files excluded from the digest>
 - Project context: <saved PROJECT CONTEXT path and revision, or reason unavailable>
 - Governing artifacts: <contract/report IDs and revisions, or none>
 - Workflow state: <applicable failed_cycles, review_cycles, failed_cycles_for_root_cause, total_fix_cycles; governing revisions; stable finding/blocker IDs and statuses, or not applicable>
