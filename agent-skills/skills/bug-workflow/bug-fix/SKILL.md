@@ -23,21 +23,25 @@ bug-verification. The user must have authorized the correction.
 
 ## Walk It Down
 
-- Start: Use the confirmed cause, preservation boundary, named code, and regression obligations.
+- Start: Confirm user authorization and an accessible CONFIRMED ROOT CAUSE REPORT, or a focused BUG FIX REQUEST in repair mode. If either is missing, ask once and do not edit.
 - Expand: Inspect direct dependencies, consumers, or analogous tests only for a named correction or regression-risk question.
-- Stop: Stop at the smallest cause-correcting change and evidence needed for review, or return contradictory evidence upstream.
+- Stop: Stop at the smallest cause-correcting change and evidence needed for review, return contradictory evidence upstream, or block when authority or the governing artifact is unavailable.
 
 ## Required outcome
 
-Make the scoped correction and regression-test changes, then produce a
+If user authorization or the CONFIRMED ROOT CAUSE REPORT / BUG FIX REQUEST is missing
+or inaccessible, ask once, leave the repository unchanged, and return BLOCKED with the
+owner and resume condition.
+
+Otherwise make the scoped correction and regression-test changes, then produce a
 [BUG FIX REPORT](references/bug-fix-report-template.md) with status IMPLEMENTED or
 BLOCKED. Map the confirmed cause to actual changes and available checks.
 
 ## Boundaries
 
-Do not fix an unconfirmed cause, broaden scope to unrelated cleanup, overwrite local
-changes, conceal failed checks, weaken tests, or preserve a disproven cause merely to
-justify the patch.
+Do not edit without confirmed user authorization. Do not fix an unconfirmed cause,
+broaden scope to unrelated cleanup, overwrite local changes, conceal failed checks,
+weaken tests, or preserve a disproven cause merely to justify the patch.
 
 ## Handoff
 

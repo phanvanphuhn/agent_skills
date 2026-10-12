@@ -23,8 +23,9 @@ USER REQUEST → TASK ROUTER
       → code-review → bug-verification
   CODE_REVIEW → code-review
   FIX_CODE_REVIEW → fix-code-review → code-review
+  HANDOFF → handoff
+  COMMENT → comment
   NORMAL → normal Codex behavior
-  explicit user handoff request → handoff
 ```
 
 ## Project context
@@ -46,6 +47,14 @@ generate a stable local ID when none exists. Feature and bug DONE still require 
 verification PASS; a requested handoff for unfinished work is a CHECKPOINT and must
 retain open items. The handoff is the fresh-session entry point, not a substitute for
 the PROJECT CONTEXT or current-baseline inspection.
+
+## Code comments
+
+Use [comment](skills/comment/SKILL.md) only when the user explicitly invokes `$comment`
+or asks to add, revise, or clean up comments in a named scope. Add comments only when
+they are genuinely necessary, such as for complex functions, non-obvious logic, or
+important implementation decisions. Avoid redundant comments on self-explanatory code.
+Prefer comments that explain why something is done rather than what the code does.
 
 ## Walk It Down
 

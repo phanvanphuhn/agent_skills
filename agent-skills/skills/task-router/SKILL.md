@@ -1,6 +1,6 @@
 ---
 name: task-router
-description: "Routes a new top-level request to the applicable development workflow and performs no downstream work."
+description: "Routes a new top-level request to the applicable development workflow, including feature, bug, review, handoff, and comment paths, and performs no downstream work."
 ---
 
 # Task router
@@ -22,17 +22,21 @@ that route, and stop.
 | --- | --- | --- |
 | `FIX_CODE_REVIEW` | Explicitly fix an existing CODE REVIEW REPORT | [fix-code-review](../code-review-workflow/fix-code-review/SKILL.md) |
 | `CODE_REVIEW` | Explicitly review code, files, a diff, commit, branch, or PR | [code-review](../code-review-workflow/code-review/SKILL.md) |
+| `HANDOFF` | User explicitly invokes `$handoff` or asks to create a handoff | [handoff](../handoff/SKILL.md) |
+| `COMMENT` | User explicitly invokes `$comment` or asks to comment a named scope | [comment](../comment/SKILL.md) |
 | `BUG` | Investigate or fix behavior that should already work | [bug-analysis](../bug-workflow/bug-analysis/SKILL.md) |
 | `FEATURE` | Introduce or intentionally change product behavior | [task-requirements](../feature-workflow/task-requirements/SKILL.md) |
 | `NORMAL` | Explanation, documentation, planning, maintenance, or other work | Normal Codex behavior |
 
-Explicit user routing wins. `Review and fix` starts with `CODE_REVIEW` and carries
-authorization for the later fix stage. Follow-up messages stay with an active workflow.
+Explicit user routing wins. Mentioning handoff or comment selects that route and does
+not insert it into the default feature or bug path. `Review and fix` starts with
+`CODE_REVIEW` and carries authorization for the later fix stage. Follow-up messages
+stay with an active workflow.
 
 ## Output
 
 ```text
-ROUTE: <FEATURE | BUG | CODE_REVIEW | FIX_CODE_REVIEW | NORMAL>
+ROUTE: <FEATURE | BUG | CODE_REVIEW | FIX_CODE_REVIEW | HANDOFF | COMMENT | NORMAL>
 CONFIDENCE: HIGH
 ```
 

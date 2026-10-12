@@ -19,6 +19,7 @@ agent-skills/
     ├── task-router/SKILL.md
     ├── project-discovery/{SKILL.md,references/project-context-template.md}
     ├── handoff/{SKILL.md,agents/openai.yaml,references/}
+    ├── comment/{SKILL.md,agents/openai.yaml,references/comment-examples.md}
     ├── feature-workflow/
     │   ├── task-requirements/{SKILL.md,references/task-contract-template.md}
     │   ├── requirement-validator/{SKILL.md,references/validation-report-template.md}
@@ -66,6 +67,11 @@ fresh-session resume instructions. An explicit unfinished checkpoint remains lab
 CHECKPOINT with blockers. Fresh sessions compare the saved baseline with the current
 worktree before relying on the summary.
 
+Only when the user explicitly invokes `$comment` or asks to comment a named scope,
+`comment` adds or revises comments that explain why code exists. It skips redundant
+narration of self-explanatory variables and functions. Client metadata disables
+implicit invocation.
+
 Opening the workspace uses `AGENTS.md`. The repo-local marketplace and Codex configuration
 enable the plugin for trusted projects, while its manifest declares every skill root for
 native `$skill-name` discovery. Structural validation proves package coverage; live
@@ -87,6 +93,12 @@ MANUAL REVIEW
 
 AUTHORIZED REVIEW FIX
   FIX CODE REVIEW → CODE REVIEW → applicable verification
+
+HANDOFF (explicit mention only)
+  HANDOFF.md + CHANGELOG.md
+
+COMMENT (explicit mention only, named scope required)
+  necessary why-comments in the authorized scope
 ```
 
 The files define contracts between these stages. The model remains responsible for

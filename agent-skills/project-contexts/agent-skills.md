@@ -1,14 +1,14 @@
 # PROJECT CONTEXT
 
-- Target: `/Users/pro14inch/Desktop/Code/skills/agent_skills` (Git repository containing the `agent-skills/` package).
+- Target: `/Users/snsean/Desktop/code/agent_skills` (Git repository containing the `agent-skills/` package).
 - Saved path: `agent-skills/project-contexts/agent-skills.md`.
-- Revision: pc9.
+- Revision: pc12.
 - Status: CURRENT for repository-level architecture; the Git baseline is a point-in-time observation.
-- Selected route / scope: Improve project-discovery, handoff, requirement-validator, code-review, and fix-code-review after their below-8 evaluation.
-- Repository baseline observation: Git root at target path, branch `main`. At the start of pc9 refresh, HEAD was `5328fd63bf339e2ab001e14ec4b0204991ae0d97` and the worktree was clean. The current skill changes make the worktree dirty; recheck HEAD and worktree state before reusing check or review evidence. This snapshot does not claim that Git state remains unchanged.
-- Sources: `AGENTS.md`, `agent-skills/AGENTS.md`, `agent-skills/skills/README.md`, `agent-skills/skills/task-router/SKILL.md`, `agent-skills/skills/project-discovery/SKILL.md`, representative feature/bug/review skills, package manifests, validator and evaluation source listed below.
-- Freshness basis: Directly inspected the named files and Git status at pc1 creation; refreshed pc2–pc8 for the changes recorded in those revisions and pc9 for five skill contracts plus targeted evaluation wiring. Recheck governing instructions, manifests, changed skill files, and worktree status before reusing affected facts. A new commit by itself does not invalidate unchanged architecture facts.
-- Prior revision / changes: pc8 recorded removal of the last saved handoff. pc9 records stronger baseline freshness, self-contained handoff evidence, partial-answer validation, repeatable fresh review, and carried review blockers.
+- Selected route / scope: Skill quality pass — router HANDOFF/COMMENT routes and missing-authority stops.
+- Repository baseline observation: Git root at `/Users/snsean/Desktop/code/agent_skills`, branch `main`. At the start of pc12 refresh, HEAD was `2ebb154448d832c93428d9e7c07c56c566efde51` and the worktree is dirty with comment-skill work plus the quality-pass edits; recheck HEAD and worktree state before reusing check or review evidence. This snapshot does not claim that Git state remains unchanged.
+- Sources: `AGENTS.md`, `agent-skills/AGENTS.md`, `agent-skills/skills/README.md`, `agent-skills/skills/task-router/SKILL.md`, `agent-skills/skills/comment/SKILL.md`, `agent-skills/skills/handoff/SKILL.md`, `implementation` and `bug-fix` skills, package manifests, validator listed below.
+- Freshness basis: Directly inspected the named files and Git status for pc12. Recheck governing instructions, manifests, changed skill files, and worktree status before reusing affected facts. A new commit by itself does not invalidate unchanged architecture facts.
+- Prior revision / changes: pc11 completed comment diagram parity. pc12 corrects the Target path, routes HANDOFF/COMMENT through task-router, and records missing-authority stops on implementation, bug-fix, and handoff.
 
 ## Repository Topology
 
@@ -26,6 +26,7 @@ agent_skills/                         # Git workspace
         ├── task-router/             # route selection
         ├── project-discovery/       # repository map
         ├── handoff/                 # task context reset
+        ├── comment/                 # necessary why-comments
         ├── feature-workflow/        # feature stages
         ├── bug-workflow/            # bug stages
         ├── code-review-workflow/    # review stages
@@ -43,6 +44,7 @@ agent_skills/                         # Git workspace
 - `agent-skills/AGENTS.md`: equivalent package-level workflow for a workspace using the cloned `agent-skills/` directory. It directs PROJECT CONTEXT snapshots to `project-contexts/`, user-requested task handoffs to `handoffs/`, and other artifacts to the conversation by default.
 - `agent-skills/skills/project-discovery/SKILL.md`: discovery may write only its context Markdown file, uses repository evidence, refreshes material facts, distinguishes a CURRENT architecture map from its point-in-time Git observation, and reports unavailable persistence.
 - `agent-skills/skills/handoff/SKILL.md` and `agents/openai.yaml`: only an explicit user request invokes handoff; it creates the parent directory if needed, writes a handoff and changelog under `<taskID>-<description>/`, and keeps its own content manifest. An unfinished checkpoint remains labeled CHECKPOINT.
+- `agent-skills/skills/comment/SKILL.md` and `agents/openai.yaml`: only an explicit `$comment` or comment request invokes the skill; it adds why-comments for complex or non-obvious logic and skips redundant what-comments.
 
 ## Technology and Tooling
 
@@ -55,9 +57,10 @@ agent_skills/                         # Git workspace
 
 | Path / component | Responsibility and boundary | Evidence |
 | --- | --- | --- |
-| `skills/task-router/` | Selects one route; stops before downstream work | `task-router/SKILL.md` |
+| `skills/task-router/` | Selects one route including HANDOFF and COMMENT; stops before downstream work | `task-router/SKILL.md` |
 | `skills/project-discovery/` and `project-contexts/` | Creates and stores versioned repository maps | `project-discovery/SKILL.md`, template |
 | `skills/handoff/` and `handoffs/` | On explicit user request, captures a completed task or unfinished checkpoint as two files per `<taskID>-<description>/` folder | `handoff/SKILL.md`, `agents/openai.yaml` |
+| `skills/comment/` | On explicit user request, adds necessary why-comments and removes redundant what-comments in a named scope | `comment/SKILL.md`, `agents/openai.yaml`, examples |
 | `skills/feature-workflow/`, `bug-workflow/`, `code-review-workflow/` | Stage contracts, gates, report templates, and required-gate independent review packet guide | Representative `SKILL.md` files; `code-review/references/independent-review.md`; `agent-skills/AGENTS.md` |
 | `skills/references/check-evidence.md` | Shared executed-check provenance | `check-evidence.md` |
 | `skills/scripts/` and `skills/feature-workflow/verification/scripts/` | Package validation and focused verification helpers | `validate-skill-system.sh`, `verify.sh` |
@@ -76,15 +79,18 @@ flowchart LR
   Context --> Stages
   Stages --> Templates["references/*.md"]
   User["Explicit user request"] --> Handoff["handoff skill"]
+  User --> Comment["comment skill"]
   Handoff --> Saved["task folder:<br/>HANDOFF.md + CHANGELOG.md"]
+  Comment --> Scoped["named source comments"]
   Plugin["plugin metadata"] -. exposes .-> Router
   Plugin -. exposes .-> Discovery
   Plugin -. exposes .-> Stages
   Plugin -. exposes .-> Handoff
+  Plugin -. exposes .-> Comment
   Validator["validator + local tests"] -. checks .-> Stages
 ```
 
-- Architecture / dependency evidence: `agent-skills/AGENTS.md`, `.codex-plugin/plugin.json`, `skills/task-router/SKILL.md`, `skills/project-discovery/SKILL.md`, `skills/handoff/SKILL.md`, and `skills/scripts/validate_native_package.py`.
+- Architecture / dependency evidence: `agent-skills/AGENTS.md`, `.codex-plugin/plugin.json`, `skills/task-router/SKILL.md`, `skills/project-discovery/SKILL.md`, `skills/handoff/SKILL.md`, `skills/comment/SKILL.md`, and `skills/scripts/validate_native_package.py`.
 - Style / boundary notes: File-based contract and handoff workflow. Skills define stage outcomes; linked templates define artifact fields. The plugin manifest exposes skill roots; validator and evaluation scripts inspect package files.
 
 Task flow (repository-dependent path; arrows state the required advancement status):
@@ -114,10 +120,12 @@ flowchart TD
   ManualReview -->|review task completed| Complete
   HandoffRequest["Explicit user handoff request"] --> Handoff["Task handoff"]
   Handoff --> Files["HANDOFF.md + CHANGELOG.md"]
+  CommentRequest["Explicit user comment request"] --> Comment["Comment skill"]
+  Comment --> NamedScope["Named-scope why-comments"]
 ```
 
-- Workflow / data-flow evidence: `agent-skills/AGENTS.md` workflow diagrams and artifact rules, `skills/feature-workflow/requirement-validator/SKILL.md`, `skills/bug-workflow/bug-reproduction/SKILL.md`, `skills/bug-workflow/bug-root-cause/SKILL.md`, `skills/code-review-workflow/code-review/SKILL.md`, and `skills/handoff/SKILL.md`. Stop outcomes retain their owner and resume conditions; FAIL returns through its owning stage and review. An explicit unfinished handoff records CHECKPOINT and open items rather than DONE.
-- Text fallback: The router selects a route and repository work uses PROJECT CONTEXT. Feature implementation needs READY and authority; bug fixing needs confirming reproduction evidence, a confirmed cause, and authority. Feature/bug changes need APPROVED review and verification PASS before DONE. Handoff runs only on explicit user request.
+- Workflow / data-flow evidence: `agent-skills/AGENTS.md` workflow diagrams and artifact rules, `skills/feature-workflow/requirement-validator/SKILL.md`, `skills/bug-workflow/bug-reproduction/SKILL.md`, `skills/bug-workflow/bug-root-cause/SKILL.md`, `skills/code-review-workflow/code-review/SKILL.md`, `skills/handoff/SKILL.md`, and `skills/comment/SKILL.md`. Stop outcomes retain their owner and resume conditions; FAIL returns through its owning stage and review. An explicit unfinished handoff records CHECKPOINT and open items rather than DONE.
+- Text fallback: The router selects a route and repository work uses PROJECT CONTEXT. Feature implementation needs READY and authority; bug fixing needs confirming reproduction evidence, a confirmed cause, and authority. Feature/bug changes need APPROVED review and verification PASS before DONE. Handoff and comment run only on explicit user request; comment also requires a named scope before editing.
 - Evaluation flow: Separately, `build_packet.py` selects allowlisted skill/scenario files, including the required-gate review guide only for E11 and handoff resources for E16; `run_behavioral_eval.py` sends the packet to `codex exec` and records trace-derived results.
 
 ## Project Notes and Edge Cases
@@ -125,6 +133,7 @@ flowchart TD
 - Notes: The root and package `AGENTS.md` files have distinct path bases; edit both when shared instructions change. Skill-system maintenance requires updating `skills/CHANGELOG.md` and running the structural validator (`AGENTS.md`, `agent-skills/AGENTS.md`).
 - Notes: PROJECT CONTEXT is the persistent exception to the package's conversation-only artifact default. Refresh only materially affected facts and keep the saved path in discovery handoff (`project-discovery/SKILL.md`).
 - Notes: User-requested task handoffs are the other persistent artifact exception. A fresh session reads the handoff, its task changelog, PROJECT CONTEXT, and current instructions, then checks content fingerprints and baseline freshness before reusing evidence (`handoff/SKILL.md`).
+- Notes: Explicit `$comment` or comment requests require a named file/symbol/diff scope before any edit; the skill asks once and leaves the tree unchanged until scope is confirmed (`comment/SKILL.md`).
 - Edge cases: A dirty worktree can invalidate prior review or check evidence even when HEAD is unchanged. Preserve unrelated changes and identify the actual content baseline (`AGENTS.md`, `skills/references/check-evidence.md`).
 - Edge cases: Read-only review cannot fix findings without explicit fix authority; required approval needs a fresh reviewer context. Verification cannot claim PASS from missing required evidence, and repeated blocking review or verification failures have stop limits (`agent-skills/AGENTS.md`, `code-review/SKILL.md`).
 - Edge cases: `verify.sh` prints changed files and related test candidates, but runs a check only when arguments follow `--`; name-matched tests are candidates, not complete coverage (`verification/scripts/verify.sh`, `related-tests.sh`).
@@ -149,7 +158,7 @@ flowchart TD
 
 ## Task-Relevant Map
 
-- Current request: Improve the five skills previously scored below 8 and test their affected decisions.
+- Current request: Score all skills and fix High/Medium quality gaps (router routes, missing-authority stops, context path).
 
 ## Risks and Unknowns
 
@@ -160,6 +169,6 @@ flowchart TD
 ## Handoff
 
 - Context disposition: CURRENT for this repository's workflow/package architecture; refresh only affected facts after relevant edits.
-- Next stage / owner: The current five-skill improvement task may use pc9. Future repository-dependent work may reuse pc9 after a freshness check.
+- Next stage / owner: The skill quality pass may use pc12. Future repository-dependent work may reuse pc12 after a freshness check.
 - Required refresh triggers: Changed governing instructions, plugin manifests, stage contracts, templates, validator/evaluation architecture, or another change affecting a fact cited here. A different commit alone is insufficient.
 - Remaining action: None for discovery; live client discovery and behavior checks remain separate if later requested.

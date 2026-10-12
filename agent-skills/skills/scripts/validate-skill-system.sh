@@ -106,6 +106,7 @@ skills=(
   'skills/task-router/SKILL.md:task-router'
   'skills/project-discovery/SKILL.md:project-discovery'
   'skills/handoff/SKILL.md:handoff'
+  'skills/comment/SKILL.md:comment'
   'skills/feature-workflow/task-requirements/SKILL.md:task-requirements'
   'skills/feature-workflow/requirement-validator/SKILL.md:requirement-validator'
   'skills/feature-workflow/implementation/SKILL.md:implementation'
@@ -135,6 +136,7 @@ templates=(
   skills/project-discovery/references/project-context-template.md
   skills/handoff/references/handoff-template.md
   skills/handoff/references/task-changelog-template.md
+  skills/comment/references/comment-examples.md
   skills/feature-workflow/task-requirements/references/task-contract-template.md
   skills/feature-workflow/requirement-validator/references/validation-report-template.md
   skills/feature-workflow/implementation/references/implementation-report-template.md
@@ -207,9 +209,11 @@ for entry in "${skills[@]}"; do
   reject_pattern "$doc" '(^|[^A-Z])[LRVPF][0-6]([^0-9]|$)' 'context-level ladder'
 done
 
-for route in FEATURE BUG CODE_REVIEW FIX_CODE_REVIEW NORMAL; do
+for route in FEATURE BUG CODE_REVIEW FIX_CODE_REVIEW HANDOFF COMMENT NORMAL; do
   require_pattern skills/task-router/SKILL.md "$route" "router route $route"
 done
+require_pattern skills/task-router/SKILL.md 'handoff/SKILL[.]md' 'router handoff destination'
+require_pattern skills/task-router/SKILL.md 'comment/SKILL[.]md' 'router comment destination'
 
 for marker in task-requirements requirement-validator implementation verification \
   bug-analysis bug-reproduction bug-root-cause bug-fix bug-verification code-review \
@@ -227,6 +231,14 @@ require_file skills/handoff/agents/openai.yaml
 require_pattern skills/handoff/agents/openai.yaml '^[[:space:]]*allow_implicit_invocation: false[[:space:]]*$' 'disabled implicit handoff invocation'
 require_heading skills/handoff/references/handoff-template.md '## Definition of Done'
 require_heading skills/handoff/references/handoff-template.md '## Resume in a Fresh Session'
+require_heading AGENTS.md '## Code comments'
+require_pattern AGENTS.md 'genuinely necessary' 'manual-only comment necessity rule'
+require_pattern skills/comment/SKILL.md 'Run only when the user explicitly' 'manual-only comment trigger'
+require_pattern skills/comment/SKILL.md 'explains why' 'comment why-not-what rule'
+require_file skills/comment/agents/openai.yaml
+require_pattern skills/comment/agents/openai.yaml '^[[:space:]]*allow_implicit_invocation: false[[:space:]]*$' 'disabled implicit comment invocation'
+require_heading skills/comment/references/comment-examples.md '## Add a why-comment'
+require_heading skills/comment/references/comment-examples.md '## Do not add a what-comment'
 require_heading AGENTS.md '## Walk It Down'
 require_pattern AGENTS.md 'Start.*Expand.*Stop' 'shared Walk It Down contract'
 

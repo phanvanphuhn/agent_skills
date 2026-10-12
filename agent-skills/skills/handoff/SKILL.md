@@ -26,13 +26,16 @@ only after verification PASS. Label an unfinished handoff CHECKPOINT and retain 
 
 ## Walk It Down
 
-- Start: Collect the final task status, inputs, outputs, exact baseline, and accessible evidence.
+- Start: Confirm an identifiable task with status, inputs, and outputs to hand off. If none is available, ask once and do not write files.
 - Expand: Inspect only the files or artifacts needed to resolve a missing handoff fact or stale status.
-- Stop: Stop when a fresh session can identify what was done, what remains, and how to verify the current baseline.
+- Stop: Stop when a fresh session can identify what was done, what remains, and how to verify the current baseline, or when the task to hand off remains unconfirmed.
 
 ## Required outcome
 
-Create `../../handoffs/` if absent, then one dedicated folder there for the task. It contains exactly
+If no identifiable task status and outputs are available, ask once for the task identity
+or governing artifacts and write no files until they are supplied.
+
+Otherwise create `../../handoffs/` if absent, then one dedicated folder there for the task. It contains exactly
 `HANDOFF.md` and `CHANGELOG.md`, following the
 [handoff template](references/handoff-template.md) and
 [task changelog template](references/task-changelog-template.md). Name the folder
@@ -62,7 +65,8 @@ Return the two saved paths and the recorded status in the final response.
 
 ## Boundaries
 
-The handoff is a summary, not a new review or verification result. Never infer DONE
+Do not invent a task identity or outcome when none was supplied. The handoff is a
+summary, not a new review or verification result. Never infer DONE
 from code changes, proposed checks, or an approval without required verification PASS.
 Do not turn unknown or blocked DoD items into completed ones. Do not copy secrets,
 private payloads, or entire conversations. If a required artifact cannot be preserved

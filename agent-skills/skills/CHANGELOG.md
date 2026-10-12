@@ -1,5 +1,24 @@
 # Skill-system changelog
 
+## 2026-10-12 — Skill quality pass: routing and missing-authority stops
+
+- Routed `HANDOFF` and `COMMENT` through `task-router` so explicit mentions no longer
+  fall through to `NORMAL`, and taught the validator to require those destinations.
+- Implementation and bug-fix now confirm user authorization and the governing READY
+  or CONFIRMED artifact before editing; missing inputs ask once and leave the tree
+  unchanged.
+- Handoff asks once when no identifiable task is available instead of inventing one.
+- Aligned the `comment` description with the named-scope trigger and corrected the
+  saved project-context target path.
+
+## 2026-10-12 — Explicit comment skill
+
+- Added `comment`. It runs only when the user invokes `$comment` or asks to comment a
+  named scope, adds why-comments for complex or non-obvious logic, and skips redundant
+  what-comments on self-explanatory code.
+- Registered the skill, examples, and disabled implicit invocation with the workspace
+  instructions and structural validator.
+
 ## 2026-10-10 — Focused improvements to five skills
 
 - Project discovery now distinguishes a reusable architecture map from the observed

@@ -25,23 +25,27 @@ REQUEST and verification history.
 
 ## Walk It Down
 
-- Start: Use the READY contract or focused FIX REQUEST and its named files, patterns, and checks.
+- Start: Confirm user authorization and an accessible READY TASK CONTRACT, or a focused FIX REQUEST in repair mode. If either is missing, ask once and do not edit.
 - Expand: Inspect direct dependencies or analogous code only for a named implementation or regression-risk question.
-- Stop: Stop at the smallest contract-complete change and evidence needed for code review, or a precise blocker.
+- Stop: Stop at the smallest contract-complete change and evidence needed for code review, or a precise blocker when authority or the governing artifact is unavailable.
 
 ## Required outcome
 
-Make the scoped code/test/configuration changes and produce an
+If user authorization or the READY TASK CONTRACT / FIX REQUEST is missing or
+inaccessible, ask once, leave the repository unchanged, and return BLOCKED with the
+owner and resume condition.
+
+Otherwise make the scoped code/test/configuration changes and produce an
 [IMPLEMENTATION REPORT](references/implementation-report-template.md) with status
 READY_FOR_REVIEW or BLOCKED. Map every acceptance criterion or repair ID to actual
 files and available checks.
 
 ## Boundaries
 
-Do not implement against DRAFT, NEEDS_CLARIFICATION, BLOCKED, missing, or stale
-requirements. Do not broaden the product scope, overwrite unrelated changes, conceal
-failed checks, or weaken requirements/tests. A discovered product ambiguity returns to
-requirement-validator.
+Do not edit without confirmed user authorization. Do not implement against DRAFT,
+NEEDS_CLARIFICATION, BLOCKED, missing, or stale requirements. Do not broaden the
+product scope, overwrite unrelated changes, conceal failed checks, or weaken
+requirements/tests. A discovered product ambiguity returns to requirement-validator.
 
 ## Handoff
 
