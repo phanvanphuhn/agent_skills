@@ -1,8 +1,9 @@
 # Generic project development workflow
 
-This directory is the complete agent skills package. Clone the repository into another
-project and use this `agent-skills` directory; it contains these instructions, `skills/`,
-the Codex plugin manifest, the local marketplace, and plugin enablement.
+This directory is the complete agent skills package. Place only this `agent-skills`
+folder in another project; it contains these instructions, `skills/`, the Codex plugin
+manifest, the local marketplace, and plugin enablement. Keep the host project's root
+clean of duplicate `AGENTS.md`, `.agents/`, or `.codex/` files from this package.
 
 ## Scope
 

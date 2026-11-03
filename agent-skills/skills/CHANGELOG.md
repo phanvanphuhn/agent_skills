@@ -1,5 +1,12 @@
 # Skill-system changelog
 
+## 2026-11-03 — Single distributable agent-skills folder
+
+- Removed the repository-root `AGENTS.md`, `.agents/`, and `.codex/` adapters so the
+  only package to add to another project is `agent-skills/`.
+- Documented that host projects should keep their roots free of duplicate package
+  entry files.
+
 ## 2026-10-12 — Skill quality pass: routing and missing-authority stops
 
 - Routed `HANDOFF` and `COMMENT` through `task-router` so explicit mentions no longer

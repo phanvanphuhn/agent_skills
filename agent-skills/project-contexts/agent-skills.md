@@ -2,22 +2,20 @@
 
 - Target: `/Users/snsean/Desktop/code/agent_skills` (Git repository containing the `agent-skills/` package).
 - Saved path: `agent-skills/project-contexts/agent-skills.md`.
-- Revision: pc12.
+- Revision: pc13.
 - Status: CURRENT for repository-level architecture; the Git baseline is a point-in-time observation.
-- Selected route / scope: Skill quality pass — router HANDOFF/COMMENT routes and missing-authority stops.
-- Repository baseline observation: Git root at `/Users/snsean/Desktop/code/agent_skills`, branch `main`. At the start of pc12 refresh, HEAD was `2ebb154448d832c93428d9e7c07c56c566efde51` and the worktree is dirty with comment-skill work plus the quality-pass edits; recheck HEAD and worktree state before reusing check or review evidence. This snapshot does not claim that Git state remains unchanged.
-- Sources: `AGENTS.md`, `agent-skills/AGENTS.md`, `agent-skills/skills/README.md`, `agent-skills/skills/task-router/SKILL.md`, `agent-skills/skills/comment/SKILL.md`, `agent-skills/skills/handoff/SKILL.md`, `implementation` and `bug-fix` skills, package manifests, validator listed below.
-- Freshness basis: Directly inspected the named files and Git status for pc12. Recheck governing instructions, manifests, changed skill files, and worktree status before reusing affected facts. A new commit by itself does not invalidate unchanged architecture facts.
-- Prior revision / changes: pc11 completed comment diagram parity. pc12 corrects the Target path, routes HANDOFF/COMMENT through task-router, and records missing-authority stops on implementation, bug-fix, and handoff.
+- Selected route / scope: Keep only the distributable `agent-skills/` folder for host projects.
+- Repository baseline observation: Git root at `/Users/snsean/Desktop/code/agent_skills`, branch `main`. At the start of pc13 refresh, recheck HEAD and worktree state before reusing check or review evidence. This snapshot does not claim that Git state remains unchanged.
+- Sources: `README.md`, `agent-skills/AGENTS.md`, `agent-skills/skills/README.md`, package manifests under `agent-skills/`.
+- Freshness basis: Directly inspected the package layout for pc13. Recheck governing instructions, manifests, and worktree status before reusing affected facts.
+- Prior revision / changes: pc12 recorded router and authority-stop fixes. pc13 removes repository-root adapters so host projects receive only `agent-skills/`.
 
 ## Repository Topology
 
 ```text
-agent_skills/                         # Git workspace
-├── AGENTS.md                         # root workflow instructions
-├── .agents/                          # root plugin marketplace
-├── .codex/                           # root plugin enablement
-└── agent-skills/                     # distributable package
+agent_skills/                         # Git workspace (not copied into host projects)
+├── README.md                         # points at the package folder
+└── agent-skills/                     # only folder to add to another project
     ├── AGENTS.md                     # package workflow instructions
     ├── .codex-plugin/                # package manifest
     ├── .agents/  .codex/             # package marketplace and enablement
@@ -35,13 +33,12 @@ agent_skills/                         # Git workspace
         └── evals/                  # decision probes and local tests
 ```
 
-- Boundaries / excluded areas: One Git repository; no nested `.git` directory was found in the inspected tree. `.git/` internals and historical evaluation result bodies are outside this context's scope. No generated, vendor, or application build tree was observed in the relevant file listing.
-- Tree evidence: `AGENTS.md`, `agent-skills/skills/README.md` layout, package manifests, and the inspected file listing under `agent-skills/`. The `handoffs/` directory is currently absent; the handoff skill creates a task folder there when explicitly requested.
+- Boundaries / excluded areas: One Git repository; no nested `.git` directory was found in the inspected tree. `.git/` internals and historical evaluation result bodies are outside this context's scope. No generated, vendor, or application build tree was observed in the relevant file listing. Host projects should receive only `agent-skills/`.
+- Tree evidence: `README.md`, `agent-skills/skills/README.md` layout, package manifests, and the inspected file listing under `agent-skills/`. The `handoffs/` directory is currently absent; the handoff skill creates a task folder there when explicitly requested.
 
 ## Governing Instructions
 
-- `AGENTS.md`: applies when the repository root is the workspace. Route each new top-level request; run discovery for repository-dependent work; preserve unrelated work; use stage contracts and review/verification gates; validate authorized skill-system maintenance.
-- `agent-skills/AGENTS.md`: equivalent package-level workflow for a workspace using the cloned `agent-skills/` directory. It directs PROJECT CONTEXT snapshots to `project-contexts/`, user-requested task handoffs to `handoffs/`, and other artifacts to the conversation by default.
+- `agent-skills/AGENTS.md`: package-level workflow when the `agent-skills/` directory is in the workspace. It directs PROJECT CONTEXT snapshots to `project-contexts/`, user-requested task handoffs to `handoffs/`, and other artifacts to the conversation by default.
 - `agent-skills/skills/project-discovery/SKILL.md`: discovery may write only its context Markdown file, uses repository evidence, refreshes material facts, distinguishes a CURRENT architecture map from its point-in-time Git observation, and reports unavailable persistence.
 - `agent-skills/skills/handoff/SKILL.md` and `agents/openai.yaml`: only an explicit user request invokes handoff; it creates the parent directory if needed, writes a handoff and changelog under `<taskID>-<description>/`, and keeps its own content manifest. An unfinished checkpoint remains labeled CHECKPOINT.
 - `agent-skills/skills/comment/SKILL.md` and `agents/openai.yaml`: only an explicit `$comment` or comment request invokes the skill; it adds why-comments for complex or non-obvious logic and skips redundant what-comments.
@@ -130,7 +127,7 @@ flowchart TD
 
 ## Project Notes and Edge Cases
 
-- Notes: The root and package `AGENTS.md` files have distinct path bases; edit both when shared instructions change. Skill-system maintenance requires updating `skills/CHANGELOG.md` and running the structural validator (`AGENTS.md`, `agent-skills/AGENTS.md`).
+- Notes: Only `agent-skills/AGENTS.md` governs the package. Skill-system maintenance requires updating `skills/CHANGELOG.md` and running the structural validator from the package root.
 - Notes: PROJECT CONTEXT is the persistent exception to the package's conversation-only artifact default. Refresh only materially affected facts and keep the saved path in discovery handoff (`project-discovery/SKILL.md`).
 - Notes: User-requested task handoffs are the other persistent artifact exception. A fresh session reads the handoff, its task changelog, PROJECT CONTEXT, and current instructions, then checks content fingerprints and baseline freshness before reusing evidence (`handoff/SKILL.md`).
 - Notes: Explicit `$comment` or comment requests require a named file/symbol/diff scope before any edit; the skill asks once and leaves the tree unchanged until scope is confirmed (`comment/SKILL.md`).
@@ -142,7 +139,7 @@ flowchart TD
 
 ## Entry Points and Interfaces
 
-- `AGENTS.md` and `agent-skills/AGENTS.md`: workspace instruction entry points.
+- `agent-skills/AGENTS.md`: package workspace instruction entry point.
 - `agent-skills/.codex-plugin/plugin.json`: plugin manifest; lists skill roots. `.agents/plugins/marketplace.json` and `.codex/config.toml` provide package-local marketplace and enablement.
 - `agent-skills/skills/*/SKILL.md`: stage contracts loaded for the selected route; `references/*.md` are output schemas.
 - `agent-skills/skills/scripts/validate-skill-system.sh`: structural validation command, defaulting to the `agent-skills/` package root.
@@ -158,7 +155,7 @@ flowchart TD
 
 ## Task-Relevant Map
 
-- Current request: Score all skills and fix High/Medium quality gaps (router routes, missing-authority stops, context path).
+- Current request: Keep a single distributable `agent-skills/` folder for host projects.
 
 ## Risks and Unknowns
 
@@ -169,6 +166,6 @@ flowchart TD
 ## Handoff
 
 - Context disposition: CURRENT for this repository's workflow/package architecture; refresh only affected facts after relevant edits.
-- Next stage / owner: The skill quality pass may use pc12. Future repository-dependent work may reuse pc12 after a freshness check.
+- Next stage / owner: Future repository-dependent work may reuse pc13 after a freshness check.
 - Required refresh triggers: Changed governing instructions, plugin manifests, stage contracts, templates, validator/evaluation architecture, or another change affecting a fact cited here. A different commit alone is insufficient.
 - Remaining action: None for discovery; live client discovery and behavior checks remain separate if later requested.

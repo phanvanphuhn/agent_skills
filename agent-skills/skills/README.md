@@ -41,9 +41,9 @@ agent-skills/
 
 ## Invocation
 
-The `agent-skills` directory is the whole package. Clone this repository into another
-project and use that directory: it holds `AGENTS.md`, `skills/`, the plugin manifest,
-the local marketplace, and plugin enablement.
+The `agent-skills` directory is the whole package. Add only that folder to another
+project: it holds `AGENTS.md`, `skills/`, the plugin manifest, the local marketplace,
+and plugin enablement. Do not also copy repository-root adapters into the host project.
 
 Open the workspace containing `AGENTS.md`, or explicitly supply that file when working
 inside a child repository. The workspace routes every new top-level request through
