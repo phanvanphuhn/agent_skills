@@ -1,6 +1,6 @@
 ---
 name: bug-root-cause
-description: "Establishes an evidence-backed actionable cause for a reproduced or evidence-confirmed bug before code changes."
+description: "Establishes an evidence-backed root cause for a reproduced or evidence-confirmed bug and keeps competing explanations open until evidence decides them. Use when asked why a confirmed bug happens or to find its root cause before any fix."
 ---
 
 # Bug root cause

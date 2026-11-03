@@ -157,6 +157,9 @@ documents=(
   skills/README.md
   skills/CHANGELOG.md
   skills/references/check-evidence.md
+  skills/references/state-storage.md
+  agents/fresh-reviewer.md
+  evals/README.md
   skills/evals/behavioral-evals.md
   skills/evals/case-01.md
   skills/evals/case-02.md
@@ -227,16 +230,14 @@ require_pattern AGENTS.md 'Task completion alone does not trigger the skill' 'ma
 require_pattern skills/handoff/SKILL.md 'HANDOFF[.]md' 'handoff artifact'
 require_pattern skills/handoff/SKILL.md 'CHANGELOG[.]md' 'task changelog artifact'
 require_pattern skills/handoff/SKILL.md 'Run only when the user explicitly' 'manual-only handoff trigger'
-require_file skills/handoff/agents/openai.yaml
-require_pattern skills/handoff/agents/openai.yaml '^[[:space:]]*allow_implicit_invocation: false[[:space:]]*$' 'disabled implicit handoff invocation'
+require_pattern skills/handoff/SKILL.md '^description: .*Use only when the user explicitly' 'explicit-only handoff description'
 require_heading skills/handoff/references/handoff-template.md '## Definition of Done'
 require_heading skills/handoff/references/handoff-template.md '## Resume in a Fresh Session'
 require_heading AGENTS.md '## Code comments'
 require_pattern AGENTS.md 'genuinely necessary' 'manual-only comment necessity rule'
 require_pattern skills/comment/SKILL.md 'Run only when the user explicitly' 'manual-only comment trigger'
 require_pattern skills/comment/SKILL.md 'explains why' 'comment why-not-what rule'
-require_file skills/comment/agents/openai.yaml
-require_pattern skills/comment/agents/openai.yaml '^[[:space:]]*allow_implicit_invocation: false[[:space:]]*$' 'disabled implicit comment invocation'
+require_pattern skills/comment/SKILL.md '^description: .*Use only when the user explicitly' 'explicit-only comment description'
 require_heading skills/comment/references/comment-examples.md '## Add a why-comment'
 require_heading skills/comment/references/comment-examples.md '## Do not add a what-comment'
 require_heading AGENTS.md '## Walk It Down'
@@ -292,21 +293,33 @@ for script in skills/scripts/validate-skill-system.sh \
 done
 
 require_file skills/evals/build_packet.py
-require_file skills/evals/run_behavioral_eval.py
 require_file skills/evals/test_build_packet.py
 require_file skills/evals/test_validator.py
-require_file skills/evals/test_run_behavioral_eval.py
-require_file skills/evals/test_native_package.py
-require_file skills/scripts/validate_native_package.py
-require_file .codex-plugin/plugin.json
-require_file .agents/plugins/marketplace.json
-require_file .codex/config.toml
+require_file skills/scripts/validate_claude_package.py
+require_file skills/evals/test_claude_package.py
+for removed in .codex .codex-plugin .agents skills/comment/agents skills/handoff/agents; do
+  [ ! -e "$workspace_root/$removed" ] || fail "$removed: Codex packaging was removed; this is a Claude Code plugin"
+done
+require_file .claude-plugin/plugin.json
+require_file .claude-plugin/marketplace.json
+require_file agents/fresh-reviewer.md
+require_file evals/README.md
+require_file skills/references/state-storage.md
+require_pattern skills/project-discovery/SKILL.md 'references/state-storage[.]md' 'saved-state root rule'
+require_pattern skills/handoff/SKILL.md 'references/state-storage[.]md' 'saved-state root rule'
+require_pattern skills/code-review-workflow/code-review/references/independent-review.md 'fresh-reviewer' 'Claude fresh-reviewer launch'
+for doc in skills/task-router/SKILL.md AGENTS.md; do
+  reject_pattern "$doc" '[Nn]ormal Codex behavior' 'host-specific NORMAL route'
+done
+for doc in skills/task-router/SKILL.md skills/handoff/SKILL.md skills/comment/SKILL.md AGENTS.md; do
+  reject_pattern "$doc" '[$](handoff|comment)' 'Codex-only $skill invocation'
+done
 
 if [ "$errors" -ne 0 ]; then
   printf 'FAIL: %d structural error(s).\n' "$errors" >&2
   exit 1
 fi
 
-python3 "$workspace_root/skills/scripts/validate_native_package.py" "$workspace_root"
+python3 "$workspace_root/skills/scripts/validate_claude_package.py" "$workspace_root"
 
 printf 'PASS: workflow routes, Walk It Down contracts, stage contracts, templates, links, evidence rules, and stop conditions validated.\n'

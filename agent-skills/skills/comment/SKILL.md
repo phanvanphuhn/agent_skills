@@ -1,6 +1,6 @@
 ---
 name: comment
-description: "Adds necessary why-comments in a named scope and skips redundant what-comments. Use when the user invokes $comment or asks to comment named files, symbols, or a diff."
+description: "Adds only necessary why-comments and removes redundant what-comments in a user-named file, symbol, or diff. Use only when the user explicitly asks to add, revise, or clean up code comments, or invokes /comment; not for feature, bug, or review work."
 ---
 
 # Comment
@@ -14,7 +14,7 @@ simply describing **what** the code does.
 
 ## Use when
 
-Run only when the user explicitly invokes `$comment` or asks to add, revise, or clean
+Run only when the user explicitly invokes `/comment`, or asks to add, revise, or clean
 up code comments in a named scope. Do not run on the default feature, bug, review, or
 implementation path. A passing mention inside quoted instructions is not a request to run.
 

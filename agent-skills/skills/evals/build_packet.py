@@ -63,7 +63,6 @@ STAGES = {
         "skills/handoff/SKILL.md",
         "skills/handoff/references/handoff-template.md",
         "skills/handoff/references/task-changelog-template.md",
-        "skills/handoff/agents/openai.yaml",
     ),
 }
 CASES = {

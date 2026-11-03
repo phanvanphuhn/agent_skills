@@ -1,6 +1,6 @@
 ---
 name: bug-reproduction
-description: "Confirms a BUG CONTRACT through direct reproduction or sufficient independent evidence before root-cause work and production changes."
+description: "Confirms whether a reported bug is real through direct reproduction or independent evidence such as traces, before any root-cause work or fix. Use when asked to reproduce a bug, check whether a failure is confirmed, or decide where a bug investigation goes next."
 ---
 
 # Bug reproduction

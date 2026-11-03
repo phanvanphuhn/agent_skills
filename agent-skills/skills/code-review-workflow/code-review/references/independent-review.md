@@ -20,16 +20,13 @@ required artifact is unavailable, name the owner and missing item in the packet.
 
 ## Fresh-session launch
 
-When a separate local Codex CLI session is available, save the packet outside the
-repository and use a fresh, read-only run such as:
+In Claude Code, dispatch this plugin's `fresh-reviewer` subagent (namespaced
+`agent-skills:fresh-reviewer`) through the Agent tool with the complete packet as its
+prompt. The subagent starts without the implementation conversation and receives only
+the packet, which establishes reviewer separation. Record the subagent type, the packet
+baseline, and its returned report; merge its findings into the gate's CODE REVIEW
+REPORT without softening them.
 
-```bash
-codex --ask-for-approval never exec --ephemeral --ignore-user-config \
-  --sandbox read-only --cd /absolute/repository/path - < /absolute/review-packet.md
-```
-
-The packet must include the review skill and report template when user config is
-ignored. The command is an example; confirm the installed CLI supports its options.
-Record the new session identity, packet/content baseline, tool access, and resulting
-report. Recheck the worktree before treating APPROVED as applicable. If no separate
-reviewer is available, return the copy-ready packet and an OPEN separation blocker.
+Recheck the worktree before treating APPROVED as applicable. If the subagent is
+unavailable and no other separate reviewer is, return the copy-ready packet and an
+OPEN separation blocker.

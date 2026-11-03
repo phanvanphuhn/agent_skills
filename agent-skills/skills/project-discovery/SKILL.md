@@ -1,6 +1,6 @@
 ---
 name: project-discovery
-description: "Creates or refreshes a visual, evidence-backed map of repository structure, architecture, workflows, and commands for repository-dependent work."
+description: "Creates or refreshes an evidence-backed PROJECT CONTEXT map of a repository's structure, architecture, flows, and commands. Use before feature or bug work in an unfamiliar repo, or when asked to map, onboard onto, or explain how a codebase is organized."
 ---
 
 # Project discovery
@@ -24,13 +24,13 @@ not trigger a refresh when the saved baseline is only historical context.
 ## Inputs
 
 - Selected route and authorized scope.
-- Target workspace/repository, applicable instructions, and writable package location.
+- Target workspace/repository, applicable instructions, and writable state root.
 - Relevant manifests, entry points, source, tests, and prior PROJECT CONTEXT if present.
 - Current Git/worktree state where available.
 
 ## Walk It Down
 
-- Start: Resolve repository boundaries, applicable instructions, worktree state, and any saved context in `../../project-contexts/`.
+- Start: Resolve repository boundaries, applicable instructions, worktree state, the saved-state root, and any saved context under it.
 - Expand: Inspect structure, manifests, entry points, representative source, then direct dependencies only for a named context gap.
 - Stop: Stop when the active route has enough evidence, or report the exact immaterial gap or blocker.
 
@@ -49,9 +49,10 @@ non-obvious relationships. Mark unverified details as unknown rather than drawin
 speculative nodes or arrows. On refresh, reuse an unchanged visual by citing its prior
 revision instead of redrawing it.
 
-Save one Markdown snapshot per target repository in
-[`../../project-contexts/`](../../project-contexts/README.md), using a stable,
-distinct filename. On refresh, update that file in place, increment its revision only
+Save one Markdown snapshot per target repository in `project-contexts/` under the
+state root chosen by the [saved state location](../references/state-storage.md) rule,
+using a stable, distinct filename; the vendored layout is described in
+[`project-contexts/`](../../project-contexts/README.md). On refresh, update that file in place, increment its revision only
 for material context changes, and preserve relevant notes. Mark the baseline observation
 separately from the map's CURRENT/PARTIAL/BLOCKED status so a later commit cannot make
 an old dirty-worktree description look current. Include the saved path in
@@ -66,8 +67,8 @@ Do not claim architecture, flows, edge cases, or commands without repository evi
 Do not infer dependencies from folder proximity or imply that a diagram proves runtime
 behavior. Keep diagrams valid Markdown/Mermaid and provide a short text fallback when
 the chosen renderer may not display Mermaid.
-If the package location is unavailable or unwritable, emit the context in the
-conversation and identify the persistence gap; do not write to another location.
+If the state root is unavailable or unwritable, emit the context in the conversation
+and identify the persistence gap; do not write to another location.
 
 ## Handoff
 

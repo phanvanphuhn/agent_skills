@@ -1,6 +1,6 @@
 ---
 name: task-requirements
-description: "Converts development stories, acceptance criteria, designs, mappings, and decisions into a traceable TASK CONTRACT before implementation."
+description: "Turns a feature ticket, user story, acceptance criteria, designs, or decisions into a traceable DRAFT TASK CONTRACT before any code. Use when a user shares a new feature or behavior-change request, or asks to break down, write up, or prepare requirements for one."
 ---
 
 # Task requirements

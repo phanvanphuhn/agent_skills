@@ -1,5 +1,42 @@
 # Skill-system changelog
 
+## 2026-11-03 — Claude Code only (2.0.0)
+
+- Removed Codex packaging: `.codex/`, `.codex-plugin/`, `.agents/`, the handoff and
+  comment `agents/openai.yaml` files, the `codex exec` runner and its tests, and the
+  Codex manifest validator. The validator now fails if any of them return.
+- Dropped the `$handoff` and `$comment` syntax and the Codex CLI reviewer launch. Handoff
+  and comment are explicit-only through their descriptions, which the validator checks.
+- `skills/evals/` keeps the source scenarios and the packet builder; historical Codex
+  results stay as reference only.
+
+## 2026-11-03 — Claude Code plugin support and plugin evals (1.1.0)
+
+- Added `.claude-plugin/plugin.json` and a local Claude marketplace. The manifest lists
+  the three workflow folders beside the default `skills/` scan, so all 15 skills load
+  once; both manifests are now version 1.1.0.
+- `task-router` now routes and then continues into the selected entry skill, unless the
+  user asks only for the route. It no longer depends on `AGENTS.md`, which Claude Code
+  does not read. `NORMAL` now says normal assistant behavior.
+- Rewrote every skill description with the phrases users actually type, so Claude Code
+  can select each stage directly.
+- Added the saved-state rule in `skills/references/state-storage.md`. A vendored
+  package keeps state beside `skills/`; an installed plugin uses
+  `${CLAUDE_PLUGIN_DATA}`, never its replaceable plugin root. Project discovery and
+  handoff follow it.
+- Handoff and comment accept `/handoff`, `/comment`, `$handoff`, and `$comment`. They
+  stay model-invocable in Claude Code so natural-language explicit requests still work;
+  their descriptions limit them to explicit asks, and negative evals check this.
+- Added the `fresh-reviewer` subagent and a Claude Code launch path in the
+  independent-review guide, so the required review gate can establish separation
+  without the Codex CLI.
+- Documented calling verification helper scripts by absolute path, including
+  `${CLAUDE_PLUGIN_ROOT}`.
+- Added a 24-case `evals/` suite for `claude plugin eval`. It has a natural-language
+  trigger case for every skill, three negative cases, and four scaffolded cases that
+  edit files or run tests. It also adds `validate_claude_package.py`, its tests, and
+  validator wiring.
+
 ## 2026-11-03 — Single distributable agent-skills folder
 
 - Removed the repository-root `AGENTS.md`, `.agents/`, and `.codex/` adapters so the

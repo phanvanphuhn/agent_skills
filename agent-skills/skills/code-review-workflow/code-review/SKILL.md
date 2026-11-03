@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "Performs a read-only review of actual code or a changed baseline and returns evidence-backed findings and an approval decision."
+description: "Performs a read-only review of actual code, a diff, commit, branch, or PR and returns evidence-backed findings with APPROVED, CHANGES_REQUIRED, BLOCKED, or REVIEW_ESCALATION. Use when asked to review code or a change, or as the required gate after implementing a feature or bug fix."
 ---
 
 # Code review
@@ -51,7 +51,8 @@ session or reviewer with a compact packet of the governing artifacts, actual bas
 directly related tests, and available check evidence; otherwise give the handoff to
 the user. A role label or copied implementation conversation is not reviewer separation.
 For a REQUIRED GATE, use the [independent review packet guide](references/independent-review.md)
-to assemble a reproducible packet and record how the fresh reviewer was started.
+to assemble a reproducible packet and record how the fresh reviewer was started; in
+Claude Code, the bundled `fresh-reviewer` subagent is that reviewer when available.
 If confirmed findings require changes, request explicit fix authorization first; the
 fresh reviewer then inspects the corrected baseline, not a known-defective one.
 

@@ -1,6 +1,6 @@
 ---
 name: implementation
-description: "Implements an authorized READY TASK CONTRACT or a focused verification FIX REQUEST and prepares the resulting baseline for code review."
+description: "Implements a feature from a READY TASK CONTRACT, or a verification FIX REQUEST, once the user authorizes code changes, then hands the baseline to code review. Use when asked to build, implement, or continue implementing an approved feature spec or contract."
 ---
 
 # Implementation

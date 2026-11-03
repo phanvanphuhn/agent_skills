@@ -1,9 +1,14 @@
 # Generic project development workflow
 
-This directory is the complete agent skills package. Place only this `agent-skills`
-folder in another project; it contains these instructions, `skills/`, the Codex plugin
-manifest, the local marketplace, and plugin enablement. Keep the host project's root
-clean of duplicate `AGENTS.md`, `.agents/`, or `.codex/` files from this package.
+This directory is the complete Claude Code plugin. Load or install only this
+`agent-skills` folder; it contains these instructions, `skills/`, the plugin manifest
+and local marketplace in `.claude-plugin/`, the `fresh-reviewer` subagent, and the eval
+suite in `evals/`. Keep the host project's root clean of copies of these files.
+
+Claude Code does not load this file automatically. It is the shared workflow reference
+for maintainers and for agents that read `AGENTS.md`; in Claude Code each skill starts
+from its own description, and [task-router](skills/task-router/SKILL.md) routes
+requests whose workflow is unclear.
 
 ## Scope
 
@@ -26,7 +31,7 @@ USER REQUEST → TASK ROUTER
   FIX_CODE_REVIEW → fix-code-review → code-review
   HANDOFF → handoff
   COMMENT → comment
-  NORMAL → normal Codex behavior
+  NORMAL → normal assistant behavior
 ```
 
 ## Project context
@@ -34,8 +39,10 @@ USER REQUEST → TASK ROUTER
 Use [project-discovery](skills/project-discovery/SKILL.md) when repository-dependent
 work lacks a current PROJECT CONTEXT. Reuse a current context and refresh only facts
 affected by relevant repository, instruction, manifest, interface, or architecture
-changes. Save its Markdown snapshot under [project-contexts](project-contexts/README.md),
-one file per target repository. Include evidenced high-level architecture, flows,
+changes. Save its Markdown snapshot under [project-contexts](project-contexts/README.md)
+when this package is vendored, or under the plugin data directory when installed, as
+the [saved state location](skills/references/state-storage.md) rule defines; one file
+per target repository. Include evidenced high-level architecture, flows,
 project notes, edge cases, and unknowns. Pure conversation does not require discovery.
 
 ## Task handoff
@@ -43,7 +50,7 @@ project notes, edge cases, and unknowns. Pure conversation does not require disc
 Use [handoff](skills/handoff/SKILL.md) only when the user explicitly requests it.
 Task completion alone does not trigger the skill. Save the task summary and task
 changelog as `HANDOFF.md` and `CHANGELOG.md` in a
-dedicated `handoffs/<taskID>-<description>/` folder. Use the supplied task ID or
+dedicated `handoffs/<taskID>-<description>/` folder under the same saved-state root. Use the supplied task ID or
 generate a stable local ID when none exists. Feature and bug DONE still require their
 verification PASS; a requested handoff for unfinished work is a CHECKPOINT and must
 retain open items. The handoff is the fresh-session entry point, not a substitute for
@@ -51,7 +58,7 @@ the PROJECT CONTEXT or current-baseline inspection.
 
 ## Code comments
 
-Use [comment](skills/comment/SKILL.md) only when the user explicitly invokes `$comment`
+Use [comment](skills/comment/SKILL.md) only when the user explicitly invokes `/comment`,
 or asks to add, revise, or clean up comments in a named scope. Add comments only when
 they are genuinely necessary, such as for complex functions, non-obvious logic, or
 important implementation decisions. Avoid redundant comments on self-explanatory code.
@@ -172,5 +179,7 @@ For authorized changes to this system, read [skills/README.md](skills/README.md)
 bash skills/scripts/validate-skill-system.sh
 ```
 
-The validator checks structure and links; it does not prove application behavior or
-native client discovery.
+The validator checks structure, links, the plugin manifest, and the eval suite's
+shape; it does not prove application behavior or native client discovery. Run
+`claude plugin eval .` as described in [evals/README.md](evals/README.md) for measured
+Claude behavior.

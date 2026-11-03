@@ -1,6 +1,6 @@
 ---
 name: bug-analysis
-description: "Converts a bug report, attachments, logs, and environment details into a traceable BUG CONTRACT before investigation."
+description: "Turns a bug report, screenshots, logs, and environment details into a traceable DRAFT BUG CONTRACT that separates claims, evidence, and unknowns. Use when a user reports that something is broken, crashing, wrong, or regressed and the bug has no contract yet."
 ---
 
 # Bug analysis

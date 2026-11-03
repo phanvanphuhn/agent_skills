@@ -1,6 +1,6 @@
 ---
 name: requirement-validator
-description: "Checks a TASK CONTRACT against repository evidence and resolves whether feature work is READY, needs clarification, or is blocked."
+description: "Checks a feature ticket or TASK CONTRACT for conflicts, gaps, and missing decisions and returns READY, NEEDS_CLARIFICATION with copy-ready PM/PO questions, or BLOCKED. Use when asked whether a spec or ticket is ready to build, or to validate requirements before implementing."
 ---
 
 # Requirement validator

@@ -1,15 +1,17 @@
 # agent_skills
 
-The usable package is the single folder [`agent-skills/`](agent-skills/).
+The usable package is the single Claude Code plugin folder [`agent-skills/`](agent-skills/).
+Do not copy anything from this repository root into another project.
 
-Clone or add that folder into another project. Do not copy anything from this
-repository root into the other project.
+Load it for a session, or install it once from its local marketplace:
 
 ```bash
-# example: add as a subdirectory in another repo
-git clone <this-repo-url> /tmp/agent_skills
-cp -R /tmp/agent_skills/agent-skills /path/to/your-project/agent-skills
+git clone <this-repo-url> /path/to/agent_skills
+claude --plugin-dir /path/to/agent_skills/agent-skills
+# or
+claude plugin marketplace add /path/to/agent_skills/agent-skills
+claude plugin install agent-skills@agent-skills-local
 ```
 
-Then open or point the agent at `/path/to/your-project/agent-skills` (its
-`AGENTS.md`, skills, and plugin files live there).
+Its eval suite runs from inside the folder with `claude plugin eval .`; see
+[`agent-skills/evals/README.md`](agent-skills/evals/README.md).

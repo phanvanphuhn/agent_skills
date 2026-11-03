@@ -1,6 +1,6 @@
 ---
 name: bug-fix
-description: "Implements an authorized correction for a confirmed root cause and prepares the resulting baseline for independent code review."
+description: "Applies the smallest authorized correction for a CONFIRMED root cause, or a verification BUG FIX REQUEST, with regression tests, then hands the baseline to code review. Use when asked to fix or patch a bug whose root cause has been confirmed."
 ---
 
 # Bug fix

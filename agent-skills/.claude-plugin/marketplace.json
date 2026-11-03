@@ -1,0 +1,13 @@
+{
+  "name": "agent-skills-local",
+  "owner": {
+    "name": "phanvanphuhn"
+  },
+  "plugins": [
+    {
+      "name": "agent-skills",
+      "source": "./",
+      "description": "Contract-first software development workflows."
+    }
+  ]
+}

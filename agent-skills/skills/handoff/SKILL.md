@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: "On explicit user request, save a self-contained task handoff and task changelog for a completed task or unfinished checkpoint."
+description: "Saves a self-contained HANDOFF.md and task CHANGELOG.md so a fresh session can resume a completed task or unfinished checkpoint. Use only when the user explicitly asks for a handoff or invokes /handoff; never because a task finished."
 ---
 
 # Handoff
@@ -12,7 +12,7 @@ without relying on the prior conversation transcript.
 
 ## Use when
 
-Run only when the user explicitly invokes `$handoff` or asks to create a handoff.
+Run only when the user explicitly invokes `/handoff`, or asks to create a handoff.
 Task completion alone never triggers this skill. A completed feature or bug is DONE
 only after verification PASS. Label an unfinished handoff CHECKPOINT and retain blockers.
 
@@ -35,7 +35,9 @@ only after verification PASS. Label an unfinished handoff CHECKPOINT and retain 
 If no identifiable task status and outputs are available, ask once for the task identity
 or governing artifacts and write no files until they are supplied.
 
-Otherwise create `../../handoffs/` if absent, then one dedicated folder there for the task. It contains exactly
+Otherwise resolve the state root with the
+[saved state location](../references/state-storage.md) rule, create `handoffs/` under
+it if absent, then one dedicated folder there for the task. It contains exactly
 `HANDOFF.md` and `CHANGELOG.md`, following the
 [handoff template](references/handoff-template.md) and
 [task changelog template](references/task-changelog-template.md). Name the folder

@@ -1,6 +1,6 @@
 ---
 name: bug-verification
-description: "Verifies an APPROVED bug-fix baseline against the reproduced failure and required regressions, returning PASS, FAIL, or BLOCKED."
+description: "Verifies a reviewed, APPROVED bug fix against the original failure and required regressions and returns PASS, FAIL with a BUG FIX REQUEST, or BLOCKED. Use when asked to verify, retest, or confirm that a reviewed bug fix actually works."
 ---
 
 # Bug verification

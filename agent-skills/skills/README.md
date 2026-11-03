@@ -1,6 +1,6 @@
 # Project integration workflow skills
 
-This package gives Codex a reusable path through an unfamiliar software project. It
+This Claude Code plugin gives a reusable path through an unfamiliar software project. It
 defines stage boundaries, required inputs and outputs, authorization rules, evidence
 contracts, and handoffs. Every skill uses a lightweight Walk It Down contract while
 avoiding fixed model classes, numeric context ladders, role-play, or implementation algorithms.
@@ -12,14 +12,14 @@ agent-skills/
 ├── AGENTS.md
 ├── project-contexts/README.md (saved PROJECT CONTEXT Markdown files)
 ├── handoffs/<taskID>-<description>/{HANDOFF.md,CHANGELOG.md}
-├── .codex-plugin/plugin.json
-├── .agents/plugins/marketplace.json
-├── .codex/config.toml
+├── .claude-plugin/{plugin.json,marketplace.json}
+├── agents/fresh-reviewer.md (Claude Code subagent for the required review gate)
+├── evals/<case>/{prompt.md,graders/} (Claude Code plugin evals)
 └── skills/
     ├── task-router/SKILL.md
     ├── project-discovery/{SKILL.md,references/project-context-template.md}
-    ├── handoff/{SKILL.md,agents/openai.yaml,references/}
-    ├── comment/{SKILL.md,agents/openai.yaml,references/comment-examples.md}
+    ├── handoff/{SKILL.md,references/}
+    ├── comment/{SKILL.md,references/comment-examples.md}
     ├── feature-workflow/
     │   ├── task-requirements/{SKILL.md,references/task-contract-template.md}
     │   ├── requirement-validator/{SKILL.md,references/validation-report-template.md}
@@ -34,50 +34,52 @@ agent-skills/
     ├── code-review-workflow/
     │   ├── code-review/{SKILL.md,references/code-review-report-template.md}
     │   └── fix-code-review/{SKILL.md,references/fix-code-review-report-template.md}
-    ├── references/check-evidence.md
+    ├── references/{check-evidence.md,state-storage.md}
     ├── evals/
     └── scripts/validate-skill-system.sh
 ```
 
 ## Invocation
 
-The `agent-skills` directory is the whole package. Add only that folder to another
-project: it holds `AGENTS.md`, `skills/`, the plugin manifest, the local marketplace,
-and plugin enablement. Do not also copy repository-root adapters into the host project.
+The `agent-skills` directory is the whole plugin. Load it with
+`claude --plugin-dir ./agent-skills`, or add it as a marketplace with
+`claude plugin marketplace add ./agent-skills` and install
+`agent-skills@agent-skills-local`. Do not copy its files into the host project's root.
 
-Open the workspace containing `AGENTS.md`, or explicitly supply that file when working
-inside a child repository. The workspace routes every new top-level request through
-`task-router`; repository-dependent work receives a reusable PROJECT CONTEXT before its
-selected stage runs.
+Claude Code does not load `AGENTS.md`; each skill's description decides when it fires,
+and `task-router` routes requests whose workflow is unclear before continuing into the
+selected stage. Repository-dependent work receives a reusable PROJECT CONTEXT before
+its selected stage runs.
 
-Project discovery saves a reusable Markdown snapshot in
-[`project-contexts/`](../project-contexts/README.md) for each target repository. The
+Project discovery saves a reusable Markdown snapshot for each target repository, in
+[`project-contexts/`](../project-contexts/README.md) when the package is vendored or in
+the plugin data directory when it is installed, following the
+[saved state location](references/state-storage.md) rule. The
 snapshot records high-level architecture, important flows, project notes, edge cases,
 evidence, and unknowns. It is refreshed only when relevant facts change; each target
 gets a distinct filename. Discovery uses a compact folder tree and, where they clarify
 the project, Mermaid component and workflow diagrams with source paths beside them.
 
 Only when the user explicitly requests a handoff, `handoff` writes one
-`handoffs/<taskID>-<description>/` folder per task, containing `HANDOFF.md` and
-`CHANGELOG.md`. Task completion alone does not invoke the skill; client metadata
-disables implicit invocation. It uses the supplied task ID or a stable local ID if none
+`handoffs/<taskID>-<description>/` folder per task under the same saved-state root,
+containing `HANDOFF.md` and `CHANGELOG.md`. Task completion alone does not invoke the
+skill. Its description limits it to explicit requests, which keeps natural-language
+requests such as "create a handoff" working, and a negative eval checks it does not
+fire on its own. It uses the supplied task ID or a stable local ID if none
 was supplied. The handoff records inputs, outputs, Definition of Done and evidence,
 implementation flow, exact baseline, and
 fresh-session resume instructions. An explicit unfinished checkpoint remains labeled
 CHECKPOINT with blockers. Fresh sessions compare the saved baseline with the current
 worktree before relying on the summary.
 
-Only when the user explicitly invokes `$comment` or asks to comment a named scope,
+Only when the user explicitly invokes `/comment`, or asks to comment a named scope,
 `comment` adds or revises comments that explain why code exists. It skips redundant
-narration of self-explanatory variables and functions. Client metadata disables
-implicit invocation.
+narration of self-explanatory variables and functions. Its description and negative
+evals keep it from firing on its own.
 
-Opening the workspace uses `AGENTS.md`. The repo-local marketplace and Codex configuration
-enable the plugin for trusted projects, while its manifest declares every skill root for
-native `$skill-name` discovery. Structural validation proves package coverage; live
-invocation still depends on the target client/version loading repo marketplaces. Explicit
-discovery is currently smoke-tested on Codex CLI `0.160.0`; see the
-[recorded result](evals/results/2026-10-05-walk-it-down-smoke.md).
+The manifest adds the three workflow folders to Claude Code's default `skills/` scan,
+so every skill loads once. Structural validation proves that coverage; live loading
+and triggering are measured with `claude plugin validate .` and `claude plugin eval .`.
 
 ## Workflow paths
 
@@ -155,7 +157,8 @@ Use [check-evidence](references/check-evidence.md) to record commands and manual
 A proposed command is NOT_RUN. A mock proves only its mocked boundary. Unavailable
 required evidence is BLOCKED unless an observed defect independently requires FAIL.
 
-The verification helper scripts accept an explicit repository path:
+The verification helper scripts accept an explicit repository path. Call them by
+absolute path; in Claude Code, prefix them with `${CLAUDE_PLUGIN_ROOT}/`:
 
 ```bash
 bash skills/feature-workflow/verification/scripts/changed-files.sh /path/to/repository
@@ -167,39 +170,26 @@ They provide deterministic inputs; they do not decide what evidence is sufficien
 
 ## Behavioral evaluations
 
-The `evals/` directory contains 24 decision scenarios for workflow invariants such as
-stale evidence, review authorization, unavailable contracts, blocker retention, bug
-handoffs, reviewer provenance, and counter preservation. They test observable decisions,
-not a required thought process or exact wording.
+The package-root [`evals/`](../evals/README.md) suite runs with
+`claude plugin eval .`. It has 24 cases: at least one natural-language trigger case per
+skill, three negative cases asserting that a skill does not fire, and four
+scaffolded cases that edit files or run tests. Each case scores both whether the
+intended skill fired and whether the outcome meets a PASS/FAIL rubric, and is compared
+against a no-plugin baseline.
 
-Build one candidate packet with:
+The `skills/evals/` directory keeps the 24 source decision scenarios for workflow
+invariants such as stale evidence, review authorization, unavailable contracts,
+blocker retention, bug handoffs, reviewer provenance, and counter preservation; the
+plugin eval cases are written from them. Build one self-contained scenario packet,
+without calling a model, with:
 
 ```bash
 python3 skills/evals/build_packet.py --case E1 --metadata
 ```
 
-Run a measured fresh-context probe with:
-
-```bash
-python3 skills/evals/run_behavioral_eval.py --case E4 --model <model> --output /tmp/E4.json
-```
-
-The runner uses an ephemeral, read-only working directory, captures the JSONL-derived
-response, command list, token usage, and wall-clock latency, and labels isolation
-`ISOLATION_UNVERIFIED` until the runtime boundary is independently established. Packet
-construction alone does not call a model. For a comparison with an archived package,
-pass `--root /path/to/archive --baseline-label <revision>`; compare only matching cases,
-models, and runtime conditions, and do not infer savings from a single run.
-
-The current three-stage measured smoke and native discovery result is recorded in
-[evals/results/2026-10-05-walk-it-down-smoke.md](evals/results/2026-10-05-walk-it-down-smoke.md).
-The targeted bug/review probes, one paired cost comparison, and implicit discovery
-check are recorded in
-[evals/results/2026-10-06-bug-review-smoke.md](evals/results/2026-10-06-bug-review-smoke.md).
-The required-gate review controls and four previously uncovered stage probes are
-recorded in [evals/results/2026-10-06-gate-and-stage-smoke.md](evals/results/2026-10-06-gate-and-stage-smoke.md).
-Targeted probes for the five improved skills are recorded in
-[evals/results/2026-10-10-below-eight-probes.md](evals/results/2026-10-10-below-eight-probes.md).
+Historical measured results from the earlier Codex packaging remain in
+[evals/results/](evals/results/2026-10-10-below-eight-probes.md) for reference; they do
+not describe Claude Code behavior.
 
 ## Validation
 
@@ -211,8 +201,8 @@ python3 -m unittest discover -s skills/evals -p 'test_*.py'
 ```
 
 The structural validator checks required files, frontmatter, exact Walk It Down fields,
-stage contracts, links, templates, routes, stop conditions, and one-to-one native package
-exposure. It rejects prescribed model classes, numeric context ladders, or review role-play
+stage contracts, links, templates, routes, stop conditions, one-to-one skill exposure in
+the plugin manifest, and the eval suite's case, grader, and trigger coverage. It rejects prescribed model classes, numeric context ladders, or review role-play
 in active instructions. Structural PASS does not replace live behavioral or client tests.
 
 ## Maintenance

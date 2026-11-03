@@ -1,6 +1,6 @@
 ---
 name: verification
-description: "Verifies every acceptance criterion on an APPROVED feature baseline and returns PASS, FAIL with a FIX REQUEST, or BLOCKED."
+description: "Verifies every acceptance criterion of a reviewed, APPROVED feature change with executed evidence and returns PASS, FAIL with a FIX REQUEST, or BLOCKED. Use when asked to verify, test, or confirm a reviewed feature meets its acceptance criteria before calling it done."
 ---
 
 # Verification
@@ -22,6 +22,11 @@ unvalidated contract, changed baseline, or unavailable implementation.
   CODE REVIEW REPORT.
 - Actual code/diff, tests, available environments, prior verification reports, and
   `failed_cycles`.
+- Optional helpers [changed-files.sh](scripts/changed-files.sh),
+  [related-tests.sh](scripts/related-tests.sh), and [verify.sh](scripts/verify.sh).
+  Invoke them by absolute path, such as
+  `"${CLAUDE_PLUGIN_ROOT}/skills/feature-workflow/verification/scripts/verify.sh"` in
+  Claude Code, and pass the target repository path. They list candidates only.
 
 ## Walk It Down
 

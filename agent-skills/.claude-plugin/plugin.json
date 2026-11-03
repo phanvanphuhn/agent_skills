@@ -1,0 +1,24 @@
+{
+  "name": "agent-skills",
+  "version": "2.0.0",
+  "description": "Contract-first project discovery, feature, bug, review, verification, handoff, and comment workflows for Claude Code.",
+  "author": {
+    "name": "phanvanphuhn"
+  },
+  "repository": "https://github.com/phanvanphuhn/agent_skills",
+  "keywords": [
+    "claude-code",
+    "development-workflow",
+    "code-review",
+    "bug-fixing",
+    "verification"
+  ],
+  "skills": [
+    "./skills/feature-workflow/",
+    "./skills/bug-workflow/",
+    "./skills/code-review-workflow/"
+  ],
+  "agents": [
+    "./agents/fresh-reviewer.md"
+  ]
+}

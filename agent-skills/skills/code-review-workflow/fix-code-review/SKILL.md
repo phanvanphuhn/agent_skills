@@ -1,6 +1,6 @@
 ---
 name: fix-code-review
-description: "Applies explicitly authorized corrections for accepted CODE REVIEW REPORT findings and returns the changed baseline for re-review."
+description: "Applies explicitly authorized corrections for findings in an existing CODE REVIEW REPORT, carries open blockers forward, and returns the changed baseline for re-review. Use when the user asks to fix review comments or findings, or originally asked to review and fix."
 ---
 
 # Fix code review

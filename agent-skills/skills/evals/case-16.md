@@ -2,7 +2,7 @@
 
 ## User request and selected stage
 
-The user explicitly invokes `$handoff` for ticket PAY-7: "Save a handoff checkpoint
+The user explicitly invokes `/handoff` for ticket PAY-7: "Save a handoff checkpoint
 now so I can resume verification in a new conversation." The candidate has no writable
 repository or destination in this read-only scenario. Return the two documents in the
 response and state that they were not saved.
